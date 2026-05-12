@@ -1,0 +1,28 @@
+---
+import MainLayout from '../layouts/MainLayout.astro';
+import gtaData from '../data/gta-weekly.json';
+---
+
+<MainLayout title="GTA Weekly Updates">
+	<div class="max-w-4xl mx-auto py-12 px-6">
+		<h1 class="text-4xl font-black mb-2 uppercase">Weekly Bonuses</h1>
+		<p class="text-zinc-500 mb-10 text-lg">Valid until {gtaData.weekEnding}</p>
+
+		<div class="grid md:grid-cols-2 gap-4">
+			{gtaData.bonuses.map((bonus) => (
+				<div class="bg-zinc-900 p-6 rounded-xl border border-zinc-800 shadow-xl">
+					<span class="text-[10px] uppercase tracking-widest text-orange-500 font-bold">{bonus.category}</span>
+					<h2 class="text-xl font-bold mt-1">{bonus.name}</h2>
+					<p class="text-3xl font-black text-green-400 mt-2">{bonus.value}</p>
+				</div>
+			))}
+		</div>
+
+		<div class="mt-8 bg-orange-600 p-6 rounded-xl flex justify-between items-center">
+			<div>
+				<p class="text-xs uppercase font-bold opacity-80">Lucky Wheel Podium</p>
+				<h3 class="text-2xl font-black">{gtaData.podium}</h3>
+			</div>
+		</div>
+	</div>
+</MainLayout>

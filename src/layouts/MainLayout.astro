@@ -1,0 +1,31 @@
+---
+const { title } = Astro.props;
+import '../styles/global.css'; // Tailwind will live here
+---
+
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<title>{title} | Official Nugzz Crew</title>
+		<meta name="viewport" content="width=device-width" />
+	</head>
+	<body class="bg-black text-white font-sans">
+	<nav class="p-6 border-b border-zinc-800 flex justify-between items-center">
+    <span class="text-2xl font-black tracking-tighter text-orange-500 uppercase leading-relaxed">
+        Official Nugzz Crew
+    </span>
+    <div class="space-x-6 text-sm uppercase font-bold">
+        <a href="/" class="hover:text-orange-500">Home</a>
+        <a href="/gta" class="hover:text-orange-500">GTA Weekly</a>
+    </div>
+</nav>
+		
+		<main>
+			<slot /> <!-- This is where the page content goes -->
+		</main>
+
+		<footer class="p-10 text-center text-zinc-600 text-xs">
+			&copy; 2026 Official Nugzz Crew | Built for The Fam Bam
+		</footer>
+	</body>
+</html>
