@@ -31,26 +31,27 @@ const socials = [
     </head>
     <body class="bg-black text-white">
         <nav class="sticky top-0 z-50 bg-black/90 backdrop-blur-md border-b border-zinc-800 p-4">
-            <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
+            <!-- Updated Container: 3-column grid for perfect alignment -->
+            <div class="max-w-7xl mx-auto grid grid-cols-3 items-center">
                 
-                <!-- Clickable Logo and Branding -->
-                <a href="/" class="flex items-center gap-4 group hover:opacity-90 transition-opacity">
-                    <!-- Replace 'logo.png' with your actual file name -->
-                    <img src="/Logo.png" alt="Official Nugzz Crew Logo" class="w-10 h-10 object-contain" />
-                    
-                    <div class="flex flex-col md:flex-row md:items-center gap-2 md:gap-6">
-                        <span class="text-xl font-header text-gold uppercase tracking-tighter group-hover:text-gold-bright transition-colors">
+                <!-- 1. LEFT: Logo and Branding -->
+                <div class="flex justify-start">
+                    <a href="/" class="flex items-center gap-4 group hover:opacity-90 transition-opacity">
+                        <img src="/Logo.png" alt="Official Nugzz Crew Logo" class="w-10 h-10 object-contain" />
+                        <span class="hidden lg:block text-xl font-header text-gold uppercase tracking-tighter group-hover:text-gold-bright transition-colors">
                             Official Nugzz Crew
                         </span>
-                        <div class="flex gap-4 text-xs uppercase font-bold tracking-widest text-zinc-400">
-                            <span class="hover:text-gold transition-colors">Home</span>
-                            <a href="/gta" class="hover:text-gold transition-colors">GTA Weekly</a>
-                        </div>
-                    </div>
-                </a>
+                    </a>
+                </div>
 
-                <!-- Social Icons -->
-                <div class="flex flex-wrap justify-center gap-3">
+                <!-- 2. CENTER: Navigation Links -->
+                <div class="flex justify-center gap-8 text-xs uppercase font-bold tracking-widest text-zinc-400">
+                    <a href="/" class="hover:text-gold transition-colors">Home</a>
+                    <a href="/gta" class="hover:text-gold transition-colors">GTA Weekly</a>
+                </div>
+
+                <!-- 3. RIGHT: Social Icons -->
+                <div class="flex justify-end gap-3 flex-wrap">
                     {socials.map((social) => (
                         <a 
                             href={social.url} 
