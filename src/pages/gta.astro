@@ -43,14 +43,14 @@ import gtaData from '../data/gta-weekly.json';
 
       <!-- Side Column: Podium & Discounts -->
       <div class="space-y-6">
-        <!-- Podium Card -->
-        <div class="p-6 bg-gold rounded-2xl shadow-[0_0_30px_-5px_rgba(212,175,55,0.4)] text-black">
+        <!-- Podium Card: Font color locked to black -->
+        <div class="p-6 bg-gold rounded-2xl shadow-[0_0_30px_-5px_rgba(212,175,55,0.4)]">
           <p class="text-[10px] uppercase font-black text-black/60 mb-1">Lucky Wheel Podium</p>
-          <h3 class="text-2xl font-black leading-tight uppercase">
+          <h3 class="text-2xl font-black leading-tight uppercase !text-black" style="color: #000000 !important;">
             {gtaData.podium}
           </h3>
           <div class="mt-4 flex justify-between items-end">
-             <span class="text-[10px] font-bold opacity-50 italic">Visit The Diamond</span>
+             <span class="text-[10px] font-bold text-black/50 italic uppercase">Spin at Diamond Casino</span>
              <i data-lucide="sparkles" class="w-8 h-8 text-black/40"></i>
           </div>
         </div>
@@ -69,9 +69,8 @@ import gtaData from '../data/gta-weekly.json';
       </div>
     </div>
 
-    <!-- NEW SECTION: GTA+ Monthly Benefits -->
+    <!-- GTA+ Monthly Benefits Section -->
     <div class="relative overflow-hidden p-10 rounded-3xl border border-zinc-700 bg-gradient-to-br from-zinc-900 via-black to-zinc-900">
-      <!-- Decorative Logo/Background Element -->
       <div class="absolute -top-10 -right-10 opacity-10 pointer-events-none">
         <i data-lucide="star" class="w-64 h-64 text-gold"></i>
       </div>
@@ -86,24 +85,22 @@ import gtaData from '../data/gta-weekly.json';
         </div>
 
         <div class="grid md:grid-cols-3 gap-8">
-          <!-- Free Vehicle Benefit -->
           <div class="bg-white/5 p-6 rounded-2xl border border-white/10">
             <p class="text-gold text-[10px] font-black uppercase mb-4 tracking-widest">Free Vehicle</p>
             <h3 class="text-2xl font-bold text-white mb-1">{gtaData.gtaPlus.freeVehicle}</h3>
-            <p class="text-zinc-400 text-xs">Claim for free at Legendary Motorsport or Vinewood Club.</p>
+            <p class="text-zinc-400 text-xs italic">Claim at Legendary Motorsport.</p>
           </div>
 
-          <!-- Bonuses Benefit -->
           <div class="bg-white/5 p-6 rounded-2xl border border-white/10">
             <p class="text-gold text-[10px] font-black uppercase mb-4 tracking-widest">Active Bonuses</p>
-            <ul class="text-white text-sm space-y-2 font-bold uppercase">
+            <ul class="text-white text-xs space-y-2 font-bold uppercase tracking-wide">
                 <li>4X Junk Energy Skydives</li>
                 <li>2X Import/Export Sales</li>
                 <li>2X Special Vehicle Work</li>
+                <li>2X Junk Energy Time Trials</li>
             </ul>
           </div>
 
-          <!-- vinewood Club -->
           <div class="bg-white/5 p-6 rounded-2xl border border-white/10">
             <p class="text-gold text-[10px] font-black uppercase mb-4 tracking-widest">The Vinewood Club</p>
             <p class="text-white text-sm leading-relaxed mb-4">Access the 100-car garage and the Club Showroom for 20% off premium rides.</p>
