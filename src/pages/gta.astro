@@ -4,25 +4,61 @@ import gtaData from '../data/gta-weekly.json';
 ---
 
 <MainLayout title="GTA Weekly Updates">
-	<div class="max-w-4xl mx-auto py-12 px-6">
-		<h1 class="text-4xl font-black mb-2 uppercase">Weekly Bonuses</h1>
-		<p class="text-zinc-500 mb-10 text-lg">Valid until {gtaData.weekEnding}</p>
+  <div class="max-w-5xl mx-auto py-12 px-6">
+    <!-- Header Section -->
+    <h1 class="text-5xl mb-2 tracking-wider">Weekly Bonuses</h1>
+    <p class="text-zinc-500 mb-10 text-lg italic tracking-wide">Valid through {gtaData.weekEnding}</p>
 
-		<div class="grid md:grid-cols-2 gap-4">
-			{gtaData.bonuses.map((bonus) => (
-				<div class="bg-zinc-900 p-6 rounded-xl border border-zinc-800 shadow-xl">
-					<span class="text-[10px] uppercase tracking-widest text-orange-500 font-bold">{bonus.category}</span>
-					<h2 class="text-xl font-bold mt-1">{bonus.name}</h2>
-					<p class="text-3xl font-black text-green-400 mt-2">{bonus.value}</p>
-				</div>
-			))}
-		</div>
+    <!-- Main Bonus Grid -->
+    <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-4 mb-12">
+      {gtaData.bonuses.map((bonus) => (
+        <div class="bg-zinc-900/50 p-6 rounded-xl border border-zinc-800 hover:border-gold transition-all">
+          <span class="text-[10px] uppercase tracking-widest text-gold font-bold">{bonus.category}</span>
+          <h2 class="text-lg font-bold mt-1 text-white leading-tight">{bonus.name}</h2>
+          <p class="text-2xl font-black text-gold mt-2">{bonus.value}</p>
+        </div>
+      ))}
+    </div>
 
-		<div class="mt-8 bg-orange-600 p-6 rounded-xl flex justify-between items-center">
-			<div>
-				<p class="text-xs uppercase font-bold opacity-80">Lucky Wheel Podium</p>
-				<h3 class="text-2xl font-black">{gtaData.podium}</h3>
-			</div>
-		</div>
-	</div>
+    <div class="grid md:grid-cols-3 gap-8">
+      <!-- Salvage Yard Robberies -->
+      <div class="md:col-span-2 bg-zinc-900/30 p-8 rounded-2xl border border-zinc-800">
+        <h2 class="text-2xl mb-6 flex items-center gap-2">
+          <i data-lucide="car" class="text-gold"></i> Salvage Yard Robberies
+        </h2>
+        <div class="space-y-4">
+          {gtaData.salvageYard.map((car) => (
+            <div class="flex justify-between items-center p-4 bg-black/40 rounded-lg border border-zinc-800/50">
+              <div>
+                <p class="text-[10px] uppercase text-zinc-500 font-bold tracking-tighter">{car.robbery}</p>
+                <p class="text-xl font-bold text-white">{car.name}</p>
+              </div>
+              <span class="px-3 py-1 bg-zinc-800 text-gold text-[10px] font-black uppercase rounded-full">
+                {car.type}
+              </span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <!-- Side Column: Podium & Discounts -->
+      <div class="space-y-6">
+        <div class="p-6 bg-gold rounded-2xl text-black">
+          <p class="text-xs uppercase font-black opacity-80">Lucky Wheel Podium</p>
+          <h3 class="text-2xl font-black leading-tight uppercase">{gtaData.podium}</h3>
+          <i data-lucide="sparkles" class="mt-4 opacity-50"></i>
+        </div>
+
+        <div class="p-6 bg-zinc-900 border border-gold/30 rounded-2xl">
+          <p class="text-xs uppercase font-bold text-gold mb-1">Weekly Challenge</p>
+          <p class="text-white text-sm">Complete 3 Nightclub Management Missions for GTA$100,000.</p>
+        </div>
+
+        <div class="p-6 bg-zinc-900 border border-zinc-800 rounded-2xl">
+          <p class="text-xs uppercase font-bold text-zinc-500 mb-1">Major Discount</p>
+          <p class="text-white font-bold">{gtaData.discounts}</p>
+        </div>
+      </div>
+    </div>
+  </div>
 </MainLayout>

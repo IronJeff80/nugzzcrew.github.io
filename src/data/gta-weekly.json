@@ -1,8 +1,17 @@
 {
-  "weekEnding": "May 14, 2026",
+  "weekEnding": "May 13, 2026",
   "bonuses": [
-    { "name": "Nightclub Warehouse", "value": "2X Speed & $", "category": "Business" },
-    { "name": "Salvage Yard", "value": "3X GTA$", "category": "Robbery" }
+    { "category": "Nightclub", "name": "Daily Income", "value": "2X GTA$" },
+    { "category": "Nightclub", "name": "Warehouse Production", "value": "2X Speed" },
+    { "category": "Missions", "name": "Terrorbyte Client Jobs", "value": "2X GTA$ & RP" },
+    { "category": "Missions", "name": "Yohan's Goods", "value": "2X GTA$, RP & Goods" }
   ],
-  "podium": "Pegassi Infernus"
+  "salvageYard": [
+    { "type": "Top Tier", "name": "Pfister Growler", "robbery": "The Podium" },
+    { "type": "Standard", "name": "Dinka Jester Classic", "robbery": "The Cargo Ship" },
+    { "type": "Low Tier", "name": "Albany Cavalcade XL", "robbery": "The Gangbanger" }
+  ],
+  "podium": "Överflöd Imorgon",
+  "prizeRide": "Annis Minimus",
+  "discounts": "40% Off Nightclubs & Upgrades"
 }
