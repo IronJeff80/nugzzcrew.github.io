@@ -12,8 +12,10 @@ import '../styles/global.css';
         <meta charset="utf-8" />
         <title>{title} | Official Nugzz Crew</title>
         <meta name="viewport" content="width=device-width" />
-        <!-- This script allows icons to work without extra npm packages -->
+        <!-- Lucide for general icons -->
         <script src="https://unpkg.com/lucide@latest"></script>
+        <!-- Simple Icons for Brand Logos -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/simple-icons-font@v10/font/simple-icons.min.css" />
     </head>
     <body class="bg-black text-white">
         <nav class="p-6 border-b border-zinc-800 flex justify-between items-center">
@@ -35,7 +37,6 @@ import '../styles/global.css';
         </footer>
 
         <script>
-          // This tells the browser to find and draw the icons
           // @ts-ignore
           lucide.createIcons();
         </script>

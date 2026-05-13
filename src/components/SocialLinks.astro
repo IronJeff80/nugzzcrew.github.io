@@ -1,16 +1,16 @@
 ---
 const socials = [
-  { name: 'YouTube', url: 'https://www.youtube.com/c/OfficialNugzzCrew', icon: 'youtube' },
-  { name: 'Twitch', url: 'https://www.twitch.tv/officialnugzzcrew', icon: 'twitch' },
-  { name: 'Kick', url: 'https://kick.com/officialnugzzcrew', icon: 'play' }, 
-  { name: 'Discord', url: 'https://discord.gg/officialnugzzcrew', icon: 'message-square' },
-  { name: 'TikTok', url: 'https://www.tiktok.com/@officialnugzzcrew', icon: 'music' },
-  { name: 'Instagram', url: 'https://www.instagram.com/officialnugzzcrew', icon: 'instagram' },
-  { name: 'X', url: 'https://x.com/NugzzCrew', icon: 'twitter' },
-  { name: 'Facebook', url: 'https://www.facebook.com/nugzzcrew', icon: 'facebook' },
-  { name: 'Snapchat', url: 'https://www.snapchat.com/add/nugzzcrew', icon: 'ghost' },
-  { name: 'Shop', url: 'https://officialnugzzcrew-shop.fourthwall.com', icon: 'shopping-bag' },
-  { name: 'Crew', url: 'https://socialclub.rockstargames.com/crew/official_nugzz_crew', icon: 'users' },
+  { name: 'YouTube', url: 'https://www.youtube.com/c/OfficialNugzzCrew', si: 'si-youtube' },
+  { name: 'Twitch', url: 'https://www.twitch.tv/officialnugzzcrew', si: 'si-twitch' },
+  { name: 'Kick', url: 'https://kick.com/officialnugzzcrew', si: 'si-kick' }, 
+  { name: 'Discord', url: 'https://discord.gg/officialnugzzcrew', si: 'si-discord' },
+  { name: 'TikTok', url: 'https://www.tiktok.com/@officialnugzzcrew', si: 'si-tiktok' },
+  { name: 'Instagram', url: 'https://www.instagram.com/officialnugzzcrew', si: 'si-instagram' },
+  { name: 'X', url: 'https://x.com/NugzzCrew', si: 'si-x' },
+  { name: 'Facebook', url: 'https://www.facebook.com/nugzzcrew', si: 'si-facebook' },
+  { name: 'Snapchat', url: 'https://www.snapchat.com/add/nugzzcrew', si: 'si-snapchat' },
+  { name: 'Shop', url: 'https://officialnugzzcrew-shop.fourthwall.com', lucide: 'shopping-bag' },
+  { name: 'Crew', url: 'https://socialclub.rockstargames.com/crew/official_nugzz_crew', lucide: 'users' },
 ];
 ---
 
@@ -22,8 +22,13 @@ const socials = [
       rel="noopener noreferrer"
       class="flex flex-col items-center justify-center p-6 bg-zinc-900/50 border border-zinc-800 rounded-xl hover:border-gold hover:bg-zinc-900 transition-all group"
     >
-      {/* Added 'lucide' as a class and kept the data attribute */}
-      <i data-lucide={social.icon} class="lucide w-8 h-8 text-zinc-500 group-hover:text-gold mb-3 transition-colors"></i>
+      {social.si ? (
+        /* Use Simple Icons for Brands */
+        <i class={`si ${social.si} text-2xl text-zinc-500 group-hover:text-gold mb-3 transition-colors`}></i>
+      ) : (
+        /* Use Lucide for General Items */
+        <i data-lucide={social.lucide} class="w-8 h-8 text-zinc-500 group-hover:text-gold mb-3 transition-colors"></i>
+      )}
       <span class="text-[10px] uppercase text-zinc-500 group-hover:text-gold font-bold tracking-widest text-center">
         {social.name}
       </span>
