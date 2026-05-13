@@ -12,6 +12,8 @@ import '../styles/global.css';
         <meta charset="utf-8" />
         <title>{title} | Official Nugzz Crew</title>
         <meta name="viewport" content="width=device-width" />
+        <!-- This script allows icons to work without extra npm packages -->
+        <script src="https://unpkg.com/lucide@latest"></script>
     </head>
     <body class="bg-black text-white">
         <nav class="p-6 border-b border-zinc-800 flex justify-between items-center">
@@ -31,5 +33,11 @@ import '../styles/global.css';
         <footer class="p-10 text-center text-zinc-600 text-xs border-t border-zinc-900 mt-20">
             &copy; 2026 Official Nugzz Crew | Built for The Fam Bam
         </footer>
+
+        <script>
+          // This tells the browser to find and draw the icons
+          // @ts-ignore
+          lucide.createIcons();
+        </script>
     </body>
 </html>
