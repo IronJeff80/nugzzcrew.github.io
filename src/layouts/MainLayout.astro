@@ -30,12 +30,12 @@ const socials = [
         <!-- Favicon Link -->
         <link rel="icon" type="image/png" href="/Logo.png" />
         
-        <script src="https://unpkg.com/lucide@latest"></script>
+        <!-- Font and Icon Styles -->
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/simple-icons-font@v10/font/simple-icons.min.css" />
+        <script src="https://unpkg.com/lucide@latest"></script>
     </head>
     <body class="bg-black text-white">
         <nav class="sticky top-0 z-50 bg-black/95 backdrop-blur-md border-b border-zinc-800 p-4">
-            <!-- Mobile: Stacked | Desktop: 3-Column Grid -->
             <div class="max-w-7xl mx-auto flex flex-col items-center gap-4 md:grid md:grid-cols-3 md:gap-0">
                 
                 <!-- 1. Branding -->
@@ -48,13 +48,13 @@ const socials = [
                     </a>
                 </div>
 
-                <!-- 2. Navigation (Center) -->
+                <!-- 2. Navigation -->
                 <div class="flex justify-center gap-6 text-[10px] md:text-xs uppercase font-bold tracking-[0.2em] text-zinc-400">
                     <a href="/" class="hover:text-gold transition-colors">Home</a>
                     <a href="/gta" class="hover:text-gold transition-colors">GTA Bonuses</a>
                 </div>
 
-                <!-- 3. Social Icons (Fixed Alignment) -->
+                <!-- 3. Social Icons (Centered on mobile, Right on desktop) -->
                 <div class="flex justify-center md:justify-end gap-3 flex-wrap w-full">
                     {socials.map((social) => (
                         <a 
@@ -62,12 +62,11 @@ const socials = [
                             target="_blank" 
                             rel="noopener noreferrer" 
                             title={social.name}
-                            class="hover:scale-110 active:scale-95 transition-transform"
+                            class="hover:scale-110 active:scale-95 transition-transform flex items-center justify-center"
                         >
-                            <!-- Fixed container box to force alignment between SI and Lucide -->
-                            <div class="w-5 h-5 md:w-6 md:h-6 flex items-center justify-center">
+                            <div class="w-5 h-5 md:w-6 md:h-6 flex items-center justify-center pointer-events-none">
                                 {social.si ? (
-                                    <i class={`si ${social.si} text-sm md:text-base text-zinc-400 hover:text-gold transition-colors flex items-center justify-center`}></i>
+                                    <i class={`si ${social.si} text-sm md:text-base text-zinc-400 hover:text-gold transition-colors`}></i>
                                 ) : (
                                     <i data-lucide={social.lucide} class="w-4 h-4 md:w-5 md:h-5 text-zinc-400 hover:text-gold transition-colors"></i>
                                 )}
@@ -87,21 +86,36 @@ const socials = [
             &copy; 2026 Official Nugzz Crew | Built for The Fam Bam
         </footer>
 
+        <!-- Lucide Loader Script -->
         <script is:inline>
-          // Run once on load
-          if (window.lucide) {
-            window.lucide.createIcons();
+          function initIcons() {
+            if (window.lucide) {
+              window.lucide.createIcons();
+            }
           }
+          // Initialize on load
+          window.addEventListener('load', initIcons);
+          // Initialize on view transition (if using Astro View Transitions)
+          document.addEventListener('astro:page-load', initIcons);
         </script>
     </body>
 </html>
 
 <style is:global>
-    /* Prevent Simple Icons font from adding vertical baseline spacing */
+    /* Ensure Simple Icons behave like flexible boxes for centering */
     .si {
-        line-height: 1;
-        display: flex;
-        align-items: center;
-        justify-content: center;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        line-height: 1 !important;
+        width: 100%;
+        height: 100%;
+    }
+
+    /* Prevent the data-lucide icon from disappearing if script takes a second */
+    [data-lucide] {
+        display: inline-block;
+        min-width: 1rem;
+        min-height: 1rem;
     }
 </style>
