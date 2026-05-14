@@ -30,7 +30,7 @@ const socials = [
         <!-- Favicon Link -->
         <link rel="icon" type="image/png" href="/Logo.png" />
         
-        <!-- Font and Icon Styles -->
+        <!-- Icons -->
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/simple-icons-font@v10/font/simple-icons.min.css" />
         <script src="https://unpkg.com/lucide@latest"></script>
     </head>
@@ -62,13 +62,15 @@ const socials = [
                             target="_blank" 
                             rel="noopener noreferrer" 
                             title={social.name}
-                            class="hover:scale-110 active:scale-95 transition-transform flex items-center justify-center"
+                            /* Added 'group' here so the icons inside can react to the hover */
+                            class="group hover:scale-110 active:scale-95 transition-all flex items-center justify-center p-1"
                         >
                             <div class="w-5 h-5 md:w-6 md:h-6 flex items-center justify-center pointer-events-none">
                                 {social.si ? (
-                                    <i class={`si ${social.si} text-sm md:text-base text-zinc-400 hover:text-gold transition-colors`}></i>
+                                    /* group-hover:text-gold ensures color changes when the 'a' tag is hovered */
+                                    <i class={`si ${social.si} text-sm md:text-base text-zinc-400 group-hover:text-gold transition-colors`}></i>
                                 ) : (
-                                    <i data-lucide={social.lucide} class="w-4 h-4 md:w-5 md:h-5 text-zinc-400 hover:text-gold transition-colors"></i>
+                                    <i data-lucide={social.lucide} class="w-4 h-4 md:w-5 md:h-5 text-zinc-400 group-hover:text-gold transition-colors"></i>
                                 )}
                             </div>
                         </a>
@@ -86,33 +88,27 @@ const socials = [
             &copy; 2026 Official Nugzz Crew | Built for The Fam Bam
         </footer>
 
-        <!-- Lucide Loader Script -->
         <script is:inline>
           function initIcons() {
             if (window.lucide) {
               window.lucide.createIcons();
             }
           }
-          // Initialize on load
           window.addEventListener('load', initIcons);
-          // Initialize on view transition (if using Astro View Transitions)
           document.addEventListener('astro:page-load', initIcons);
         </script>
     </body>
 </html>
 
 <style is:global>
-    /* Ensure Simple Icons behave like flexible boxes for centering */
     .si {
         display: flex !important;
         align-items: center !important;
         justify-content: center !important;
         line-height: 1 !important;
-        width: 100%;
-        height: 100%;
     }
 
-    /* Prevent the data-lucide icon from disappearing if script takes a second */
+    /* Keep icons visible while loading */
     [data-lucide] {
         display: inline-block;
         min-width: 1rem;
