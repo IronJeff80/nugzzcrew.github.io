@@ -27,7 +27,7 @@ const socials = [
         <title>{title} | Official Nugzz Crew</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         
-        <!-- Favicon Link: This adds your logo to the browser tab -->
+        <!-- Favicon Link -->
         <link rel="icon" type="image/png" href="/Logo.png" />
         
         <script src="https://unpkg.com/lucide@latest"></script>
@@ -35,10 +35,10 @@ const socials = [
     </head>
     <body class="bg-black text-white">
         <nav class="sticky top-0 z-50 bg-black/95 backdrop-blur-md border-b border-zinc-800 p-4">
-            <!-- Mobile: Stacked (flex-col) | Desktop: 3-Column Grid -->
+            <!-- Mobile: Stacked | Desktop: 3-Column Grid -->
             <div class="max-w-7xl mx-auto flex flex-col items-center gap-4 md:grid md:grid-cols-3 md:gap-0">
                 
-                <!-- 1. Branding (Centered on mobile, Left on desktop) -->
+                <!-- 1. Branding -->
                 <div class="flex md:justify-start w-full justify-center">
                     <a href="/" class="flex items-center gap-3 group hover:opacity-90 transition-opacity">
                         <img src="/Logo.png" alt="Official Nugzz Crew Logo" class="w-8 h-8 md:w-10 md:h-10 object-contain" />
@@ -54,7 +54,7 @@ const socials = [
                     <a href="/gta" class="hover:text-gold transition-colors">GTA Bonuses</a>
                 </div>
 
-                <!-- 3. Social Icons (Centered wrap on mobile, Right on desktop) -->
+                <!-- 3. Social Icons (Fixed Alignment) -->
                 <div class="flex justify-center md:justify-end gap-3 flex-wrap w-full">
                     {socials.map((social) => (
                         <a 
@@ -64,11 +64,14 @@ const socials = [
                             title={social.name}
                             class="hover:scale-110 active:scale-95 transition-transform"
                         >
-                            {social.si ? (
-                                <i class={`si ${social.si} text-base md:text-lg text-zinc-400 hover:text-gold transition-colors`}></i>
-                            ) : (
-                                <i data-lucide={social.lucide} class="w-4 h-4 md:w-5 md:h-5 text-zinc-400 hover:text-gold transition-colors"></i>
-                            )}
+                            <!-- Fixed container box to force alignment between SI and Lucide -->
+                            <div class="w-5 h-5 md:w-6 md:h-6 flex items-center justify-center">
+                                {social.si ? (
+                                    <i class={`si ${social.si} text-sm md:text-base text-zinc-400 hover:text-gold transition-colors flex items-center justify-center`}></i>
+                                ) : (
+                                    <i data-lucide={social.lucide} class="w-4 h-4 md:w-5 md:h-5 text-zinc-400 hover:text-gold transition-colors"></i>
+                                )}
+                            </div>
                         </a>
                     ))}
                 </div>
@@ -84,9 +87,21 @@ const socials = [
             &copy; 2026 Official Nugzz Crew | Built for The Fam Bam
         </footer>
 
-        <script>
-          // @ts-ignore
-          lucide.createIcons();
+        <script is:inline>
+          // Run once on load
+          if (window.lucide) {
+            window.lucide.createIcons();
+          }
         </script>
     </body>
 </html>
+
+<style is:global>
+    /* Prevent Simple Icons font from adding vertical baseline spacing */
+    .si {
+        line-height: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+</style>
