@@ -14,22 +14,23 @@ const socials = [
 ];
 ---
 
-<div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 my-12">
+<div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 my-12 justify-center">
   {socials.map((social) => (
     <a 
       href={social.url} 
       target="_blank" 
       rel="noopener noreferrer"
-      class="flex flex-col items-center justify-center p-6 bg-zinc-900/50 border border-zinc-800 rounded-xl hover:border-gold hover:bg-zinc-900 transition-all group"
+      class="flex flex-col items-center justify-center p-6 bg-zinc-900/50 border border-zinc-800 rounded-xl hover:border-gold hover:bg-zinc-900 transition-all group min-h-[120px]"
     >
-      {social.si ? (
-        /* Use Simple Icons for Brands */
-        <i class={`si ${social.si} text-2xl text-zinc-500 group-hover:text-gold mb-3 transition-colors`}></i>
-      ) : (
-        /* Use Lucide for General Items */
-        <i data-lucide={social.lucide} class="w-8 h-8 text-zinc-500 group-hover:text-gold mb-3 transition-colors"></i>
-      )}
-      <span class="text-[10px] uppercase text-zinc-500 group-hover:text-gold font-bold tracking-widest text-center">
+      <div class="h-8 flex items-center justify-center mb-3">
+        {social.si ? (
+          <i class={`si ${social.si} text-2xl text-zinc-500 group-hover:text-gold transition-colors`}></i>
+        ) : (
+          <i data-lucide={social.lucide} class="w-7 h-7 text-zinc-500 group-hover:text-gold transition-colors"></i>
+        )}
+      </div>
+
+      <span class="text-[10px] uppercase text-zinc-500 group-hover:text-gold font-bold tracking-widest text-center leading-none">
         {social.name}
       </span>
     </a>
