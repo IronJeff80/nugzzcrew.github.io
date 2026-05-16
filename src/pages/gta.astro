@@ -184,10 +184,17 @@ import gtaData from '../data/gta-weekly.json';
   </div>
 </MainLayout>
 
-<script>
-  // Refresh Lucide icons after Astro render
-  import { createIcons, CheckCircle, Car, Wrench, MapPin, Timer, Tag, Gift } from 'lucide';
-  createIcons({
-    icons: { CheckCircle, Car, Wrench, MapPin, Timer, Tag, Gift }
-  });
+<script is:inline>
+  // This uses the CDN version already loaded in MainLayout
+  function initGtaIcons() {
+    if (window.lucide) {
+      window.lucide.createIcons();
+    }
+  }
+
+  // Initialize on load
+  window.addEventListener('load', initGtaIcons);
+  
+  // Initialize when Astro swaps pages
+  document.addEventListener('astro:page-load', initGtaIcons);
 </script>
