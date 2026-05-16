@@ -7,7 +7,7 @@ const { title } = Astro.props;
 import '../styles/global.css'; 
 
 const socials = [
-  { name: 'YouTube', url: 'https://www.youtube.com/c/OfficialNugzzCrew', si: 'si-youtube' },
+  { name: 'YouTube', url: 'https://www.youtube.com/channel/UC-n3I2D0e4T3V6_6v-p-vjg/join?app=desktop&action=join', si: 'si-youtube' },
   { name: 'Twitch', url: 'https://www.twitch.tv/officialnugzzcrew', si: 'si-twitch' },
   { name: 'Kick', url: 'https://kick.com/officialnugzzcrew', si: 'si-kick' }, 
   { name: 'Discord', url: 'https://discord.gg/officialnugzzcrew', si: 'si-discord' },
@@ -48,7 +48,12 @@ const socials = [
                         <a href="/" class="hover:text-gold transition-colors">Home</a>
                         <a href="/gta" class="hover:text-gold transition-colors">GTA Bonuses</a>
                     </div>
-                    <a href="https://www.youtube.com/c/OfficialNugzzCrew/join" target="_blank" class="text-[clamp(8px,2vw,10px)] text-gold-bright uppercase tracking-[0.2em] font-black text-center transition-colors">
+                    <a 
+                      href="https://www.youtube.com/channel/UC-n3I2D0e4T3V6_6v-p-vjg/join?app=desktop&action=join" 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      class="text-[clamp(8px,2vw,10px)] text-gold-bright uppercase tracking-[0.2em] font-black text-center transition-all hover:text-white hover:scale-105 active:scale-95"
+                    >
                         Join The Fam Bam Membership
                     </a>
                 </div>
@@ -90,15 +95,11 @@ const socials = [
         box-sizing: border-box;
     }
 
-    /* IMPORTANT: We removed 'overflow-x: hidden' from the 'html' tag. 
-       Sometimes 'overflow-x: hidden' on the <html> or <body> 
-       breaks 'position: sticky' in certain browsers.
-    */
     body {
         margin: 0;
         padding: 0;
         min-height: 100vh;
-        overflow-x: hidden; /* Keep it on body only */
+        overflow-x: hidden; 
     }
 
     .si {
@@ -106,5 +107,11 @@ const socials = [
         align-items: center !important;
         justify-content: center !important;
         line-height: 1 !important;
+    }
+
+    /* Custom color for the Join link to make it pop */
+    .text-gold-bright {
+        color: #ffcc00;
+        text-shadow: 0 0 10px rgba(255, 204, 0, 0.2);
     }
 </style>
