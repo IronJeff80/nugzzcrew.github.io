@@ -1,7 +1,6 @@
 {
   "weekEnding": "May 20, 2026",
   "fibFile": "The Black Box File",
-  "livery": "Water Like (Vapid FMJ MK V)",
   "weeklyChallenge": "Win any two Races to receive the Dark Manor Racing Suit and GTA$100,000",
   "podium": "Benefactor LM87",
   "prizeRide": "Benefactor Krieger",
@@ -14,12 +13,16 @@
     { "category": "2X GTA$", "name": "Salvage Yard Daily Income", "value": "2X" },
     { "category": "2X GTA$", "name": "Salvage Yard Robbery Sales & Value", "value": "2X" }
   ],
-  "motorMadness": [
-    "Log in to receive the Rockstar Helmet",
-    "Purchase PDM vehicle for Rockstar Racing Suit",
-    "Purchase Luxury Autos vehicle for LS Customs Varsity Jacket",
-    "Purchase LSCM vehicle for Blue Banshee Tee",
-    "FREE Horn Customization & LS Car Meet Membership"
+  "loginRewards": [
+    "Water Like Livery (Vapid FMJ MK V)",
+    "Rockstar Helmet",
+    "FREE Horn Customization",
+    "FREE LS Car Meet Membership"
+  ],
+  "purchaseUnlocks": [
+    { "action": "Purchase any PDM Vehicle", "reward": "Rockstar Racing Suit" },
+    { "action": "Purchase any Luxury Autos Vehicle", "reward": "LS Customs Varsity Jacket" },
+    { "action": "Purchase any LSCM Featured Vehicle", "reward": "Blue Banshee Tee" }
   ],
   "discounts": {
     "fifty": ["LS Tuners Racing Suits", "HSW Performance Upgrades", "Benny’s Conversion Upgrades", "Turbo Tuning", "Blue and Yellow Tire Smoke"],
@@ -34,7 +37,7 @@
   "simeonVehicles": ["Dewbauchee JB 700", "Dewbauchee Rapid GT Cabrio", "Karin 190z", "Lampadati Furore GT", "Western Rat Bike"],
   "luxuryAutos": ["Übermacht Sentinel XS4", "Vapid FMJ MK V (Water Like Livery)"],
   "lsCarMeet": {
-    "prizeRideRequirement": "Place Top 5 in five Races in the LS Car Meet Series",
+    "prizeRideRequirement": "Place Top 5 in five LSCM Races",
     "testTrack": ["Bravado Banshee GTS", "Grotti Itali RSX (Monochrome)", "Överflöd Pipistrello (Street Camo)"],
     "hsw": "Weeny Issi Rally"
   },
@@ -48,7 +51,7 @@
     "duration": "May 7 - June 10, 2026",
     "freeVehicles": ["Übermacht Sentinel GTS", "Junk Energy Inductor Bike", "Magenta/Cyan Flip Chameleon Paint & Wheel Paint"],
     "clothing": ["Junk x Jackal Tee (Sports)", "Junk x Jackal Wide Pants (Designer Jeans)"],
-    "bonuses": ["4X GTA$ & RP on Junk Energy Skydives", "2X GTA$ & RP on Import/Export Sell Missions", "2X GTA$ & RP on Special Vehicle Work", "2X GTA$ & RP on Junk Energy Time Trials"],
+    "bonuses": ["4X Junk Energy Skydives", "2X Import/Export Sell Missions", "2X Special Vehicle Work", "2X Junk Energy Time Trials"],
     "discounts": ["60% OFF Executive Offices, Upgrades & Mods"],
     "vinewoodShowroom": ["Annis S80RR (eCola)", "Bollokan Envisage (Junk Race)", "Bravado Gauntlet Hellfire", "Coil Cyclone II", "Declasse Scramjet", "HVY Nightshark (Galaxy)", "Pegassi Oppressor (Santo Capra)", "Pegassi Toreador (Shark Camo)", "Pegassi Zentorno (Rockstar Motorsport)"],
     "persistent": ["FREE Taxi services (shorter cooldown)", "FREE CEO/VIP Abilities", "FREE vehicle requests via Interaction Menu", "Remote Access to Business Staff", "Extra Lucky Wheel Spin Every Day", "Claim All Business Earnings", "Gun Van blipped with extra discounts", "GTA$500,000 every month", "15% extra bonus on Shark Cards"],
