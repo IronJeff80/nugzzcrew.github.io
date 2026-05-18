@@ -1,12 +1,16 @@
 ---
 import MainLayout from '../layouts/MainLayout.astro';
 
-// Data pulled specifically from your CSV "Obtainable" == FALSE categories
-const primaryUnselected = ["Custom RGB", "Pure White", "Modded Blue", "Modded Green", "Secret Gold", "MP100", "Chrome", "Black", "Blue", "Brown", "Dark Blue", "Dark Earth", "Dark Red", "Desert Tan", "Foliage Green", "Gray", "Green", "Hot Pink", "Lime Green", "Orange", "Pink", "Purple", "Red", "White", "Yellow"];
-const secondaryUnselected = ["Custom RGB", "Pure White", "Secret Gold", "MP100", "Chrome", "Black", "Blue", "Brown", "Dark Blue", "Dark Earth", "Dark Red", "Desert Tan", "Foliage Green", "Gray", "Green", "Hot Pink", "Lime Green", "Orange", "Pink", "Purple", "Red", "White", "Yellow"];
-const pearlUnselected = ["Pure White", "Secret Gold", "MP100", "Chrome", "Black", "Blue", "Brown", "Dark Blue", "Dark Earth", "Dark Red", "Desert Tan", "Foliage Green", "Gray", "Green", "Hot Pink", "Lime Green", "Orange", "Pink", "Purple", "Red", "White", "Yellow"];
-const rimUnselected = ["Pure White", "Secret Gold", "MP100", "Chrome", "Black", "Blue", "Brown", "Dark Blue", "Dark Earth", "Dark Red", "Desert Tan", "Foliage Green", "Gray", "Green", "Hot Pink", "Lime Green", "Orange", "Pink", "Purple", "Red", "White", "Yellow"];
-const interiorUnselected = ["Pure White", "Secret Gold", "MP100", "Chrome", "Black", "Blue", "Brown", "Dark Blue", "Dark Earth", "Dark Red", "Desert Tan", "Foliage Green", "Gray", "Green", "Hot Pink", "Lime Green", "Orange", "Pink", "Purple", "Red", "White", "Yellow"];
+// DATA EXTRACTED FROM COLOR SHENANIGANS CSV (Obtainable = FALSE)
+const primaryUnselected = ["Custom RGB", "Alloy", "Anthracite Gray", "Baby Blue", "BeechWood Brown", "Bison Brown", "Black", "Black Poly", "Black Steel", "Blaze Red", "Bleached Brown", "Blue", "Blue Silver", "Bluish Silver", "Bright Blue/Slate Blue", "Bright Green", "Bright Orange", "Bright Purple", "Bright Red", "Bronze", "Brown", "Brushed Aluminium", "Brushed Black Steel", "Brushed Gold", "Brushed Steel", "Cabernet Red", "Candy Red", "Carbon Black", "Cast Iron Silver", "Champagne", "Chocolate Brown", "Chrome", "Cream", "Creek Brown", "Dark Blue", "Dark Brown", "Dark Earth", "Dark Green", "Dark Red", "Dark Silver", "Dark Steel", "Desert Tan", "Dew Yellow/Yellow Bird", "Diamond Blue", "Epsilon Blue", "Feltzer Brown", "Fluorescent Blue", "Foliage Green", "Forest Green", "Formula Red", "Frost White", "Galaxy Blue", "Garnet Red", "Gasoline Green", "Gold", "Golden Red", "Grace Red", "Graphite", "Gray", "Green", "Green Bright", "Gun Metal", "Harbor Blue", "Honey Beige", "Hot Pink", "Hunter Green", "Ice White", "Lava Red", "Light Blue", "Light Brown", "Light Gray", "Light Orange", "Lightning Blue", "Lime Green", "MP100", "Maple Brown", "Mariner Blue", "Maui Blue Poly", "Medium Brown", "Midnight Blue", "Midnight Purple", "Midnight Purple/V Dark Blue", "Midnight Silver", "Moss Brown", "Nautical Blue", "Off White", "Olive Army Green", "Olive Drab", "Olive Green", "Orange", "Orange 2", "Pea Green/Securicor Green", "Pfister Pink", "Police Blue", "Pure Gold", "Pure White", "Race Yellow", "Racing Blue", "Racing Green", "Red", "Rolled Steel", "Saddle Brown", "Salmon Pink", "Sandy Brown", "Saxon Blue", "Schafter Purple", "Sea Foam Blue", "Sea Green", "Sea Wash", "Shadow Silver", "Shawdow Silver", "Sienna Brown", "Silver", "Silver Grey", "Spinnaker Purple", "Stone Silver", "Straw Beige", "Straw Brown", "Sunrise Orange", "Sunset Red", "Surf Blue", "Taxi Yellow", "Torino Red", "Ultra Blue", "White", "Wine Red", "Woodbeach Brown", "Yellow"];
+
+const secondaryUnselected = ["Custom RGB", "Alloy", "Baby Blue", "Black", "Black Poly", "Blue", "Blue Silver", "Bright Blue/Slate Blue", "Bright Red", "Brown", "Champagne", "Dark Blue", "Dark Brown", "Dark Green", "Dark Red", "Dark Silver", "Epsilon Blue", "Fluorescent Blue", "Garnet Red", "Golden Red", "Graphite", "Green", "Green Bright", "Gun Metal", "Honey Beige", "Hunter Green", "Light Brown", "Light Orange", "Lightning Blue", "MP100", "Maui Blue Poly", "Medium Brown", "Midnight Blue", "Off White", "Olive Army Green", "Orange", "Orange 2", "Pea Green/Securicor Green", "Police Blue", "Pure White", "Red", "Sea Foam Blue", "Sea Wash", "Shadow Silver", "Shawdow Silver", "Silver", "Silver Grey", "Straw Beige", "Taxi Yellow", "White"];
+
+const pearlUnselected = ["Alloy", "Baby Blue", "Black", "Black Poly", "Blue", "Blue Silver", "Bright Blue/Slate Blue", "Bright Red", "Brown", "Brushed Aluminium", "Brushed Black Steel", "Brushed Gold", "Brushed Steel", "Champagne", "Chrome", "Dark Blue", "Dark Brown", "Dark Earth", "Dark Green", "Dark Red", "Dark Silver", "Desert Tan", "Epsilon Blue", "Fluorescent Blue", "Foliage Green", "Forest Green", "Garnet Red", "Golden Red", "Graphite", "Gray", "Green", "Green Bright", "Gun Metal", "Honey Beige", "Hunter Green", "Ice White", "Light Brown", "Light Gray", "Light Orange", "Lightning Blue", "Lime Green", "MP100", "Maui Blue Poly", "Medium Brown", "Midnight Blue", "Midnight Purple", "Off White", "Olive Army Green", "Olive Drab", "Orange", "Orange 2", "Pea Green/Securicor Green", "Police Blue", "Pure Gold", "Pure White", "Red", "Schafter Purple", "Sea Foam Blue", "Sea Wash", "Shadow Silver", "Shawdow Silver", "Silver", "Silver Grey", "Straw Beige", "Taxi Yellow", "White", "Yellow"];
+
+const rimUnselected = ["Anthracite Gray", "BeechWood Brown", "Bison Brown", "Black", "Black Poly", "Bleached Brown", "Blue", "Blue Silver", "Bluish Silver", "Bright Red", "Brown", "Brushed Aluminium", "Brushed Black Steel", "Brushed Gold", "Brushed Steel", "Cabernet Red", "Carbon Black", "Cast Iron Silver", "Champagne", "Chocolate Brown", "Chrome", "Cream", "Dark Blue", "Dark Green", "Dark Red", "Dark Silver", "Dark Steel", "Diamond Blue", "Epsilon Blue", "Feltzer Brown", "Foliage Green", "Formula Red", "Frost White", "Galaxy Blue", "Garnet Red", "Gasoline Green", "Golden Red", "Grace Red", "Graphite", "Gray", "Green", "Green Bright", "Gun Metal", "Harbor Blue", "Honey Beige", "Hunter Green", "Ice White", "Lava Red", "Light Blue", "Light Brown", "Light Gray", "Light Orange", "Lightning Blue", "Lime Green", "MP100", "Maple Brown", "Mariner Blue", "Maui Blue Poly", "Midnight Blue", "Midnight Purple", "Midnight Purple/V Dark Blue", "Midnight Silver", "Moss Brown", "Nautical Blue", "Off White", "Olive Army Green", "Olive Drab", "Olive Green", "Orange", "Orange 2", "Pfister Pink", "Police Blue", "Pure Gold", "Pure White", "Racing Blue", "Racing Green", "Red", "Rolled Steel", "Saddle Brown", "Sandy Brown", "Saxon Blue", "Schafter Purple", "Sea Foam Blue", "Sea Green", "Sea Wash", "Shadow Silver", "Shawdow Silver", "Sienna Brown", "Silver", "Silver Grey", "Spinnaker Purple", "Straw Beige", "Surf Blue", "Taxi Yellow", "Torino Red", "White", "Wine Red", "Woodbeach Brown", "Yellow"];
+
+const interiorUnselected = ["Alloy", "Baby Blue", "Black", "Black Poly", "Blue", "Blue Silver", "Bright Blue/Slate Blue", "Bright Red", "Brown", "Brushed Aluminium", "Brushed Black Steel", "Brushed Gold", "Brushed Steel", "Carbon Black", "Champagne", "Chrome", "Dark Blue", "Dark Brown", "Dark Earth", "Dark Green", "Dark Red", "Dark Silver", "Desert Tan", "Epsilon Blue", "Fluorescent Blue", "Foliage Green", "Forest Green", "Formula Red", "Garnet Red", "Gold", "Golden Red", "Graphite", "Gray", "Green", "Green Bright", "Gun Metal", "Honey Beige", "Hot Pink", "Hunter Green", "Ice White", "Light Brown", "Light Gray", "Light Orange", "Lightning Blue", "Lime Green", "MP100", "Maui Blue Poly", "Medium Brown", "Midnight Blue", "Midnight Purple", "Off White", "Olive Army Green", "Olive Drab", "Orange", "Orange 2", "Pea Green/Securicor Green", "Police Blue", "Pure Gold", "Pure White", "Red", "Schafter Purple", "Sea Foam Blue", "Sea Wash", "Shadow Silver", "Shawdow Silver", "Silver", "Silver Grey", "Straw Beige", "Taxi Yellow", "White", "Yellow"];
 
 const textures = ["MP100(Super Shiny)", "Other(Shiny)", "Brushed(Shiny/Matte)", "Matte", "Worn"];
 const tireDesigns = ["None", "White lines", "Classic", "Retro", "Red", "Blue"];
@@ -17,7 +21,7 @@ const headlightColors = ["Default", "Pure White", "Blue", "Electric Blue", "Mint
   <div class="max-w-5xl mx-auto px-4 py-12">
     <div class="mb-10 text-center">
       <h1 class="text-4xl font-header text-gold uppercase tracking-tighter mb-2">DMO Generator</h1>
-      <p class="text-zinc-400 uppercase text-xs tracking-[0.2em]">Follow the order and build your spec</p>
+      <p class="text-zinc-400 uppercase text-xs tracking-[0.2em]">Build your spec for the Fam Bam</p>
     </div>
 
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
@@ -77,8 +81,8 @@ const headlightColors = ["Default", "Pure White", "Blue", "Electric Blue", "Mint
           </div>
 
           <div id="rgbInputArea" class="hidden">
-            <label class="block text-[10px] text-gold uppercase font-black mb-1">Enter Shared RGB (255, 255, 255):</label>
-            <input type="text" id="customRgb" placeholder="0, 0, 0" class="w-full bg-black border border-gold/50 rounded-lg p-2.5 text-white text-sm outline-none" />
+            <label class="block text-[10px] text-gold uppercase font-black mb-1">Enter Shared RGB:</label>
+            <input type="text" id="customRgb" placeholder="255, 255, 255" class="w-full bg-black border-2 border-gold/50 rounded-lg p-3 text-white text-sm outline-none" />
           </div>
 
           <div>
@@ -127,7 +131,7 @@ const headlightColors = ["Default", "Pure White", "Blue", "Electric Blue", "Mint
           </div>
         </div>
 
-        <button id="generateBtn" class="w-full bg-gold hover:bg-white text-black font-black uppercase py-4 rounded-xl tracking-widest transition-all">
+        <button id="generateBtn" class="w-full bg-gold hover:bg-white text-black font-black uppercase py-4 rounded-xl tracking-widest transition-all shadow-[0_0_20px_rgba(212,175,55,0.2)]">
           Generate DMO Spec
         </button>
       </div>
@@ -135,8 +139,8 @@ const headlightColors = ["Default", "Pure White", "Blue", "Electric Blue", "Mint
       <div class="lg:col-span-5">
         <div class="sticky top-24">
           <div class="bg-black border-2 border-dashed border-zinc-800 rounded-3xl p-6 flex flex-col">
-            <span class="text-[10px] text-zinc-500 uppercase font-black tracking-widest mb-4">Discord Ready Output:</span>
-            <textarea id="output" readonly class="bg-transparent font-mono text-sm h-[500px] w-full resize-none outline-none border-none" style="color: #D4AF37;" placeholder="Waiting for build..."></textarea>
+            <span class="text-[10px] text-zinc-500 uppercase font-black tracking-widest mb-4">Discord Output:</span>
+            <textarea id="output" readonly class="bg-transparent font-mono text-sm h-[500px] w-full resize-none outline-none border-none" style="color: #D4AF37;"></textarea>
             <button id="copyBtn" class="mt-6 w-full bg-zinc-800 hover:bg-zinc-700 text-white font-bold uppercase py-4 rounded-xl tracking-widest transition-all">
               Copy To Clipboard
             </button>
@@ -153,12 +157,11 @@ const headlightColors = ["Default", "Pure White", "Blue", "Electric Blue", "Mint
   const secondarySel = document.getElementById('secondary') as HTMLSelectElement;
   const rgbArea = document.getElementById('rgbInputArea');
 
-  // Toggle RGB input if "Custom RGB" is selected in either paint slot
   const checkRgb = () => {
     if (primarySel.value === "Custom RGB" || secondarySel.value === "Custom RGB") {
-      rgbArea.classList.remove('hidden');
+      rgbArea.style.display = "block";
     } else {
-      rgbArea.classList.add('hidden');
+      rgbArea.style.display = "none";
     }
   };
 
@@ -167,8 +170,8 @@ const headlightColors = ["Default", "Pure White", "Blue", "Electric Blue", "Mint
 
   generateBtn.addEventListener('click', () => {
     const getData = (id: string) => (document.getElementById(id) as HTMLInputElement | HTMLSelectElement).value;
-    
     const customRgb = (document.getElementById('customRgb') as HTMLInputElement).value;
+    
     const pVal = primarySel.value === "Custom RGB" ? `RGB (${customRgb})` : primarySel.value;
     const sVal = secondarySel.value === "Custom RGB" ? `RGB (${customRgb})` : secondarySel.value;
 
@@ -199,6 +202,6 @@ const headlightColors = ["Default", "Pure White", "Blue", "Electric Blue", "Mint
     const out = document.getElementById('output') as HTMLTextAreaElement;
     out.select();
     document.execCommand('copy');
-    alert('Copied to Clipboard!');
+    alert('Copied!');
   });
 </script>
