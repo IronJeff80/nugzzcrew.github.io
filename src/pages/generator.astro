@@ -1,140 +1,146 @@
 ---
 import MainLayout from '../layouts/MainLayout.astro';
 
-// Logic: Filters colors from your CSV where 'Obtainable' is FALSE
-const textures = ["MP100 (Super Shiny)", "Other (Shiny)", "Brushed (Shiny+Matte)", "Matte", "Worn"];
+// Data pulled specifically from your CSV "Obtainable" == FALSE categories
+const primaryUnselected = ["Custom RGB", "Pure White", "Modded Blue", "Modded Green", "Secret Gold", "MP100", "Chrome", "Black", "Blue", "Brown", "Dark Blue", "Dark Earth", "Dark Red", "Desert Tan", "Foliage Green", "Gray", "Green", "Hot Pink", "Lime Green", "Orange", "Pink", "Purple", "Red", "White", "Yellow"];
+const secondaryUnselected = ["Custom RGB", "Pure White", "Secret Gold", "MP100", "Chrome", "Black", "Blue", "Brown", "Dark Blue", "Dark Earth", "Dark Red", "Desert Tan", "Foliage Green", "Gray", "Green", "Hot Pink", "Lime Green", "Orange", "Pink", "Purple", "Red", "White", "Yellow"];
+const pearlUnselected = ["Pure White", "Secret Gold", "MP100", "Chrome", "Black", "Blue", "Brown", "Dark Blue", "Dark Earth", "Dark Red", "Desert Tan", "Foliage Green", "Gray", "Green", "Hot Pink", "Lime Green", "Orange", "Pink", "Purple", "Red", "White", "Yellow"];
+const rimUnselected = ["Pure White", "Secret Gold", "MP100", "Chrome", "Black", "Blue", "Brown", "Dark Blue", "Dark Earth", "Dark Red", "Desert Tan", "Foliage Green", "Gray", "Green", "Hot Pink", "Lime Green", "Orange", "Pink", "Purple", "Red", "White", "Yellow"];
+const interiorUnselected = ["Pure White", "Secret Gold", "MP100", "Chrome", "Black", "Blue", "Brown", "Dark Blue", "Dark Earth", "Dark Red", "Desert Tan", "Foliage Green", "Gray", "Green", "Hot Pink", "Lime Green", "Orange", "Pink", "Purple", "Red", "White", "Yellow"];
 
-const primaryUnobtainable = [
-  "MP100", "Chrome", "Secret Gold", "Pure White", "Modded Blue", "Modded Green",
-  "Worn Honey Beige", "Worn Golden Red", "Worn Light Orange", "Worn Blue Silver", 
-  "Worn Olive Army Green", "Matte Foliage Green", "Matte Desert Tan", "Matte Dark Earth"
-];
-
-const trimUnselected = ["Pure White", "Silver", "MP100", "Chrome", "Black", "Blue", "Brown", "Dark Blue", "Dark Earth", "Dark Red", "Desert Tan", "Foliage Green", "Gray"];
-const accentUnselected = ["Pure White", "Secret Gold", "MP100", "Chrome", "Black", "Blue", "Brown", "Dark Blue", "Dark Earth", "Dark Red", "Desert Tan", "Foliage Green", "Gray", "Hot Pink"];
-
-const rimStyles = ["Bespoke", "Originals", "F1", "Street", "Stock"];
+const textures = ["MP100(Super Shiny)", "Other(Shiny)", "Brushed(Shiny/Matte)", "Matte", "Worn"];
+const tireDesigns = ["None", "White lines", "Classic", "Retro", "Red", "Blue"];
 const headlightColors = ["Default", "Pure White", "Blue", "Electric Blue", "Mint Green", "Lime Green", "Yellow", "Golden Shower", "Orange", "Red", "Poncho Pink", "Hot Pink", "Purple", "Blacklight"];
 ---
 
-<MainLayout title="DMO Spec Generator">
-  <div class="max-w-6xl mx-auto px-4 py-12">
+<MainLayout title="DMO Generator">
+  <div class="max-w-5xl mx-auto px-4 py-12">
     <div class="mb-10 text-center">
-      <h1 class="text-4xl font-header text-gold uppercase tracking-tighter mb-2">DMO Spec Generator</h1>
-      <p class="text-zinc-400 uppercase text-xs tracking-[0.2em]">Build your spec and paste it into your ticket</p>
+      <h1 class="text-4xl font-header text-gold uppercase tracking-tighter mb-2">DMO Generator</h1>
+      <p class="text-zinc-400 uppercase text-xs tracking-[0.2em]">Follow the order and build your spec</p>
     </div>
 
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
-      
-      <div class="lg:col-span-7 bg-zinc-900/40 p-6 md:p-8 rounded-3xl border border-zinc-800 space-y-8">
+      <div class="lg:col-span-7 bg-zinc-900/40 p-6 rounded-3xl border border-zinc-800 space-y-6">
         
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div>
-            <label class="block text-[10px] text-zinc-500 uppercase font-black mb-2 tracking-wider">Vehicle or Set</label>
-            <input type="text" id="vehicle" placeholder="e.g. Buffalo STX" class="w-full bg-black border border-zinc-800 rounded-xl p-3 text-white outline-none focus:border-gold transition-all text-sm" />
-          </div>
-          <div>
-            <label class="block text-[10px] text-zinc-500 uppercase font-black mb-2 tracking-wider">Plate Text (8 Chars)</label>
-            <input type="text" id="plate" maxlength="8" placeholder="NUGZZ" class="w-full bg-black border border-zinc-800 rounded-xl p-3 text-white outline-none focus:border-gold transition-all text-sm uppercase font-mono" />
-          </div>
-        </div>
-
         <div class="space-y-4">
-          <h3 class="text-gold text-[11px] uppercase font-black tracking-[0.4em] pb-2 border-b border-zinc-800 mb-2">Exterior Paint</h3>
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <label class="block text-[10px] text-zinc-500 uppercase font-black mb-2 tracking-wider">Paint Texture</label>
-              <select id="texture" class="w-full bg-black border border-zinc-800 rounded-xl p-3 text-white outline-none focus:border-gold transition-all text-sm">
-                {textures.map(t => <option value={t}>{t}</option>)}
-              </select>
-            </div>
-            <div>
-              <label class="block text-[10px] text-zinc-500 uppercase font-black mb-2 tracking-wider">Primary Color</label>
-              <select id="primary" class="w-full bg-black border border-zinc-800 rounded-xl p-3 text-white outline-none focus:border-gold transition-all text-sm">
-                {primaryUnobtainable.map(c => <option value={c}>{c}</option>)}
-              </select>
-            </div>
-            <div>
-              <label class="block text-[10px] text-zinc-500 uppercase font-black mb-2 tracking-wider">Secondary Color</label>
-              <select id="secondary" class="w-full bg-black border border-zinc-800 rounded-xl p-3 text-white outline-none focus:border-gold transition-all text-sm">
-                {primaryUnobtainable.map(c => <option value={c}>{c}</option>)}
-              </select>
-            </div>
-            <div>
-              <label class="block text-[10px] text-zinc-500 uppercase font-black mb-2 tracking-wider">Pearlescent (No RGB)</label>
-              <input type="text" id="pearl" placeholder="e.g. Race Yellow" class="w-full bg-black border border-zinc-800 rounded-xl p-3 text-white outline-none focus:border-gold transition-all text-sm" />
-            </div>
-          </div>
-        </div>
-
-        <div class="space-y-4">
-          <h3 class="text-gold text-[11px] uppercase font-black tracking-[0.4em] pb-2 border-b border-zinc-800 mb-2">Interior Customization</h3>
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <label class="block text-[10px] text-zinc-500 uppercase font-black mb-2 tracking-wider">Interior Trim Color</label>
-              <select id="trim" class="w-full bg-black border border-zinc-800 rounded-xl p-3 text-white outline-none focus:border-gold transition-all text-sm">
-                {trimUnselected.map(c => <option value={c}>{c}</option>)}
-              </select>
-            </div>
-            <div>
-              <label class="block text-[10px] text-zinc-500 uppercase font-black mb-2 tracking-wider">Dashboard Accent Color</label>
-              <select id="accent" class="w-full bg-black border border-zinc-800 rounded-xl p-3 text-white outline-none focus:border-gold transition-all text-sm">
-                {accentUnselected.map(c => <option value={c}>{c}</option>)}
-              </select>
-            </div>
-          </div>
-        </div>
-
-        <div class="space-y-4">
-          <h3 class="text-gold text-[11px] uppercase font-black tracking-[0.4em] pb-2 border-b border-zinc-800 mb-2">Wheels & Lighting</h3>
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <label class="block text-[10px] text-zinc-500 uppercase font-black mb-2 tracking-wider">Rim Style</label>
-              <select id="rimStyle" class="w-full bg-black border border-zinc-800 rounded-xl p-3 text-white outline-none focus:border-gold transition-all text-sm">
-                {rimStyles.map(s => <option value={s}>{s}</option>)}
-              </select>
-            </div>
-            <div>
-              <label class="block text-[10px] text-zinc-500 uppercase font-black mb-2 tracking-wider">Rim Color</label>
-              <input type="text" id="rimColor" placeholder="e.g. Pure White" class="w-full bg-black border border-zinc-800 rounded-xl p-3 text-white outline-none focus:border-gold transition-all text-sm" />
-            </div>
-            <div>
-              <label class="block text-[10px] text-zinc-500 uppercase font-black mb-2 tracking-wider">Headlights (No RGB)</label>
-              <select id="headlights" class="w-full bg-black border border-zinc-800 rounded-xl p-3 text-white outline-none focus:border-gold transition-all text-sm">
-                {headlightColors.map(h => <option value={h}>{h}</option>)}
-              </select>
-            </div>
-            <div>
-              <label class="block text-[10px] text-zinc-500 uppercase font-black mb-2 tracking-wider">Window Tint</label>
-              <select id="windows" class="w-full bg-black border border-zinc-800 rounded-xl p-3 text-white outline-none focus:border-gold transition-all text-sm">
-                <option value="Clear">Clear</option>
-                <option value="Green">Green</option>
-              </select>
-            </div>
-          </div>
           <div>
-            <label class="block text-[10px] text-zinc-500 uppercase font-black mb-2 tracking-wider">Neon Color / Horn / Livery / Notes</label>
-            <textarea id="notes" rows="3" placeholder="Enter RGB values or extra details..." class="w-full bg-black border border-zinc-800 rounded-xl p-3 text-white outline-none focus:border-gold transition-all text-sm resize-none"></textarea>
+            <label class="block text-[10px] text-zinc-500 uppercase font-black mb-1">Vehicle or Set:</label>
+            <input type="text" id="vehicle" placeholder="e.g. Buffalo STX" class="w-full bg-black border border-zinc-800 rounded-lg p-2.5 text-white text-sm outline-none focus:border-gold" />
+          </div>
+
+          <div>
+            <label class="block text-[10px] text-zinc-500 uppercase font-black mb-1">Plate Text (8 characters):</label>
+            <input type="text" id="plate" maxlength="8" placeholder="NUGZZ" class="w-full bg-black border border-zinc-800 rounded-lg p-2.5 text-white text-sm uppercase font-mono outline-none focus:border-gold" />
+          </div>
+
+          <div>
+            <label class="block text-[10px] text-zinc-500 uppercase font-black mb-1">Windows Tint (Clear or Green):</label>
+            <select id="windows" class="w-full bg-black border border-zinc-800 rounded-lg p-2.5 text-white text-sm outline-none focus:border-gold">
+              <option value="Clear">Clear</option>
+              <option value="Green">Green</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="block text-[10px] text-zinc-500 uppercase font-black mb-1">Headlight Color NO RGB:</label>
+            <select id="headlights" class="w-full bg-black border border-zinc-800 rounded-lg p-2.5 text-white text-sm outline-none focus:border-gold">
+              {headlightColors.map(h => <option value={h}>{h}</option>)}
+            </select>
+          </div>
+
+          <div>
+            <label class="block text-[10px] text-zinc-500 uppercase font-black mb-1">Neon Color or RGB:</label>
+            <input type="text" id="neon" placeholder="e.g. Pure White or 255, 255, 255" class="w-full bg-black border border-zinc-800 rounded-lg p-2.5 text-white text-sm outline-none focus:border-gold" />
+          </div>
+
+          <div>
+            <label class="block text-[10px] text-zinc-500 uppercase font-black mb-1">Paint Texture:</label>
+            <select id="texture" class="w-full bg-black border border-zinc-800 rounded-lg p-2.5 text-white text-sm outline-none focus:border-gold">
+              {textures.map(t => <option value={t}>{t}</option>)}
+            </select>
+          </div>
+
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <label class="block text-[10px] text-zinc-500 uppercase font-black mb-1">Primary Color or RGB:</label>
+              <select id="primary" class="w-full bg-black border border-zinc-800 rounded-lg p-2.5 text-white text-sm outline-none focus:border-gold">
+                {primaryUnselected.map(c => <option value={c}>{c}</option>)}
+              </select>
+            </div>
+            <div>
+              <label class="block text-[10px] text-zinc-500 uppercase font-black mb-1">Secondary Color or RGB:</label>
+              <select id="secondary" class="w-full bg-black border border-zinc-800 rounded-lg p-2.5 text-white text-sm outline-none focus:border-gold">
+                {secondaryUnselected.map(c => <option value={c}>{c}</option>)}
+              </select>
+            </div>
+          </div>
+
+          <div id="rgbInputArea" class="hidden">
+            <label class="block text-[10px] text-gold uppercase font-black mb-1">Enter Shared RGB (255, 255, 255):</label>
+            <input type="text" id="customRgb" placeholder="0, 0, 0" class="w-full bg-black border border-gold/50 rounded-lg p-2.5 text-white text-sm outline-none" />
+          </div>
+
+          <div>
+            <label class="block text-[10px] text-zinc-500 uppercase font-black mb-1">Pearlescent Color NO RGB:</label>
+            <select id="pearl" class="w-full bg-black border border-zinc-800 rounded-lg p-2.5 text-white text-sm outline-none focus:border-gold">
+              {pearlUnselected.map(c => <option value={c}>{c}</option>)}
+            </select>
+          </div>
+
+          <div>
+            <label class="block text-[10px] text-zinc-500 uppercase font-black mb-1">Interior Color NO RGB:</label>
+            <select id="interior" class="w-full bg-black border border-zinc-800 rounded-lg p-2.5 text-white text-sm outline-none focus:border-gold">
+              {interiorUnselected.map(c => <option value={c}>{c}</option>)}
+            </select>
+          </div>
+
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <label class="block text-[10px] text-zinc-500 uppercase font-black mb-1">Rim Style:</label>
+              <input type="text" id="rimStyle" placeholder="e.g. Bennys Bespoke" class="w-full bg-black border border-zinc-800 rounded-lg p-2.5 text-white text-sm outline-none focus:border-gold" />
+            </div>
+            <div>
+              <label class="block text-[10px] text-zinc-500 uppercase font-black mb-1">Rim Color NO RGB:</label>
+              <select id="rimColor" class="w-full bg-black border border-zinc-800 rounded-lg p-2.5 text-white text-sm outline-none focus:border-gold">
+                {rimUnselected.map(c => <option value={c}>{c}</option>)}
+              </select>
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-[10px] text-zinc-500 uppercase font-black mb-1">Tire Design:</label>
+            <select id="tires" class="w-full bg-black border border-zinc-800 rounded-lg p-2.5 text-white text-sm outline-none focus:border-gold">
+              {tireDesigns.map(d => <option value={d}>{d}</option>)}
+            </select>
+          </div>
+
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <label class="block text-[10px] text-zinc-500 uppercase font-black mb-1">Horn:</label>
+              <input type="text" id="horn" placeholder="e.g. San Andreas" class="w-full bg-black border border-zinc-800 rounded-lg p-2.5 text-white text-sm outline-none focus:border-gold" />
+            </div>
+            <div>
+              <label class="block text-[10px] text-zinc-500 uppercase font-black mb-1">Livery:</label>
+              <input type="text" id="livery" placeholder="e.g. Flaming Skull" class="w-full bg-black border border-zinc-800 rounded-lg p-2.5 text-white text-sm outline-none focus:border-gold" />
+            </div>
           </div>
         </div>
 
-        <button id="generateBtn" class="w-full bg-gold hover:bg-white text-black font-black uppercase py-5 rounded-2xl tracking-[0.3em] transition-all transform active:scale-95 shadow-[0_0_30px_rgba(212,175,55,0.2)]">
-          Generate Spec Sheet
+        <button id="generateBtn" class="w-full bg-gold hover:bg-white text-black font-black uppercase py-4 rounded-xl tracking-widest transition-all">
+          Generate DMO Spec
         </button>
       </div>
 
       <div class="lg:col-span-5">
         <div class="sticky top-24">
-            <div class="bg-black border-2 border-dashed border-zinc-800 rounded-3xl p-6 flex flex-col">
-                <div class="flex items-center justify-between mb-4">
-                    <span class="text-[10px] text-zinc-500 uppercase font-black tracking-widest">Discord Spec:</span>
-                    <span id="copyStatus" class="text-[10px] text-green-500 uppercase font-black hidden">Copied!</span>
-                </div>
-                <textarea id="output" readonly class="bg-transparent font-mono text-sm h-[450px] w-full resize-none outline-none border-none" style="color: #D4AF37;" placeholder="Build your car on the left..."></textarea>
-                <button id="copyBtn" class="mt-6 w-full bg-zinc-800 hover:bg-zinc-700 text-white font-bold uppercase py-4 rounded-xl tracking-widest transition-all">
-                    Copy To Clipboard
-                </button>
-            </div>
+          <div class="bg-black border-2 border-dashed border-zinc-800 rounded-3xl p-6 flex flex-col">
+            <span class="text-[10px] text-zinc-500 uppercase font-black tracking-widest mb-4">Discord Ready Output:</span>
+            <textarea id="output" readonly class="bg-transparent font-mono text-sm h-[500px] w-full resize-none outline-none border-none" style="color: #D4AF37;" placeholder="Waiting for build..."></textarea>
+            <button id="copyBtn" class="mt-6 w-full bg-zinc-800 hover:bg-zinc-700 text-white font-bold uppercase py-4 rounded-xl tracking-widest transition-all">
+              Copy To Clipboard
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -143,50 +149,56 @@ const headlightColors = ["Default", "Pure White", "Blue", "Electric Blue", "Mint
 
 <script>
   const generateBtn = document.getElementById('generateBtn');
-  const copyBtn = document.getElementById('copyBtn');
-  const output = document.getElementById('output');
-  const copyStatus = document.getElementById('copyStatus');
+  const primarySel = document.getElementById('primary') as HTMLSelectElement;
+  const secondarySel = document.getElementById('secondary') as HTMLSelectElement;
+  const rgbArea = document.getElementById('rgbInputArea');
+
+  // Toggle RGB input if "Custom RGB" is selected in either paint slot
+  const checkRgb = () => {
+    if (primarySel.value === "Custom RGB" || secondarySel.value === "Custom RGB") {
+      rgbArea.classList.remove('hidden');
+    } else {
+      rgbArea.classList.add('hidden');
+    }
+  };
+
+  primarySel.addEventListener('change', checkRgb);
+  secondarySel.addEventListener('change', checkRgb);
 
   generateBtn.addEventListener('click', () => {
-    const v = (document.getElementById('vehicle') as HTMLInputElement).value || "Not Specified";
-    const plate = (document.getElementById('plate') as HTMLInputElement).value || "Stock";
-    const texture = (document.getElementById('texture') as HTMLSelectElement).value;
-    const p = (document.getElementById('primary') as HTMLSelectElement).value;
-    const s = (document.getElementById('secondary') as HTMLSelectElement).value;
-    const pearl = (document.getElementById('pearl') as HTMLInputElement).value || "None";
-    const trim = (document.getElementById('trim') as HTMLSelectElement).value;
-    const accent = (document.getElementById('accent') as HTMLSelectElement).value;
-    const rimS = (document.getElementById('rimStyle') as HTMLSelectElement).value;
-    const rimC = (document.getElementById('rimColor') as HTMLInputElement).value || "Stock";
-    const lights = (document.getElementById('headlights') as HTMLSelectElement).value;
-    const windows = (document.getElementById('windows') as HTMLSelectElement).value;
-    const notes = (document.getElementById('notes') as HTMLTextAreaElement).value || "None";
+    const getData = (id: string) => (document.getElementById(id) as HTMLInputElement | HTMLSelectElement).value;
+    
+    const customRgb = (document.getElementById('customRgb') as HTMLInputElement).value;
+    const pVal = primarySel.value === "Custom RGB" ? `RGB (${customRgb})` : primarySel.value;
+    const sVal = secondarySel.value === "Custom RGB" ? `RGB (${customRgb})` : secondarySel.value;
 
-    const spec = `**🚀 NEW DMO SPEC SHEET**
+    const spec = `**🚀 DMO SPEC SHEET**
 ────────────────────
-🚘 **VEHICLE:** ${v}
-📟 **PLATE:** ${plate}
-🎨 **EXTERIOR:** ${texture}
-   • Primary: ${p}
-   • Secondary: ${s}
-   • Pearl: ${pearl}
-🛋️ **INTERIOR:**
-   • Trim Color: ${trim}
-   • Dash Accent: ${accent}
-🛞 **WHEELS:** ${rimS} (${rimC})
-💡 **LIGHTS:** ${lights}
-🪟 **WINDOWS:** ${windows}
-📝 **NOTES:** ${notes}
+🚘 **Vehicle or Set:** ${getData('vehicle')}
+📟 **Plate Text:** ${getData('plate')}
+🪟 **Windows Tint:** ${getData('windows')}
+💡 **Headlight Color:** ${getData('headlights')}
+🌈 **Neon Color or RGB:** ${getData('neon')}
+🎨 **Paint Texture:** ${getData('texture')}
+🖌️ **Primary Color:** ${pVal}
+🖌️ **Secondary Color:** ${sVal}
+✨ **Pearlescent Color:** ${getData('pearl')}
+🛋️ **Interior Color:** ${getData('interior')}
+🛞 **Rim Style:** ${getData('rimStyle')}
+🎨 **Rim Color:** ${getData('rimColor')}
+🏁 **Tire Design:** ${getData('tires')}
+📢 **Horn:** ${getData('horn')}
+📜 **Livery:** ${getData('livery')}
 ────────────────────
-*Generated @ OfficialNugzzCrew.com*`;
+*OfficialNugzzCrew.com*`;
 
-    (output as HTMLTextAreaElement).value = spec;
+    (document.getElementById('output') as HTMLTextAreaElement).value = spec;
   });
 
-  copyBtn.addEventListener('click', () => {
-    (output as HTMLTextAreaElement).select();
+  document.getElementById('copyBtn').addEventListener('click', () => {
+    const out = document.getElementById('output') as HTMLTextAreaElement;
+    out.select();
     document.execCommand('copy');
-    copyStatus.classList.remove('hidden');
-    setTimeout(() => copyStatus.classList.add('hidden'), 2000);
+    alert('Copied to Clipboard!');
   });
 </script>
