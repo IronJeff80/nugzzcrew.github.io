@@ -66,7 +66,7 @@ const headlightAndNeonColors = ["Custom RGB", "Default", "Pure White", "Blue", "
                   <select id="neon" class="flex-1 bg-black border border-zinc-800 rounded-lg p-3 text-white text-sm outline-none focus:border-gold">
                       {headlightAndNeonColors.map(c => <option value={c}>{c}</option>)}
                   </select>
-                  <div id="neonPrev" class="w-6 h-12 rounded border border-zinc-700 bg-zinc-800 shrink-0 cursor-pointer hover:border-white transition-all"></div>
+                  <div id="neonPrev" class="w-8 h-12 rounded border border-zinc-700 bg-zinc-800 shrink-0 cursor-pointer hover:border-white transition-all"></div>
               </div>
             </div>
           </div>
@@ -85,7 +85,7 @@ const headlightAndNeonColors = ["Custom RGB", "Default", "Pure White", "Blue", "
                     <select id="primary" class="flex-1 bg-black border border-zinc-800 rounded-lg p-3 text-white text-sm outline-none focus:border-gold">
                         {primaryUnselected.map(c => <option value={c}>{c}</option>)}
                     </select>
-                    <div id="primaryPrev" class="w-6 h-12 rounded border border-zinc-700 bg-zinc-800 shrink-0 cursor-pointer hover:border-white transition-all"></div>
+                    <div id="primaryPrev" class="w-8 h-12 rounded border border-zinc-700 bg-zinc-800 shrink-0 cursor-pointer hover:border-white transition-all"></div>
                 </div>
             </div>
             <div class="space-y-1">
@@ -94,7 +94,7 @@ const headlightAndNeonColors = ["Custom RGB", "Default", "Pure White", "Blue", "
                     <select id="secondary" class="flex-1 bg-black border border-zinc-800 rounded-lg p-3 text-white text-sm outline-none focus:border-gold">
                         {secondaryUnselected.map(c => <option value={c}>{c}</option>)}
                     </select>
-                    <div id="secondaryPrev" class="w-6 h-12 rounded border border-zinc-700 bg-zinc-800 shrink-0 cursor-pointer hover:border-white transition-all"></div>
+                    <div id="secondaryPrev" class="w-8 h-12 rounded border border-zinc-700 bg-zinc-800 shrink-0 cursor-pointer hover:border-white transition-all"></div>
                 </div>
             </div>
           </div>
@@ -113,7 +113,7 @@ const headlightAndNeonColors = ["Custom RGB", "Default", "Pure White", "Blue", "
                     <select id="pearl" class="flex-1 bg-black border border-zinc-800 rounded-lg p-3 text-white text-sm outline-none focus:border-gold">
                         {pearlUnselected.map(c => <option value={c}>{c}</option>)}
                     </select>
-                    <div id="pearlPrev" class="w-6 h-12 rounded border border-zinc-700 bg-zinc-800 shrink-0"></div>
+                    <div id="pearlPrev" class="w-8 h-12 rounded border border-zinc-700 bg-zinc-800 shrink-0"></div>
                 </div>
             </div>
             <div class="space-y-1">
@@ -122,7 +122,7 @@ const headlightAndNeonColors = ["Custom RGB", "Default", "Pure White", "Blue", "
                     <select id="interior" class="flex-1 bg-black border border-zinc-800 rounded-lg p-3 text-white text-sm outline-none focus:border-gold">
                         {interiorUnselected.map(c => <option value={c}>{c}</option>)}
                     </select>
-                    <div id="interiorPrev" class="w-6 h-12 rounded border border-zinc-700 bg-zinc-800 shrink-0"></div>
+                    <div id="interiorPrev" class="w-8 h-12 rounded border border-zinc-700 bg-zinc-800 shrink-0"></div>
                 </div>
             </div>
           </div>
@@ -138,7 +138,7 @@ const headlightAndNeonColors = ["Custom RGB", "Default", "Pure White", "Blue", "
                     <select id="rimColor" class="flex-1 bg-black border border-zinc-800 rounded-lg p-3 text-white text-sm outline-none focus:border-gold">
                         {rimUnselected.map(c => <option value={c}>{c}</option>)}
                     </select>
-                    <div id="rimColorPrev" class="w-6 h-12 rounded border border-zinc-700 bg-zinc-800 shrink-0"></div>
+                    <div id="rimColorPrev" class="w-8 h-12 rounded border border-zinc-700 bg-zinc-800 shrink-0"></div>
                 </div>
             </div>
           </div>
@@ -181,103 +181,100 @@ const headlightAndNeonColors = ["Custom RGB", "Default", "Pure White", "Blue", "
     "Alloy": "#666666", "Anthracite Gray": "#1C1D21", "Baby Blue": "#5082C3", "BeechWood Brown": "#2E2823", "Bison Brown": "#1C1916", "Black": "#0D0C10", "Black Poly": "#0D0C10", "Black Steel": "#212121", "Blaze Red": "#5F0A0A", "Bleached Brown": "#423930", "Blue": "#1A1F2B", "Blue Silver": "#313845", "Bluish Silver": "#4E5660", "Bright Blue/Slate Blue": "#455364", "Bright Green": "#009900", "Bright Orange": "#F27D00", "Bright Purple": "#400E52", "Bright Red": "#820707", "Bronze": "#413023", "Brown": "#261D17", "Brushed Aluminium": "#474E54", "Brushed Black Steel": "#121315", "Brushed Gold": "#4A3B2B", "Brushed Steel": "#272D33", "Cabernet Red": "#1F0206", "Candy Red": "#660000", "Carbon Black": "#050505", "Cast Iron Silver": "#1E1E1E", "Champagne": "#655C50", "Chocolate Brown": "#18100A", "Chrome": "#929292", "Cream": "#B8AE96", "Creek Brown": "#2A211D", "Dark Blue": "#0A0C17", "Dark Brown": "#0E0D0B", "Dark Earth": "#231D19", "Dark Green": "#05130D", "Dark Red": "#1B0202", "Dark Silver": "#1E1E1E", "Dark Steel": "#12151A", "Desert Tan": "#6A5C4A", "Dew Yellow/Yellow Bird": "#B79600", "Diamond Blue": "#4E5660", "Epsilon Blue": "#355990", "Feltzer Brown": "#2A211D", "Fluorescent Blue": "#00ADFF", "Foliage Green": "#242E25", "Forest Green": "#0C1410", "Formula Red": "#540000", "Frost White": "#ECF0F0", "Galaxy Blue": "#001426", "Garnet Red": "#350406", "Gasoline Green": "#051D21", "Gold": "#47351B", "Golden Red": "#450A0A", "Grace Red": "#3E0204", "Graphite": "#15191E", "Gray": "#333333", "Green": "#0E1F18", "Green Bright": "#009900", "Gun Metal": "#283034", "Harbor Blue": "#001C57", "Honey Beige": "#574431", "Hot Pink": "#B01259", "Hunter Green": "#0C1410", "Ice White": "#F0F0F0", "Lava Red": "#210202", "Light Blue": "#1D2D44", "Light Brown": "#3B3026", "Light Gray": "#737373", "Light Orange": "#CF6300", "Lightning Blue": "#0045FF", "Lime Green": "#244105", "MP100": "#637380", "Maple Brown": "#261D17", "Mariner Blue": "#1A1F2B", "Maui Blue Poly": "#1D2D44", "Medium Brown": "#18100A", "Midnight Blue": "#010816", "Midnight Purple": "#070310", "Midnight Purple/V Dark Blue": "#070310", "Midnight Silver": "#0D1116", "Moss Brown": "#0E1F18", "Nautical Blue": "#001426", "Off White": "#B8B3A8", "Olive Army Green": "#24231E", "Olive Drab": "#1A1A11", "Olive Green": "#05130D", "Orange": "#9E4006", "Orange 2": "#F27D00", "Pea Green/Securicor Green": "#274227", "Pfister Pink": "#B01259", "Police Blue": "#000620", "Pure Gold": "#3D2B13", "Pure White": "#FFFFFF", "Race Yellow": "#C29100", "Racing Blue": "#001C57", "Racing Green": "#001A12", "Red": "#690000", "Rolled Steel": "#212121", "Saddle Brown": "#321B13", "Salmon Pink": "#5F3D41", "Sandy Brown": "#423226", "Saxon Blue": "#355990", "Schafter Purple": "#373E52", "Sea Foam Blue": "#5082C3", "Sea Green": "#011A19", "Sea Wash": "#313845", "Shadow Silver": "#121417", "Shawdow Silver": "#121417", "Sienna Brown": "#0E0D0B", "Silver": "#515554", "Silver Grey": "#474E54", "Spinnaker Purple": "#400E52", "Stone Silver": "#1E2329", "Straw Beige": "#B8AE96", "Straw Brown": "#423930", "Sunrise Orange": "#CF6300", "Sunset Red": "#400708", "Surf Blue": "#03394D", "Taxi Yellow": "#7F6500", "Torino Red": "#4E0303", "Ultra Blue": "#0045FF", "White": "#919191", "Wine Red": "#160102", "Woodbeach Brown": "#2E2823", "Yellow": "#B79600"
   };
 
-  const colorPicker = document.getElementById('colorPicker');
-  const paintRgbInput = document.getElementById('sharedRgb');
-  const neonRgbInput = document.getElementById('neonRgb');
-  let activePickerTarget = 'paint';
+  const picker = document.getElementById('colorPicker');
+  const sharedRgbInp = document.getElementById('sharedRgb');
+  const neonRgbInp = document.getElementById('neonRgb');
+  let activeTarget = 'paint';
 
-  function hexToRgb(hex) {
+  // Helper: Hex to "R, G, B" string
+  const hexToRgbStr = (hex) => {
     const r = parseInt(hex.slice(1, 3), 16);
     const g = parseInt(hex.slice(3, 5), 16);
     const b = parseInt(hex.slice(5, 7), 16);
     return `${r}, ${g}, ${b}`;
-  }
+  };
 
-  function rgbToHex(rgbStr) {
-    if (!rgbStr) return "#000000";
+  // Helper: "R, G, B" string to Hex
+  const rgbToHexStr = (rgbStr) => {
+    if (!rgbStr || !rgbStr.includes(',')) return "#000000";
     const parts = rgbStr.split(',').map(n => parseInt(n.trim()));
     if (parts.length !== 3 || parts.some(isNaN)) return "#000000";
     return "#" + parts.map(x => Math.min(255, Math.max(0, x)).toString(16).padStart(2, '0')).join('');
-  }
+  };
 
-  function updatePreview(id) {
-    const select = document.getElementById(id);
-    const prev = document.getElementById(id + 'Prev');
-    if (!select || !prev) return;
+  // MASTER UPDATE FUNCTION
+  function refreshUI() {
+    const ids = ['primary', 'secondary', 'neon', 'pearl', 'interior', 'rimColor'];
+    
+    ids.forEach(id => {
+      const select = document.getElementById(id);
+      const box = document.getElementById(id + 'Prev');
+      if (!select || !box) return;
 
-    if (select.value === "Custom RGB") {
-      const rgbVal = (id === 'neon') ? neonRgbInput.value : paintRgbInput.value;
-      if (rgbVal && rgbVal.includes(',')) {
-        prev.style.backgroundColor = `rgb(${rgbVal})`;
-        prev.style.background = "";
+      if (select.value === "Custom RGB") {
+        const val = (id === 'neon') ? neonRgbInp.value : sharedRgbInp.value;
+        if (val && val.split(',').length === 3) {
+          box.style.background = "";
+          box.style.backgroundColor = `rgb(${val})`;
+        } else {
+          box.style.background = "conic-gradient(from 0deg, red, yellow, green, cyan, blue, magenta, red)";
+        }
       } else {
-        prev.style.background = "conic-gradient(from 0deg, red, yellow, green, cyan, blue, magenta, red)";
+        box.style.background = "";
+        box.style.backgroundColor = hexCodes[select.value] || "#111111";
       }
-    } else {
-      prev.style.backgroundColor = hexCodes[select.value] || "#111111";
-      prev.style.background = "";
-    }
-  }
+    });
 
-  function toggleVisibility() {
+    // Visibility
     document.getElementById('rgbInputArea').style.display = (document.getElementById('primary').value === "Custom RGB" || document.getElementById('secondary').value === "Custom RGB") ? "block" : "none";
     document.getElementById('neonRgbArea').style.display = (document.getElementById('neon').value === "Custom RGB") ? "block" : "none";
   }
 
-  // Bind Listeners
+  // Bind Selects
   ['primary', 'secondary', 'neon', 'pearl', 'interior', 'rimColor'].forEach(id => {
     const el = document.getElementById(id);
-    const pr = document.getElementById(id + 'Prev');
+    el.addEventListener('change', refreshUI);
     
-    el.addEventListener('change', () => {
-      toggleVisibility();
-      updatePreview(id);
-      if (id === 'primary' || id === 'secondary') {
-         updatePreview('primary');
-         updatePreview('secondary');
-      }
-    });
-
+    // Bind Click to Preview Boxes for RGB triggers
+    const pr = document.getElementById(id + 'Prev');
     if (pr && (id === 'primary' || id === 'secondary' || id === 'neon')) {
       pr.addEventListener('click', () => {
         if (el.value === "Custom RGB") {
-          activePickerTarget = (id === 'neon') ? 'neon' : 'paint';
-          colorPicker.click();
+          activeTarget = (id === 'neon') ? 'neon' : 'paint';
+          const current = (activeTarget === 'neon') ? neonRgbInp.value : sharedRgbInp.value;
+          picker.value = rgbToHexStr(current);
+          picker.click();
         }
       });
     }
   });
 
-  colorPicker.addEventListener('input', (e) => {
-    const rgb = hexToRgb(e.target.value);
-    if (activePickerTarget === 'neon') {
-      neonRgbInput.value = rgb;
-      updatePreview('neon');
+  // Bind RGB Text Inputs
+  [sharedRgbInp, neonRgbInp].forEach(inp => inp.addEventListener('input', refreshUI));
+
+  // Bind Color Wheel
+  picker.addEventListener('input', (e) => {
+    const rgb = hexToRgbStr(e.target.value);
+    if (activeTarget === 'neon') {
+      neonRgbInp.value = rgb;
     } else {
-      paintRgbInput.value = rgb;
-      updatePreview('primary');
-      updatePreview('secondary');
+      sharedRgbInp.value = rgb;
     }
+    refreshUI();
   });
 
-  [paintRgbInput, neonRgbInput].forEach(inp => {
-    inp.addEventListener('input', () => {
-      updatePreview('primary');
-      updatePreview('secondary');
-      updatePreview('neon');
-    });
-  });
+  // INITIAL LOAD
+  refreshUI();
 
-  // Init
-  ['primary', 'secondary', 'neon', 'pearl', 'interior', 'rimColor'].forEach(updatePreview);
-  toggleVisibility();
-
+  // Generator Logic
   document.getElementById('mainGenerateBtn').addEventListener('click', () => {
     const val = (id) => document.getElementById(id).value;
     const isActivator = document.getElementById('activator').checked;
-    const pOut = val('primary') === "Custom RGB" ? `RGB (${val('sharedRgb')})` : val('primary');
-    const sOut = val('secondary') === "Custom RGB" ? `RGB (${val('sharedRgb')})` : val('secondary');
-    const nOut = val('neon') === "Custom RGB" ? `RGB (${val('neonRgb')})` : val('neon');
+    
+    const formatOut = (selId, rgbId) => {
+      const s = val(selId);
+      return s === "Custom RGB" ? `RGB (${val(rgbId)})` : s;
+    };
 
     document.getElementById('finalOutput').value = `**🚀 DMO SPEC SHEET**
 ────────────────────
@@ -285,10 +282,10 @@ const headlightAndNeonColors = ["Custom RGB", "Default", "Pure White", "Blue", "
 📟 **Plate:** ${val('plate')}
 🪟 **Windows:** ${val('windows')}
 💡 **Headlights:** ${val('headlights')}
-🌈 **Neon:** ${nOut}
+🌈 **Neon:** ${formatOut('neon', 'neonRgb')}
 🎨 **Texture:** ${val('texture')}
-🖌️ **Primary:** ${pOut}
-🖌️ **Secondary:** ${sOut}
+🖌️ **Primary:** ${formatOut('primary', 'sharedRgb')}
+🖌️ **Secondary:** ${formatOut('secondary', 'sharedRgb')}
 ✨ **Pearl:** ${val('pearl')}
 🛋️ **Interior:** ${val('interior')}
 🛞 **Rim Style:** ${val('rimStyle')}
@@ -303,6 +300,6 @@ const headlightAndNeonColors = ["Custom RGB", "Default", "Pure White", "Blue", "
     const box = document.getElementById('finalOutput');
     box.select();
     document.execCommand('copy');
-    alert('Copied!');
+    alert('Copied to Clipboard!');
   });
 </script>
