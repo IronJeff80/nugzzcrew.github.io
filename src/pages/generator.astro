@@ -1,7 +1,7 @@
 ---
 import MainLayout from '../layouts/MainLayout.astro';
 
-// DATA FROM CSV
+// RESTORED FULL SAVE EDITOR LIST
 const primaryUnselected = ["Custom RGB", "Alloy", "Anthracite Gray", "Baby Blue", "BeechWood Brown", "Bison Brown", "Black", "Black Poly", "Black Steel", "Blaze Red", "Bleached Brown", "Blue", "Blue Silver", "Bluish Silver", "Bright Blue/Slate Blue", "Bright Green", "Bright Orange", "Bright Purple", "Bright Red", "Bronze", "Brown", "Brushed Aluminium", "Brushed Black Steel", "Brushed Gold", "Brushed Steel", "Cabernet Red", "Candy Red", "Carbon Black", "Cast Iron Silver", "Champagne", "Chocolate Brown", "Chrome", "Cream", "Creek Brown", "Dark Blue", "Dark Brown", "Dark Earth", "Dark Green", "Dark Red", "Dark Silver", "Dark Steel", "Desert Tan", "Dew Yellow/Yellow Bird", "Diamond Blue", "Epsilon Blue", "Feltzer Brown", "Fluorescent Blue", "Foliage Green", "Forest Green", "Formula Red", "Frost White", "Galaxy Blue", "Garnet Red", "Gasoline Green", "Gold", "Golden Red", "Grace Red", "Graphite", "Gray", "Green", "Green Bright", "Gun Metal", "Harbor Blue", "Honey Beige", "Hot Pink", "Hunter Green", "Ice White", "Lava Red", "Light Blue", "Light Brown", "Light Gray", "Light Orange", "Lightning Blue", "Lime Green", "MP100", "Maple Brown", "Mariner Blue", "Maui Blue Poly", "Medium Brown", "Midnight Blue", "Midnight Purple", "Midnight Purple/V Dark Blue", "Midnight Silver", "Moss Brown", "Nautical Blue", "Off White", "Olive Army Green", "Olive Drab", "Olive Green", "Orange", "Orange 2", "Pea Green/Securicor Green", "Pfister Pink", "Police Blue", "Pure Gold", "Pure White", "Race Yellow", "Racing Blue", "Racing Green", "Red", "Rolled Steel", "Saddle Brown", "Salmon Pink", "Sandy Brown", "Saxon Blue", "Schafter Purple", "Sea Foam Blue", "Sea Green", "Sea Wash", "Shadow Silver", "Shawdow Silver", "Sienna Brown", "Silver", "Silver Grey", "Spinnaker Purple", "Stone Silver", "Straw Beige", "Straw Brown", "Sunrise Orange", "Sunset Red", "Surf Blue", "Taxi Yellow", "Torino Red", "Ultra Blue", "White", "Wine Red", "Woodbeach Brown", "Yellow"];
 
 const secondaryUnselected = ["Custom RGB", ...primaryUnselected.slice(1)];
@@ -34,7 +34,7 @@ const headlightAndNeonColors = ["Custom RGB", "Default", "Pure White", "Blue", "
 
           <div class="grid grid-cols-2 gap-4">
             <div>
-              <label class="block text-[10px] text-zinc-500 uppercase font-black mb-1">Plate Text (8 Chars):</label>
+              <label class="block text-[10px] text-zinc-500 uppercase font-black mb-1">Plate Text:</label>
               <input type="text" id="plate" maxlength="8" placeholder="NUGZZ" class="w-full bg-black border border-zinc-800 rounded-lg p-3 text-white text-sm uppercase font-mono outline-none focus:border-gold" />
             </div>
             <div>
@@ -46,12 +46,12 @@ const headlightAndNeonColors = ["Custom RGB", "Default", "Pure White", "Blue", "
             </div>
           </div>
 
-          <div id="rgbInputArea" class="bg-gold/10 p-4 rounded-xl border border-gold/50 shadow-[0_0_15px_rgba(212,175,55,0.1)]" style="display: none;">
+          <div id="rgbInputArea" class="bg-gold/10 p-4 rounded-xl border border-gold/50" style="display: none;">
             <label class="block text-[10px] text-gold uppercase font-black mb-2 tracking-widest flex justify-between">
                 <span>⚠️ SHARED PAINT RGB:</span>
-                <span class="text-[8px] opacity-70 italic uppercase">Click primary/secondary rainbow box for wheel</span>
+                <span class="text-[8px] opacity-70 italic">Click Rainbow Box to pick</span>
             </label>
-            <input type="text" id="sharedRgb" placeholder="e.g. 212, 175, 55" class="w-full bg-black border-2 border-gold rounded-lg p-3 text-white text-sm font-mono outline-none" />
+            <input type="text" id="sharedRgb" placeholder="212, 175, 55" class="w-full bg-black border-2 border-gold rounded-lg p-3 text-white text-sm font-mono outline-none" />
           </div>
 
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -61,7 +61,7 @@ const headlightAndNeonColors = ["Custom RGB", "Default", "Pure White", "Blue", "
                     {headlightAndNeonColors.filter(c => c !== "Custom RGB").map(h => <option value={h}>{h}</option>)}
                 </select>
             </div>
-            <div>
+            <div class="space-y-1">
               <label class="block text-[10px] text-zinc-500 uppercase font-black mb-1">Neon Color:</label>
               <div class="flex gap-2 items-center">
                   <select id="neon" class="flex-1 bg-black border border-zinc-800 rounded-lg p-3 text-white text-sm outline-none focus:border-gold">
@@ -75,9 +75,8 @@ const headlightAndNeonColors = ["Custom RGB", "Default", "Pure White", "Blue", "
           <div id="neonRgbArea" class="bg-blue-500/10 p-4 rounded-xl border border-blue-500/50" style="display: none;">
             <label class="block text-[10px] text-blue-400 uppercase font-black mb-2 tracking-widest flex justify-between">
                 <span>🌈 NEON RGB VALUE:</span>
-                <span class="text-[8px] opacity-70 italic uppercase">Click neon rainbow box for wheel</span>
             </label>
-            <input type="text" id="neonRgb" placeholder="e.g. 0, 255, 255" class="w-full bg-black border-2 border-blue-500 rounded-lg p-3 text-white text-sm font-mono outline-none" />
+            <input type="text" id="neonRgb" placeholder="0, 255, 255" class="w-full bg-black border-2 border-blue-500 rounded-lg p-3 text-white text-sm font-mono outline-none" />
           </div>
 
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -99,13 +98,6 @@ const headlightAndNeonColors = ["Custom RGB", "Default", "Pure White", "Blue", "
                     <div id="secondaryPrev" class="w-6 h-12 rounded border border-zinc-700 bg-zinc-800 shrink-0 cursor-pointer hover:border-white transition-all"></div>
                 </div>
             </div>
-          </div>
-
-          <div>
-            <label class="block text-[10px] text-zinc-500 uppercase font-black mb-1">Paint Texture:</label>
-            <select id="texture" class="w-full bg-black border border-zinc-800 rounded-lg p-3 text-white text-sm outline-none focus:border-gold">
-              {textures.map(t => <option value={t}>{t}</option>)}
-            </select>
           </div>
 
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -157,20 +149,9 @@ const headlightAndNeonColors = ["Custom RGB", "Default", "Pure White", "Blue", "
                 <label for="activator" class="text-[10px] text-zinc-300 uppercase font-black cursor-pointer tracking-widest">Activator</label>
             </div>
           </div>
-
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <label class="block text-[10px] text-zinc-500 uppercase font-black mb-1">Livery:</label>
-              <input type="text" id="livery" placeholder="Livery Name" class="w-full bg-black border border-zinc-800 rounded-lg p-3 text-white text-sm outline-none focus:border-gold" />
-            </div>
-            <div>
-              <label class="block text-[10px] text-zinc-500 uppercase font-black mb-1">Horn:</label>
-              <input type="text" id="horn" placeholder="e.g. Loop" class="w-full bg-black border border-zinc-800 rounded-lg p-3 text-white text-sm outline-none focus:border-gold" />
-            </div>
-          </div>
         </div>
 
-        <button id="mainGenerateBtn" class="w-full bg-gold hover:bg-white text-black font-black uppercase py-5 rounded-xl tracking-widest transition-all shadow-[0_0_20px_rgba(212,175,55,0.3)]">
+        <button id="mainGenerateBtn" class="w-full bg-gold hover:bg-white text-black font-black uppercase py-5 rounded-xl tracking-widest transition-all">
           Generate DMO Spec
         </button>
       </div>
@@ -178,7 +159,6 @@ const headlightAndNeonColors = ["Custom RGB", "Default", "Pure White", "Blue", "
       <div class="lg:col-span-5">
         <div class="sticky top-24">
           <div class="bg-black border-2 border-dashed border-zinc-800 rounded-3xl p-6">
-            <span class="text-[10px] text-zinc-500 uppercase font-black mb-4 block">Discord Ready Output:</span>
             <textarea id="finalOutput" readonly class="bg-transparent font-mono text-sm h-[520px] w-full resize-none outline-none border-none text-gold" placeholder="Ready for NUGZZ..."></textarea>
             <button id="copyFinal" class="mt-4 w-full bg-zinc-800 hover:bg-zinc-700 text-white font-bold uppercase py-4 rounded-xl transition-all">
               Copy To Clipboard
@@ -191,8 +171,9 @@ const headlightAndNeonColors = ["Custom RGB", "Default", "Pure White", "Blue", "
 </MainLayout>
 
 <script is:inline>
+  // FULL RESTORED HEX CODES FROM CSV
   const hexCodes = {
-    "Alloy": "#666666", "Anthracite Gray": "#1C1D21", "Baby Blue": "#5082C3", "BeechWood Brown": "#2E2823", "Bison Brown": "#1C1916", "Black": "#0D0C10", "Black Poly": "#0D0C10", "Black Steel": "#212121", "Blaze Red": "#5F0A0A", "Bleached Brown": "#423930", "Blue": "#1A1F2B", "Blue Silver": "#313845", "Bluish Silver": "#4E5660", "Bright Green": "#009900", "Bright Orange": "#F27D00", "Bright Purple": "#400E52", "Bright Red": "#820707", "Bronze": "#413023", "Brown": "#261D17", "Brushed Aluminium": "#474E54", "Brushed Black Steel": "#121315", "Brushed Gold": "#4A3B2B", "Brushed Steel": "#272D33", "Cabernet Red": "#1F0206", "Candy Red": "#660000", "Carbon Black": "#050505", "Champagne": "#655C50", "Chocolate Brown": "#18100A", "Chrome": "#929292", "Cream": "#B8AE96", "Dark Blue": "#0A0C17", "Dark Brown": "#0E0D0B", "Dark Earth": "#231D19", "Dark Green": "#05130D", "Dark Red": "#1B0202", "Dark Silver": "#1E1E1E", "Dark Steel": "#12151A", "Desert Tan": "#6A5C4A", "Epsilon Blue": "#355990", "Feltzer Brown": "#2A211D", "Fluorescent Blue": "#00ADFF", "Foliage Green": "#242E25", "Forest Green": "#0C1410", "Formula Red": "#540000", "Frost White": "#ECF0F0", "Galaxy Blue": "#001426", "Garnet Red": "#350406", "Gasoline Green": "#051D21", "Gold": "#47351B", "Golden Red": "#450A0A", "Grace Red": "#3E0204", "Graphite": "#15191E", "Gray": "#333333", "Green": "#0E1F18", "Gun Metal": "#283034", "Honey Beige": "#574431", "Hot Pink": "#B01259", "Ice White": "#F0F0F0", "Lava Red": "#210202", "Light Blue": "#1D2D44", "Light Brown": "#3B3026", "Light Gray": "#737373", "Light Orange": "#CF6300", "Lime Green": "#244105", "MP100": "#637380", "Midnight Blue": "#010816", "Midnight Purple": "#070310", "Midnight Silver": "#0D1116", "Off White": "#B8B3A8", "Olive Army Green": "#24231E", "Olive Drab": "#1A1A11", "Pea Green/Securicor Green": "#274227", "Orange": "#9E4006", "Police Blue": "#000620", "Pure Gold": "#3D2B13", "Pure White": "#FFFFFF", "Race Yellow": "#C29100", "Racing Blue": "#001C57", "Racing Green": "#001A12", "Red": "#690000", "Saddle Brown": "#321B13", "Salmon Pink": "#5F3D41", "Sandy Brown": "#423226", "Saxon Blue": "#355990", "Schafter Purple": "#373E52", "Sea Green": "#011A19", "Shadow Silver": "#121417", "Silver": "#515554", "Stone Silver": "#1E2329", "Sunset Red": "#400708", "Surf Blue": "#03394D", "Taxi Yellow": "#7F6500", "Torino Red": "#4E0303", "Ultra Blue": "#0045FF", "White": "#919191", "Wine Red": "#160102", "Yellow": "#B79600"
+    "Alloy": "#666666", "Anthracite Gray": "#1C1D21", "Baby Blue": "#5082C3", "BeechWood Brown": "#2E2823", "Bison Brown": "#1C1916", "Black": "#0D0C10", "Black Poly": "#0D0C10", "Black Steel": "#212121", "Blaze Red": "#5F0A0A", "Bleached Brown": "#423930", "Blue": "#1A1F2B", "Blue Silver": "#313845", "Bluish Silver": "#4E5660", "Bright Blue/Slate Blue": "#455364", "Bright Green": "#009900", "Bright Orange": "#F27D00", "Bright Purple": "#400E52", "Bright Red": "#820707", "Bronze": "#413023", "Brown": "#261D17", "Brushed Aluminium": "#474E54", "Brushed Black Steel": "#121315", "Brushed Gold": "#4A3B2B", "Brushed Steel": "#272D33", "Cabernet Red": "#1F0206", "Candy Red": "#660000", "Carbon Black": "#050505", "Cast Iron Silver": "#1E1E1E", "Champagne": "#655C50", "Chocolate Brown": "#18100A", "Chrome": "#929292", "Cream": "#B8AE96", "Creek Brown": "#2A211D", "Dark Blue": "#0A0C17", "Dark Brown": "#0E0D0B", "Dark Earth": "#231D19", "Dark Green": "#05130D", "Dark Red": "#1B0202", "Dark Silver": "#1E1E1E", "Dark Steel": "#12151A", "Desert Tan": "#6A5C4A", "Dew Yellow/Yellow Bird": "#B79600", "Diamond Blue": "#4E5660", "Epsilon Blue": "#355990", "Feltzer Brown": "#2A211D", "Fluorescent Blue": "#00ADFF", "Foliage Green": "#242E25", "Forest Green": "#0C1410", "Formula Red": "#540000", "Frost White": "#ECF0F0", "Galaxy Blue": "#001426", "Garnet Red": "#350406", "Gasoline Green": "#051D21", "Gold": "#47351B", "Golden Red": "#450A0A", "Grace Red": "#3E0204", "Graphite": "#15191E", "Gray": "#333333", "Green": "#0E1F18", "Green Bright": "#009900", "Gun Metal": "#283034", "Harbor Blue": "#001C57", "Honey Beige": "#574431", "Hot Pink": "#B01259", "Hunter Green": "#0C1410", "Ice White": "#F0F0F0", "Lava Red": "#210202", "Light Blue": "#1D2D44", "Light Brown": "#3B3026", "Light Gray": "#737373", "Light Orange": "#CF6300", "Lightning Blue": "#0045FF", "Lime Green": "#244105", "MP100": "#637380", "Maple Brown": "#261D17", "Mariner Blue": "#1A1F2B", "Maui Blue Poly": "#1D2D44", "Medium Brown": "#18100A", "Midnight Blue": "#010816", "Midnight Purple": "#070310", "Midnight Purple/V Dark Blue": "#070310", "Midnight Silver": "#0D1116", "Moss Brown": "#0E1F18", "Nautical Blue": "#001426", "Off White": "#B8B3A8", "Olive Army Green": "#24231E", "Olive Drab": "#1A1A11", "Olive Green": "#05130D", "Orange": "#9E4006", "Orange 2": "#F27D00", "Pea Green/Securicor Green": "#274227", "Pfister Pink": "#B01259", "Police Blue": "#000620", "Pure Gold": "#3D2B13", "Pure White": "#FFFFFF", "Race Yellow": "#C29100", "Racing Blue": "#001C57", "Racing Green": "#001A12", "Red": "#690000", "Rolled Steel": "#212121", "Saddle Brown": "#321B13", "Salmon Pink": "#5F3D41", "Sandy Brown": "#423226", "Saxon Blue": "#355990", "Schafter Purple": "#373E52", "Sea Foam Blue": "#5082C3", "Sea Green": "#011A19", "Sea Wash": "#313845", "Shadow Silver": "#121417", "Shawdow Silver": "#121417", "Sienna Brown": "#0E0D0B", "Silver": "#515554", "Silver Grey": "#474E54", "Spinnaker Purple": "#400E52", "Stone Silver": "#1E2329", "Straw Beige": "#B8AE96", "Straw Brown": "#423930", "Sunrise Orange": "#CF6300", "Sunset Red": "#400708", "Surf Blue": "#03394D", "Taxi Yellow": "#7F6500", "Torino Red": "#4E0303", "Ultra Blue": "#0045FF", "White": "#919191", "Wine Red": "#160102", "Woodbeach Brown": "#2E2823", "Yellow": "#B79600"
   };
 
   const primary = document.getElementById('primary');
@@ -204,7 +185,7 @@ const headlightAndNeonColors = ["Custom RGB", "Default", "Pure White", "Blue", "
   const paintRgbInput = document.getElementById('sharedRgb');
   const neonRgbInput = document.getElementById('neonRgb');
 
-  let activePickerTarget = 'paint'; // 'paint' or 'neon'
+  let activePickerTarget = 'paint';
 
   function hexToRgb(hex) {
     const r = parseInt(hex.slice(1, 3), 16);
@@ -286,8 +267,6 @@ const headlightAndNeonColors = ["Custom RGB", "Default", "Pure White", "Blue", "
 🎨 **Rim Color:** ${val('rimColor')}
 🏁 **Tire Design:** ${val('tires')}
 ⚙️ **Activator:** ${isActivator ? 'Applied ✅' : 'No ❌'}
-📢 **Horn:** ${val('horn')}
-📜 **Livery:** ${val('livery')}
 ────────────────────
 *OfficialNugzzCrew.com*`;
 
