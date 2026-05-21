@@ -1,15 +1,11 @@
 ---
-// If you have any frontmatter imports, keep them here
 const { title = "Nugzz Crew Terminal" } = Astro.props;
 
-// Centralized navigation items for easy future expansion
+// Centralized navigation links for seamless multi-game expansion
 const navLinks = [
   { href: '/', label: 'Home' },
-  { href: '/gta', label: 'GTA Bonuses' },
-  { href: '/generator', label: 'DMO Gen' },
-  { href: '/gtaresources', label: 'Gun Van' },
-  // Future expansion lines go right here:
-  // { href: '/fo76', label: 'Fallout 76' },
+  { href: '/gta', label: 'GTA Weekly' },
+  { href: '/gtaresources', label: 'DMO Gen & Maps' }
 ];
 ---
 
@@ -23,55 +19,26 @@ const navLinks = [
   </head>
   <body class="min-h-screen bg-black antialiased flex flex-col font-sans">
     
-    <header class="sticky top-0 z-50 w-full border-b border-zinc-800 bg-black/80 backdrop-blur-md">
-      <div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
+    <header class="w-full border-b border-zinc-800 bg-zinc-900/40 backdrop-blur-md sticky top-0 z-50">
+      <div class="max-w-7xl mx-auto px-4 py-4 flex flex-col sm:flex-row items-center justify-between gap-4">
         
-        <a href="/" class="flex items-center gap-2 group">
-          <span class="font-header font-black text-xl tracking-tighter text-white uppercase group-hover:text-gold transition-colors">
+        <a href="/" class="flex items-center gap-2 group shrink-0">
+          <span class="font-black text-xl tracking-tighter text-white uppercase group-hover:text-gold transition-colors">
             NUGZZ<span class="text-gold group-hover:text-white transition-colors">CREW</span>
           </span>
         </a>
 
-        <nav class="hidden md:flex items-center gap-6">
+        <nav class="flex flex-wrap items-center justify-center gap-x-6 gap-y-2">
           {navLinks.map(link => (
             <a 
               href={link.href} 
-              class="text-xs font-bold uppercase tracking-wider text-zinc-400 hover:text-gold transition-colors"
+              class="text-xs font-black uppercase tracking-wider text-zinc-400 hover:text-gold transition-colors py-1 px-2 border border-transparent hover:border-zinc-800 rounded-lg bg-zinc-950/20"
             >
               {link.label}
             </a>
           ))}
         </nav>
 
-        <button 
-          id="mobileMenuToggle"
-          class="md:hidden p-2 text-zinc-400 hover:text-white transition-colors focus:outline-none"
-          aria-label="Toggle Navigation Menu"
-        >
-          <svg id="hamburgerIcon" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 6h16M4 12h16M4 18h16" />
-          </svg>
-          <svg id="closeIcon" class="w-6 h-6 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12" />
-          </svg>
-        </button>
-
-      </div>
-
-      <div 
-        id="mobileMenuDrawer" 
-        class="hidden md:hidden border-t border-zinc-900 bg-black/95 px-4 py-6 space-y-4 shadow-2xl transition-all duration-300 ease-in-out"
-      >
-        <nav class="flex flex-col gap-4">
-          {navLinks.map(link => (
-            <a 
-              href={link.href} 
-              class="text-sm font-black uppercase tracking-widest text-zinc-300 hover:text-gold py-2 border-b border-zinc-900/50 block transition-colors"
-            >
-              {link.label}
-            </a>
-          ))}
-        </nav>
       </div>
     </header>
 
@@ -79,41 +46,12 @@ const navLinks = [
       <slot />
     </main>
 
-    <footer class="border-t border-zinc-900 py-6 text-center text-[10px] text-zinc-600 font-mono uppercase tracking-widest">
+    <footer class="border-t border-zinc-900 py-8 text-center text-[10px] text-zinc-600 font-mono uppercase tracking-widest bg-black">
       &copy; {new Date().getFullYear()} Official Nugzz Crew System Terminal. All Rights Reserved.
     </footer>
 
     <script is:inline>
-      function initNavigationToggle() {
-        const toggleBtn = document.getElementById('mobileMenuToggle');
-        const menuDrawer = document.getElementById('mobileMenuDrawer');
-        const hamburgerIcon = document.getElementById('hamburgerIcon');
-        const closeIcon = document.getElementById('closeIcon');
-
-        if (!toggleBtn || !menuDrawer) return;
-
-        toggleBtn.addEventListener('click', () => {
-          const isHidden = menuDrawer.classList.contains('hidden');
-          
-          if (isHidden) {
-            // Reveal drawer container smoothly
-            menuDrawer.classList.remove('hidden');
-            hamburgerIcon.classList.add('hidden');
-            closeIcon.classList.remove('hidden');
-          } else {
-            // Hide menu drawer completely
-            menuDrawer.classList.add('hidden');
-            hamburgerIcon.classList.remove('hidden');
-            closeIcon.classList.add('hidden');
-          }
-        });
-      }
-
-      // Initialize on initial page hits and subsequent script caching updates
-      window.addEventListener('load', initNavigationToggle);
-      document.addEventListener('astro:page-load', initNavigationToggle);
-      
-      // Initialize Lucide Icons globally across templates if present
+      // Initialize Lucide Icons globally across template loads safely
       if (window.lucide) {
         window.lucide.createIcons();
       }
