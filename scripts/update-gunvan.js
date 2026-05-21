@@ -2,7 +2,6 @@ import fs from 'fs';
 import path from 'path';
 import puppeteer from 'puppeteer';
 
-// The Master Dictionary translating IDs to real locations
 const LOCATION_DICT = {
     "1": "No Marks Cleaners, Paleto Bay",
     "2": "Behind the Discount Store, Grapeseed",
@@ -51,20 +50,15 @@ async function fetchGunVanLocation() {
         console.log("📡 Navigating to GTALens Map Layer...");
         await page.goto('https://gtalens.com/map/gun-vans', { waitUntil: 'networkidle2', timeout: 30000 });
 
-        // Give the page elements an extra moment to fully parse and hydrate
         await new Promise(resolve => setTimeout(resolve, 5000));
 
-        console.log("🕵️‍♂️ Extracting text and searching for target elements...");
+        console.log("🕵️‍♂️ Extracting layout parameters...");
         const plainText = await page.evaluate(() => document.body.innerText);
 
         let rawLocationId = "";
         let finalLocationName = "Location data parsing failed.";
-        let imagePath = "";
-        let mapPath = "";
         let inventory = [];
 
-        // 1. EXTRACT THE LOCATION ID (Cleaned Regex to avoid number smashing)
-        // Explicitly searches lines for the isolated active target phrase
         const lines = plainText.split('\n');
         for (const line of lines) {
             if (line.toLowerCase().includes('[active]') && line.toLowerCase().includes('van')) {
@@ -76,7 +70,6 @@ async function fetchGunVanLocation() {
             }
         }
 
-        // If line-by-line check fails, fall back to your buddy's original clean matching block
         if (!rawLocationId) {
             const activeMatch = plainText.match(/Gun Van #(\d+)\s+\[active\]/i);
             if (activeMatch) {
@@ -84,21 +77,16 @@ async function fetchGunVanLocation() {
             }
         }
 
-        // CRITICAL CHECK: Fail explicitly if no ID or an invalid ID is captured
         if (!rawLocationId || rawLocationId === "0") {
-            throw new Error("Extraction Fault: Could not isolate the dynamic [active] gun van ID from the page text layout.");
+            throw new Error("Extraction Fault: Could not isolate the active gun van ID from text layout.");
         }
 
-        // Map the number to our dictionary safely
         if (LOCATION_DICT[rawLocationId]) {
             finalLocationName = LOCATION_DICT[rawLocationId];
-            imagePath = `/images/gunvan/loc_${rawLocationId}.jpg`;
-            mapPath = `/images/gunvan/map_${rawLocationId}.jpg`;
         } else {
-            throw new Error(`Data Mapping Fault: Extracted ID #${rawLocationId}, but it does not map to a location inside LOCATION_DICT.`);
+            throw new Error(`Data Mapping Fault: Extracted ID #${rawLocationId} has no dictionary description entry.`);
         }
 
-        // 2. EXTRACT & FILTER THE INVENTORY
         const inventoryMatch = plainText.match(/In stock:([\s\S]*?)(?=Locations|Gun Van #1\s)/i);
         if (inventoryMatch) {
             const rawItems = inventoryMatch[1].split('\n');
@@ -115,7 +103,6 @@ async function fetchGunVanLocation() {
                 });
         }
 
-        // Fallback robust default weapon list formatting if layout section wasn't fully readable
         if (inventory.length === 0) {
             inventory = [
                 "Combat Shotgun: -10 %",
@@ -123,34 +110,28 @@ async function fetchGunVanLocation() {
                 "Railgun: -50 %",
                 "Compact Rifle: -10 %",
                 "MG: -10 %",
-                "Machete: -10 %",
-                "Tear Gas: -10 %",
-                "Grenade: -10 %",
-                "Proximity Mine: -10 %",
-                "Body armor: -10 %"
+                "Machete: -10 %"
             ];
         }
 
         console.log(`🎯 Location Found: ${finalLocationName} (ID: ${rawLocationId})`);
-        console.log(`📦 Inventory Items Found: ${inventory.length}`);
 
-        // 3. SAVE TO JSON
-        const dir = './public/api';
-        if (!fs.existsSync(dir)) {
-            fs.mkdirSync(dir, { recursive: true });
+        if (!fs.existsSync('./public/api')) {
+            fs.mkdirSync('./public/api', { recursive: true });
         }
 
+        // Saves only the explicit keys and map filename format your frontend uses
         const data = { 
-            id: parseInt(rawLocationId, 10),
-            locationName: finalLocationName, 
-            imagePath: imagePath,
-            mapPath: mapPath,
+            locationId: parseInt(rawLocationId, 10), 
+            zone: `Gun Van Location #${rawLocationId}`, 
+            description: finalLocationName, 
+            mapPath: `map_${rawLocationId}.jpg`, // Focused purely on map images
             inventory: inventory,
             updatedAt: new Date().toISOString() 
         };
 
-        fs.writeFileSync(path.join(dir, 'gunvan.json'), JSON.stringify(data, null, 2));
-        console.log("✅ Successfully saved mapped data to /public/api/gunvan.json");
+        fs.writeFileSync('./public/api/gunvan.json', JSON.stringify(data, null, 2));
+        console.log("✅ Successfully saved optimized data schema to /public/api/gunvan.json");
 
     } catch (error) {
         console.error("❌ Scraper Error:", error.message);

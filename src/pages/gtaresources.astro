@@ -4,15 +4,6 @@ import MainLayout from '../layouts/MainLayout.astro';
 // Fallback defaults while automated compiler actions finalize
 const defaultZone = "Locating Active Vector...";
 const defaultDetails = "Polling real-time scraping anchors from gtalens server maps...";
-
-const fallbackWeapons = [
-  { name: "Compact EMP Launcher", discount: "-40% OFF" },
-  { name: "Military Rifle", discount: "-10% OFF" },
-  { name: "Precision Rifle", discount: "-10% OFF" },
-  { name: "Homing Launcher", discount: "-10% OFF" },
-  { name: "Pump Shotgun", discount: "-10% OFF" },
-  { name: "Pool Cue", discount: "-10% OFF" }
-];
 ---
 
 <MainLayout title="GTA Resources & Tracker">
@@ -27,6 +18,7 @@ const fallbackWeapons = [
       
       <div class="lg:col-span-6">
         <div class="bg-zinc-900/40 p-6 rounded-3xl border border-zinc-800 flex flex-col justify-between h-full space-y-6">
+    
           <div class="space-y-4 flex-grow">
             <div>
               <label class="block text-[10px] text-zinc-500 uppercase font-black mb-1">Target Sector:</label>
@@ -44,7 +36,7 @@ const fallbackWeapons = [
               id="vanMapImage" 
               src="" 
               alt="Gun Van Location Map" 
-              class="w-full h-full object-cover opacity-0 transition-transform transition-opacity duration-700 ease-out group-hover:scale-175"
+              class="w-full h-full object-cover opacity-0 transition-transform transition-opacity duration-700 ease-out group-hover:scale-110"
             />
             
             <div class="absolute inset-x-0 top-1/2 border-t border-zinc-800/40 pointer-events-none"></div>
@@ -61,12 +53,7 @@ const fallbackWeapons = [
           </div>
 
           <div id="weaponsContainer" class="space-y-2 flex-grow">
-            {fallbackWeapons.map(w => (
-              <div class="flex justify-between items-center p-3 bg-zinc-900/20 border border-zinc-800/60 rounded-xl">
-                <span class="text-sm font-bold text-white">{w.name}</span>
-                <span class="font-mono text-emerald-400 text-xs font-black px-2 py-0.5 bg-emerald-500/10 rounded">{w.discount}</span>
-              </div>
-            ))}
+            <p class="text-xs text-zinc-500 italic">Syncing inventory manifests...</p>
           </div>
 
           <div class="pt-2 border-t border-zinc-800/60 mt-auto">
@@ -88,18 +75,20 @@ const fallbackWeapons = [
 <script is:inline>
   async function fetchLiveMap() {
     try {
+      // Pull the freshly generated local json data payload
       const res = await fetch('/api/gunvan.json');
       if (!res.ok) return;
       const data = await res.json();
       
-      // Update text fields dynamically
+      // 1. Map text indicators dynamically
       document.getElementById('displayZone').textContent = data.zone;
       document.getElementById('displayDetails').textContent = data.description;
       
-      // Dynamically switch the map image source to match the active locationId
+      // 2. Resolve absolute image locations explicitly with the leading slash
       if (data.locationId) {
         const mapImg = document.getElementById('vanMapImage');
         if (mapImg) {
+          // Assembles into a perfect absolute directory pointer: /images/gunvan/map_27.jpg
           mapImg.src = `/images/gunvan/map_${data.locationId}.jpg`;
           
           mapImg.onload = function() {
@@ -108,10 +97,37 @@ const fallbackWeapons = [
           };
         }
       }
+
+      // 3. Clear placeholder layout and parse live items array
+      const container = document.getElementById('weaponsContainer');
+      if (container && data.inventory && data.inventory.length > 0) {
+        container.innerHTML = ''; 
+        
+        data.inventory.forEach(item => {
+            let name = item;
+            let discount = "-10% OFF";
+            
+            // Clean up text structures if weapon string contains a colon separator
+            if (item.includes(':')) {
+                const parts = item.split(':');
+                name = parts[0].trim();
+                discount = parts[1].replace(/\s/g, '') + ' OFF';
+            }
+
+            const itemHTML = `
+              <div class="flex justify-between items-center p-3 bg-zinc-900/20 border border-zinc-800/60 rounded-xl">
+                <span class="text-sm font-bold text-white">${name}</span>
+                <span class="font-mono text-emerald-400 text-xs font-black px-2 py-0.5 bg-emerald-500/10 rounded">${discount}</span>
+              </div>
+            `;
+            container.innerHTML += itemHTML;
+        });
+      }
     } catch (e) {
       console.error("Error running tracking engine interface synchronization loops:", e);
     }
   }
 
+  // Engage parsing run on document window assembly
   fetchLiveMap();
 </script>
