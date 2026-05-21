@@ -1,7 +1,7 @@
 ---
 import MainLayout from '../layouts/MainLayout.astro';
 
-// Placeholder fallbacks while automated compiler actions finalize
+// Fallback defaults while automated compiler actions finalize
 const defaultZone = "Locating Active Vector...";
 const defaultDetails = "Polling real-time scraping anchors from gtalens server maps...";
 const defaultCoords = "LAT: --.---- | LNG: --.----";
@@ -48,14 +48,20 @@ const fallbackWeapons = [
             <p id="displayDetails" class="text-sm text-zinc-400 leading-relaxed">{defaultDetails}</p>
           </div>
 
-          <div class="relative aspect-video w-full bg-black border border-zinc-800 rounded-2xl overflow-hidden flex items-center justify-center">
-            <div class="absolute inset-0 opacity-20 bg-[radial-gradient(#222_1px,transparent_1px)] [background-size:16px_16px]"></div>
-            <div class="absolute inset-x-0 top-1/2 border-t border-zinc-800/60"></div>
-            <div class="absolute inset-y-0 left-1/2 border-l border-zinc-800/60"></div>
+          <div class="relative aspect-video w-full bg-black border border-zinc-800 rounded-2xl overflow-hidden group">
+            <img 
+              id="vanMapImage" 
+              src="/images/gunvan/map_9.jpg" 
+              alt="Gun Van Location Map" 
+              class="w-full h-full object-cover opacity-80 group-hover:scale-105 transition-transform duration-500"
+              onerror="this.style.display='none';"
+            />
             
-            <div class="z-10 text-center space-y-2 px-4">
-              <div class="w-10 h-10 rounded-full border-2 border-gold border-dashed flex items-center justify-center mx-auto text-gold font-bold animate-spin [animation-duration:16s]">🎯</div>
-              <div id="displayCoords" class="font-mono text-[11px] text-zinc-500 tracking-wider">{defaultCoords}</div>
+            <div class="absolute inset-x-0 top-1/2 border-t border-zinc-800/40 pointer-events-none"></div>
+            <div class="absolute inset-y-0 left-1/2 border-l border-zinc-800/40 pointer-events-none"></div>
+            
+            <div class="absolute bottom-3 right-3 bg-black/80 backdrop-blur-sm border border-zinc-800 px-3 py-1.5 rounded-xl">
+              <div id="displayCoords" class="font-mono text-[10px] text-gold tracking-wider font-bold">{defaultCoords}</div>
             </div>
           </div>
         </div>
@@ -100,9 +106,19 @@ const fallbackWeapons = [
       if (!res.ok) return;
       const data = await res.json();
       
+      // Update text fields
       document.getElementById('displayZone').textContent = data.zone;
       document.getElementById('displayDetails').textContent = data.description;
       document.getElementById('displayCoords').textContent = data.coordinates;
+      
+      // Dynamically switch the map image source to match the active locationId
+      if (data.locationId) {
+        const mapImg = document.getElementById('vanMapImage');
+        if (mapImg) {
+          mapImg.src = `/images/gunvan/map_${data.locationId}.jpg`;
+          mapImg.style.display = 'block'; // Ensure it's visible if fallback previously hid it
+        }
+      }
     } catch (e) {
       console.log("Assets running deployment generation sequence build synchronization.");
     }
