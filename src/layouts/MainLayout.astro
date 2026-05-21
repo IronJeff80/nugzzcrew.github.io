@@ -4,7 +4,7 @@ interface Props {
 }
 
 const { title } = Astro.props;
-import '../styles/global.css'; 
+import '../styles/global.css';
 
 // Use your verified Channel ID with the join trigger
 const channelJoinUrl = "https://www.youtube.com/channel/UCYNmnbEgm3G0m4avmwz_4Eg/join?v=dummy";
@@ -36,7 +36,7 @@ const socials = [
     <body class="bg-black text-white antialiased">
         <nav class="sticky top-0 z-50 bg-black/95 backdrop-blur-md border-b border-zinc-800 px-3 py-3 md:px-4">
             <div class="max-w-7xl mx-auto flex flex-col items-center gap-3 md:grid md:grid-cols-3 md:gap-0">
-                
+   
                 <div class="flex md:justify-start w-full justify-center">
                     <a href="/" class="flex items-center gap-2 group transition-opacity hover:opacity-90">
                         <img src="/Logo.png" alt="Logo" class="w-6 h-6 md:w-9 md:h-9 object-contain" />
@@ -51,6 +51,7 @@ const socials = [
                         <a href="/" class="hover:text-gold transition-colors">Home</a>
                         <a href="/gta" class="hover:text-gold transition-colors">GTA Bonuses</a>
                         <a href="/generator" class="hover:text-gold transition-colors">DMO Gen</a>
+                        <a href="/gtaresources" class="hover:text-gold transition-colors">GTA Resources</a>
                     </div>
                     <a 
                       href={channelJoinUrl} 
