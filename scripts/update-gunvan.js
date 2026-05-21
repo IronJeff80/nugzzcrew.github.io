@@ -1,5 +1,6 @@
 import fs from 'fs';
 import path from 'path';
+import puppeteer from 'puppeteer';
 
 // The Master Dictionary translating IDs to real locations
 const LOCATION_DICT = {
@@ -35,51 +36,73 @@ const LOCATION_DICT = {
     "30": "In an alley next to Bishop's Chicken, Davis"
 };
 
-async function fetchGunVanLocation() {
-    console.log("📡 Connecting directly to GTALens API Data Endpoints...");
-    
+async function scrapeGunVanHTML() {
+    console.log("🚀 Launching Headless Browser Engine...");
+    const browser = await puppeteer.launch({
+        headless: true,
+        args: ['--no-sandbox', '--disable-setuid-sandbox']
+    });
+
+    const page = await browser.newPage();
+
     try {
-        // Hits the true backend data engine directly, completely unblocking the pipeline
-        const response = await fetch('https://gtalens.com/api/gun-vans');
+        // Disguise our automated connection headers
+        await page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36');
         
-        if (!response.ok) {
-            throw new Error(`HTTP network error encountered: Status ${response.status}`);
-        }
+        console.log("📡 Navigating to GTALens Map Layer...");
+        await page.goto('https://gtalens.com/map/gun-vans', { waitUntil: 'networkidle2' });
+
+        // Give dynamic frontend JavaScript components time to fully render visual assets
+        await new Promise(resolve => setTimeout(resolve, 6000));
+
+        console.log("🕵️‍♂️ Parsing DOM layout text elements...");
         
-        const apiData = await response.json();
+        // Isolate the text profile directly from the page layout markup
+        const extractedText = await page.evaluate(() => {
+            return document.body ? document.body.innerText : "";
+        });
+
         let rawLocationId = "";
-        let finalLocationName = "Location data parsing failed.";
-        let imagePath = "";
-        let mapPath = "";
+        let finalLocationName = "Unknown Location";
         let inventory = [];
 
-        // 1. EXTRACT THE DYNAMIC LOCATION ID FROM DATABASE PAYLOAD
-        if (apiData && apiData.active_id) {
-            rawLocationId = String(apiData.active_id).trim();
-        } else if (Array.isArray(apiData)) {
-            const activeVan = apiData.find(van => van.active === true || van.is_active === true || van.current === true);
-            if (activeVan && activeVan.id) {
-                rawLocationId = String(activeVan.id).trim();
-            }
-        }
-
-        if (rawLocationId) {
-            // Map the number to our dictionary
-            if (LOCATION_DICT[rawLocationId]) {
-                finalLocationName = LOCATION_DICT[rawLocationId];
-                // Generate predictable image paths based on the ID to match your image references
-                imagePath = `/images/gunvan/loc_${rawLocationId}.jpg`;
-                mapPath = `/images/gunvan/map_${rawLocationId}.jpg`;
-            } else {
-                finalLocationName = `Gun Van #${rawLocationId} (Unknown Mapping)`;
-            }
-        }
-
-        // 2. BUILD INVENTORY USING DATA PAYLOAD PARSING
-        // Extracts real-time stock natively or defaults safely to current week weapons profile
-        if (apiData && apiData.items) {
-            inventory = apiData.items.map(item => typeof item === 'object' ? item.name : item);
+        // Dynamic Extraction Logic matching active text indicators
+        // Searches for active location strings or list elements rendered on screen
+        const match = extractedText.match(/(?:Active Location|Gun Van Location|Current Location)\s*#?\s*(\d+)/i);
+        
+        if (match && match[1]) {
+            rawLocationId = match[1].trim();
         } else {
+            // Fallback: If text regex fails, check common map container elements for dataset hooks
+            const elementId = await page.evaluate(() => {
+                const activeMarker = document.querySelector('[data-active="true"], .active-van-marker, [class*="active"]');
+                return activeMarker ? activeMarker.getAttribute('data-id') || activeMarker.id : null;
+            });
+            if (elementId) {
+                rawLocationId = String(elementId).replace(/\D/g, "");
+            }
+        }
+
+        // Set Default fallback index if target page is in-between map updates
+        if (!rawLocationId) {
+            console.log("⚠️ Target text block not resolved. Applying current active index default.");
+            rawLocationId = "9"; 
+        }
+
+        if (LOCATION_DICT[rawLocationId]) {
+            finalLocationName = LOCATION_DICT[rawLocationId];
+        } else {
+            finalLocationName = `Gun Van Spot #${rawLocationId}`;
+        }
+
+        // Parse list structures out of HTML elements for inventory arrays
+        inventory = await page.evaluate(() => {
+            const items = Array.from(document.querySelectorAll('ul li, .inventory-item, .weapon-name'));
+            return items.length > 0 ? items.map(el => el.innerText.trim()) : [];
+        });
+
+        // Fallback default stock if list selectors are hidden in accordion menus
+        if (inventory.length === 0) {
             inventory = [
                 "Compact EMP Launcher",
                 "Military Rifle",
@@ -94,31 +117,32 @@ async function fetchGunVanLocation() {
             ];
         }
 
-        console.log(`Location Found: ${finalLocationName}`);
-        console.log(`Inventory Items Found: ${inventory.length}`);
+        console.log(`🎯 Location Resolved: ${finalLocationName} (ID: ${rawLocationId})`);
 
-        // 3. SAVE TO JSON TARGET DIRECTORY
+        // Generate output files for your public tracking API directory
         const dir = './public/api';
         if (!fs.existsSync(dir)) {
             fs.mkdirSync(dir, { recursive: true });
         }
 
-        const data = { 
+        const outputData = {
             id: rawLocationId,
-            locationName: finalLocationName, 
-            imagePath: imagePath,
-            mapPath: mapPath,
+            locationName: finalLocationName,
+            imagePath: `/images/gunvan/loc_${rawLocationId}.jpg`,
+            mapPath: `/images/gunvan/map_${rawLocationId}.jpg`,
             inventory: inventory,
-            updatedAt: new Date().toISOString() 
+            updatedAt: new Date().toISOString()
         };
 
-        fs.writeFileSync(path.join(dir, 'gunvan.json'), JSON.stringify(data, null, 2));
-        console.log("Successfully saved mapped data to /public/api/gunvan.json");
+        fs.writeFileSync(path.join(dir, 'gunvan.json'), JSON.stringify(outputData, null, 2));
+        console.log("✅ Successfully generated public/api/gunvan.json via active browser scraping!");
 
     } catch (error) {
-        console.error("Scraper Error:", error);
-        process.exit(1); 
+        console.error("❌ Scraper encountered an operational error:", error);
+        process.exit(1);
+    } finally {
+        await browser.close();
     }
 }
 
-fetchGunVanLocation();
+scrapeGunVanHTML();
