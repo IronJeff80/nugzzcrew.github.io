@@ -35,7 +35,7 @@ const defaultDetails = "Polling real-time scraping anchors from gtalens server m
               id="vanMapImage" 
               src="" 
               alt="Gun Van Location Map" 
-              class="w-full h-full object-cover opacity-0 transition-transform transition-opacity duration-700 ease-out group-hover:scale-110"
+              class="w-full h-full object-cover opacity-0 scale-95 transition-transform transition-opacity duration-500 ease-out group-hover:scale-100"
             />
             
             <div class="absolute inset-x-0 top-1/2 border-t border-zinc-800/40 pointer-events-none"></div>
@@ -84,9 +84,7 @@ const defaultDetails = "Polling real-time scraping anchors from gtalens server m
       if (data.locationId && data.mapPath) {
         const mapImg = document.getElementById('vanMapImage');
         if (mapImg) {
-          // Assembles absolute root routing lookup address: /images/gunvan/map_27.jpg
           mapImg.src = `/images/gunvan/${data.mapPath}`;
-          
           mapImg.onload = function() {
             mapImg.classList.remove('opacity-0');
             mapImg.classList.add('opacity-80');
