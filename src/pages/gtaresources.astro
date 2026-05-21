@@ -1,7 +1,6 @@
 ---
 import MainLayout from '../layouts/MainLayout.astro';
 
-// Fallback defaults while automated compiler actions finalize
 const defaultZone = "Locating Active Vector...";
 const defaultDetails = "Polling real-time scraping anchors from gtalens server maps...";
 ---
@@ -75,21 +74,18 @@ const defaultDetails = "Polling real-time scraping anchors from gtalens server m
 <script is:inline>
   async function fetchLiveMap() {
     try {
-      // Pull the freshly generated local json data payload
       const res = await fetch('/api/gunvan.json');
       if (!res.ok) return;
       const data = await res.json();
       
-      // 1. Map text indicators dynamically
       document.getElementById('displayZone').textContent = data.zone;
       document.getElementById('displayDetails').textContent = data.description;
       
-      // 2. Resolve absolute image locations explicitly with the leading slash
-      if (data.locationId) {
+      if (data.locationId && data.mapPath) {
         const mapImg = document.getElementById('vanMapImage');
         if (mapImg) {
-          // Assembles into a perfect absolute directory pointer: /images/gunvan/map_27.jpg
-          mapImg.src = `/images/gunvan/map_${data.locationId}.jpg`;
+          // Assembles absolute root routing lookup address: /images/gunvan/map_27.jpg
+          mapImg.src = `/images/gunvan/${data.mapPath}`;
           
           mapImg.onload = function() {
             mapImg.classList.remove('opacity-0');
@@ -98,7 +94,6 @@ const defaultDetails = "Polling real-time scraping anchors from gtalens server m
         }
       }
 
-      // 3. Clear placeholder layout and parse live items array
       const container = document.getElementById('weaponsContainer');
       if (container && data.inventory && data.inventory.length > 0) {
         container.innerHTML = ''; 
@@ -107,7 +102,6 @@ const defaultDetails = "Polling real-time scraping anchors from gtalens server m
             let name = item;
             let discount = "-10% OFF";
             
-            // Clean up text structures if weapon string contains a colon separator
             if (item.includes(':')) {
                 const parts = item.split(':');
                 name = parts[0].trim();
@@ -128,6 +122,5 @@ const defaultDetails = "Polling real-time scraping anchors from gtalens server m
     }
   }
 
-  // Engage parsing run on document window assembly
   fetchLiveMap();
 </script>

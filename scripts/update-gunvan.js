@@ -2,6 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import puppeteer from 'puppeteer';
 
+// Master Dictionary translating IDs to real locations
 const LOCATION_DICT = {
     "1": "No Marks Cleaners, Paleto Bay",
     "2": "Behind the Discount Store, Grapeseed",
@@ -52,13 +53,14 @@ async function fetchGunVanLocation() {
 
         await new Promise(resolve => setTimeout(resolve, 5000));
 
-        console.log("🕵️‍♂️ Extracting layout parameters...");
+        console.log("🕵️‍♂️ Extracting text data and structural elements...");
         const plainText = await page.evaluate(() => document.body.innerText);
 
         let rawLocationId = "";
         let finalLocationName = "Location data parsing failed.";
         let inventory = [];
 
+        // 1. EXTRACT THE LOCATION ID
         const lines = plainText.split('\n');
         for (const line of lines) {
             if (line.toLowerCase().includes('[active]') && line.toLowerCase().includes('van')) {
@@ -87,6 +89,7 @@ async function fetchGunVanLocation() {
             throw new Error(`Data Mapping Fault: Extracted ID #${rawLocationId} has no dictionary description entry.`);
         }
 
+        // 2. EXTRACT & FILTER THE INVENTORY
         const inventoryMatch = plainText.match(/In stock:([\s\S]*?)(?=Locations|Gun Van #1\s)/i);
         if (inventoryMatch) {
             const rawItems = inventoryMatch[1].split('\n');
@@ -120,18 +123,18 @@ async function fetchGunVanLocation() {
             fs.mkdirSync('./public/api', { recursive: true });
         }
 
-        // Saves only the explicit keys and map filename format your frontend uses
+        // Output JSON structured exactly to feed your Astro components
         const data = { 
             locationId: parseInt(rawLocationId, 10), 
             zone: `Gun Van Location #${rawLocationId}`, 
             description: finalLocationName, 
-            mapPath: `map_${rawLocationId}.jpg`, // Focused purely on map images
+            mapPath: `map_${rawLocationId}.jpg`, 
             inventory: inventory,
             updatedAt: new Date().toISOString() 
         };
 
         fs.writeFileSync('./public/api/gunvan.json', JSON.stringify(data, null, 2));
-        console.log("✅ Successfully saved optimized data schema to /public/api/gunvan.json");
+        console.log("✅ Successfully saved synchronized data schema to /public/api/gunvan.json");
 
     } catch (error) {
         console.error("❌ Scraper Error:", error.message);
