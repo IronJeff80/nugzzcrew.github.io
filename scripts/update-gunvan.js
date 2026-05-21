@@ -13,7 +13,16 @@ async function scrapeGunVan() {
   
   try {
     console.log("📡 Connecting directly to gtalens.com/map/gun-vans...");
+    // Emulate a standard desktop viewport size to ensure responsive layers trigger layout loads
+    await page.setViewport({ width: 1440, height: 900 });
     await page.goto('https://gtalens.com/map/gun-vans', { waitUntil: 'networkidle2' });
+
+    console.log("⏳ Waiting for active map components to stabilize...");
+    // Wait explicitly for the document container to be interactive
+    await page.waitForSelector('body', { timeout: 15000 });
+    
+    // Give client-side JS data tracking frameworks exactly 3.5 seconds to complete rendering map nodes
+    await new Promise(resolve => setTimeout(resolve, 3500));
 
     // Global GTA Online coordinates mapping for all 30 potential spawn locations
     const allLocations = {
@@ -42,26 +51,42 @@ async function scrapeGunVan() {
       23: { name: "Downtown Vinewood", detail: "Inside a parking garage near the Oriental Theater", zone: "Los Santos North", lat: "34.0944", lng: "-118.2312" },
       24: { name: "Downtown", detail: "North of Strawberry Avenue", zone: "Downtown LS", lat: "34.0450", lng: "-118.2411" },
       25: { name: "Little Seoul", detail: "Caesars Auto Parking lots", zone: "Downtown LS", lat: "34.0450", lng: "-118.2560" },
-      26: { name: "Alamo Sea", abandoned: "Abandoned auto garage on Joshua Road", zone: "Blaine County Coast", lat: "34.1688", lng: "-118.3211" },
+      26: { name: "Alamo Sea", detail: "Abandoned auto garage on Joshua Road", zone: "Blaine County Coast", lat: "34.1688", lng: "-118.3211" },
       27: { name: "North Chumash", detail: "Right behind Hookies diner establishment", zone: "Blaine County Coast", lat: "34.1144", lng: "-118.4711" },
       28: { name: "Procopio Beach", detail: "By the public toilets west of Procopio Truck Stop", zone: "Blaine County", lat: "34.1995", lng: "-118.3911" },
       29: { name: "Mirror Park", detail: "Near the Hearty Taco restaurant courtyard", zone: "Los Santos East", lat: "34.0610", lng: "-118.2010" },
       30: { name: "Davis", detail: "In an alley beside Bishop's Chicken", zone: "Los Santos South", lat: "33.9988", lng: "-118.2399" }
     };
 
-    console.index = 9; // Fallback default to prevent blank output configurations
-
-    // Evaluates page content nodes to identify the specific active element marker
+    // Deep scanning engine context
     const activeIndex = await page.evaluate(() => {
+      // Strategy A: Scan standard body inner text with a flexible whitespace regex
       const bodyText = document.body.innerText || "";
-      const match = bodyText.match(/Gun Van\s+#(\d+)\s+\[active\]/i);
-      return match ? parseInt(match[1], 10) : 9;
+      const primaryMatch = bodyText.match(/Gun\s*Van\s*#?\s*(\d+)[\s\S]*?active/i);
+      if (primaryMatch) return parseInt(primaryMatch[1], 10);
+
+      // Strategy B: Iterate active DOM element blocks looking for dynamic strings or active attributes
+      const allElements = Array.from(document.querySelectorAll('*'));
+      for (const el of allElements) {
+        const text = el.textContent || "";
+        if (text.toLowerCase().includes('active') && text.toLowerCase().includes('van')) {
+          const innerMatch = text.match(/#?(\d+)/);
+          if (innerMatch) return parseInt(innerMatch[1], 10);
+        }
+      }
+      
+      return null;
     });
 
-    console.log(`🎯 Extracted Active Target ID: Gun Van #${activeIndex}`);
-    const selectedLocation = allLocations[activeIndex] || allLocations[9];
+    if (!activeIndex) {
+      throw new Error("Could not extract active Gun Van ID via text interfaces or node definitions.");
+    }
 
-    // Build automated parsing manifest object output arrays
+    console.log(`🎯 Extracted Active Target ID: Gun Van #${activeIndex}`);
+    
+    // Look up dynamic parsed data index safely, fallback to index 1 if structural anomaly occurs
+    const selectedLocation = allLocations[activeIndex] || allLocations[1];
+
     const scrapedWeapons = [
       { name: "Compact EMP Launcher", discount: "-40% OFF" },
       { name: "Military Rifle", discount: "-10% OFF" },
