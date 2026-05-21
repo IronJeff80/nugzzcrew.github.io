@@ -1,76 +1,37 @@
 import fs from 'fs';
 import path from 'path';
-import puppeteer from 'puppeteer';
 
 async function scrapeGunVan() {
-  console.log("🚀 Launching Headless Browser Engine...");
-  const browser = await puppeteer.launch({
-    headless: true,
-    args: ['--no-sandbox', '--disable-setuid-sandbox']
-  });
-  
-  const page = await browser.newPage();
+  console.log("📡 Connecting directly to GTALens API Data Endpoints...");
   
   try {
-    console.log("📡 Connecting directly to gtalens.com/map/gun-vans...");
-    await page.setViewport({ width: 1440, height: 900 });
+    // Directly request the raw backend data model instead of loading heavy browser canvas elements
+    const response = await fetch('https://gtalens.com/api/gun-vans');
     
-    // Variable to dynamically catch the active ID from network data payloads
+    if (!response.ok) {
+      throw new Error(`HTTP network error encountered: Status ${response.status}`);
+    }
+    
+    const data = await response.json();
     let detectedActiveId = null;
 
-    // Listen to network responses to catch the raw JSON configuration payload automatically
-    page.on('response', async (response) => {
-      try {
-        const url = response.url();
-        // Catching the actual API calls gtalens uses to hydrate their map markers
-        if (url.includes('/api/') && (url.includes('gun-van') || url.includes('gunvan'))) {
-          const json = await response.json();
-          if (json && json.active_id) {
-            detectedActiveId = parseInt(json.active_id, 10);
-            console.log(`🎯 Intercepted Active ID from Network Layer: #${detectedActiveId}`);
-          } else if (Array.isArray(json)) {
-            // Alternative layout check: look for an object flagged as active inside an array
-            const activeVan = json.find(van => van.active === true || van.is_active === true);
-            if (activeVan && activeVan.id) {
-              detectedActiveId = parseInt(activeVan.id, 10);
-              console.log(`🎯 Found Active Object Array ID: #${detectedActiveId}`);
-            }
-          }
-        }
-      } catch (e) {
-        // Suppress parsing anomalies on non-JSON image assets or styles
+    // Handle standard object response structures containing direct active parameters
+    if (data && data.active_id) {
+      detectedActiveId = parseInt(data.active_id, 10);
+    } 
+    // Handle array response structures by locating the true boolean active state
+    else if (Array.isArray(data)) {
+      const activeVan = data.find(van => van.active === true || van.is_active === true || van.current === true);
+      if (activeVan && activeVan.id) {
+        detectedActiveId = parseInt(activeVan.id, 10);
       }
-    });
-
-    // Fire the page navigation
-    await page.goto('https://gtalens.com/map/gun-vans', { waitUntil: 'networkidle2' });
-
-    console.log("⏳ Waiting for network streams to fully resolve updates...");
-    await new Promise(resolve => setTimeout(resolve, 5000));
-
-    // Fallback extraction strategy: Look into window variables injected into the DOM context
-    if (!detectedActiveId) {
-      console.log("⚠️ Network capture missed data stream. Inspecting inner page script contexts...");
-      detectedActiveId = await page.evaluate(() => {
-        try {
-          // Checks common frontend framework stores or global map asset configurations
-          if (window.__NEXT_DATA__?.props?.pageProps?.initialData?.active_id) {
-            return parseInt(window.__NEXT_DATA__.props.pageProps.initialData.active_id, 10);
-          }
-          if (window.gtaLensData?.active_id) {
-            return parseInt(window.gtaLensData.active_id, 10);
-          }
-        } catch (err) {
-          return null;
-        }
-        return null;
-      });
     }
 
-    // Guard rail check: throw an explicit error if both approaches return blank data arrays
     if (!detectedActiveId) {
-      throw new Error("Automated dynamic extraction failed: active_id parameters could not be found.");
+      throw new Error("Dynamic extraction failed: active_id property could not be isolated from the API array.");
     }
+
+    console.log(`🎯 Extracted Active Target ID: Gun Van #${detectedActiveId}`);
 
     // Global GTA Online coordinates mapping for all 30 potential spawn locations
     const allLocations = {
@@ -91,7 +52,7 @@ async function scrapeGunVan() {
       15: { name: "Land Act Reservoir", detail: "At the north end of the shoreline", zone: "Los Santos County", lat: "34.0799", lng: "-118.2311" },
       16: { name: "La Mesa", detail: "Next to Fridgit Forced Labor Place", zone: "Los Santos East", lat: "34.0320", lng: "-118.2140" },
       17: { name: "Jetsam Terminal", detail: "Under the stairs in the southwest corner of the docks", zone: "Los Santos South", lat: "33.9845", lng: "-118.2412" },
-      18: { name: "La Puerta", detail: "In front of Rogers Salvage & Scrap", zone: "Los Santos South", lat: "34.0110", font: "bold", tracking: "normal", lng: "-118.2678" },
+      18: { name: "La Puerta", detail: "In front of Rogers Salvage & Scrap", zone: "Los Santos South", lat: "34.0110", lng: "-118.2678" },
       19: { name: "La Mesa (Popular St)", detail: "Hidden behind the industrial brick alleys", zone: "Los Santos East", lat: "34.0385", lng: "-118.2099" },
       20: { name: "Del Perro", detail: "Under a carport between Cougar Ave & Bay City Ave", zone: "Downtown LS", lat: "34.0244", lng: "-118.2911" },
       21: { name: "Vespucci Beach", detail: "Behind a building on Magellan Ave and Conquistador St", zone: "Downtown LS", lat: "34.0122", lng: "-118.2845" },
@@ -106,7 +67,6 @@ async function scrapeGunVan() {
       30: { name: "Davis", detail: "In an alley beside Bishop's Chicken", zone: "Los Santos South", lat: "33.9988", lng: "-118.2399" }
     };
 
-    console.log(`🎯 Extracted Active Target ID: Gun Van #${detectedActiveId}`);
     const selectedLocation = allLocations[detectedActiveId] || allLocations[1];
 
     const scrapedWeapons = [
@@ -143,13 +103,11 @@ async function scrapeGunVan() {
       JSON.stringify(outputData, null, 2)
     );
     
-    console.log("✅ public/api/gunvan.json updated with active real-time data!");
+    console.log("✅ public/api/gunvan.json updated successfully via live API streams!");
 
   } catch (error) {
     console.error("❌ Operational scraping fault encountered:", error);
     process.exit(1);
-  } finally {
-    await browser.close();
   }
 }
 
