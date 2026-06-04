@@ -1,19 +1,19 @@
 {
-  "locationId": 1,
-  "zone": "Gun Van Location #1",
-  "description": "No Marks Cleaners, Paleto Bay",
-  "mapPath": "map_1.jpg",
+  "locationId": 11,
+  "zone": "Gun Van Location #11",
+  "description": "Thomson Scrapyard",
+  "mapPath": "map_11.jpg",
   "inventory": [
-    "Combat Shotgun: -10 %",
-    "Precision Rifle: -10 %",
-    "Railgun: -50 %",
-    "Compact Rifle: -10 %",
-    "MG: -10 %",
-    "Machete: -10 %",
-    "Tear Gas: -10 %",
-    "Grenade: -10 %",
-    "Proximity Mine: -10 %",
+    "Heavy Rifle: -50 %",
+    "Military Rifle: -10 %",
+    "Tactical SMG: -10 %",
+    "Marksman Rifle: -10 %",
+    "Heavy Pistol: -10 %",
+    "Knife: -10 %",
+    "Pipe Bomb: -10 %",
+    "Sticky Bomb: -10 %",
+    "Molotov: -10 %",
     "Body armor: -10 %"
   ],
-  "updatedAt": "2026-05-27T17:45:21.601Z"
+  "updatedAt": "2026-06-04T06:47:27.949Z"
 }
