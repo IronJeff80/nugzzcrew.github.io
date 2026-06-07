@@ -1,8 +1,8 @@
 {
-  "locationId": 29,
-  "zone": "Gun Van Location #29",
-  "description": "Hearty Taco, Mirror Park",
-  "mapPath": "map_29.jpg",
+  "locationId": 13,
+  "zone": "Gun Van Location #13",
+  "description": "LT Weld Supply Co. / Lester's Warehouse, Murrieta Heights",
+  "mapPath": "map_13.jpg",
   "inventory": [
     "Compact EMP Launcher: -10 %",
     "Service Carbine: -10 %",
@@ -15,5 +15,5 @@
     "Tear Gas: -10 %",
     "Body armor: -10 %"
   ],
-  "updatedAt": "2026-06-06T05:57:52.114Z"
+  "updatedAt": "2026-06-07T06:32:47.801Z"
 }
