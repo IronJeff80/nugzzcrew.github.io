@@ -1,18 +1,19 @@
 {
-  "eventTitle": "Community Mission Showcase",
-  "weekEnding": "June 10, 2026",
-  "fibFile": "The Project Breakaway File",
-  "weeklyChallenge": "Steal from two Stash Houses to receive GTA$100,000.",
-  "podium": "Vapid GB200",
-  "prizeRide": "Declasse Mamba",
+  "eventTitle": "Community Mission Spotlight",
+  "weekEnding": "June 17, 2026",
+  "fibFile": "The Black Box File",
+  "weeklyChallenge": "Sell GTA$500,000 of Special Cargo to receive a GTA$500,000 bonus plus the Rockstar Razor Aged T-Shirt.",
+  "podium": "Declasse Vigero ZX Convertible",
+  "prizeRide": "Grotti Cheetah Classic",
   "bonuses": [
-    { "category": "4X GTA$ & RP", "name": "Community Mission Series (PS5, Xbox Series X|S, PC Enhanced)", "value": "4X" },
-    { "category": "2X GTA$ & RP", "name": "Meth Sell Missions (Includes Nightclub Pharmaceutical Research)", "value": "2X" },
-    { "category": "2X GTA$ & RP", "name": "Featured Series (Top Fun, Turf Wars, Sumo, Come Out to Play)", "value": "2X" },
-    { "category": "2X GTA$", "name": "Street Dealers", "value": "2X" }
+    { "category": "4X GTA$ & RP", "name": "Community Mission Series (PS5 / Xbox Series X|S / PC Enhanced)", "value": "4X" },
+    { "category": "4X GTA$ & RP", "name": "Cayo Perico Treasure Chests", "value": "4X" },
+    { "category": "3X GTA$ & RP", "name": "Cayo Perico Hidden Caches", "value": "3X" },
+    { "category": "2X GTA$ & RP", "name": "Overtime Rumble Series", "value": "2X" }
   ],
   "loginRewards": [
-    "None this week"
+    "Los Santos Soccer Jersey",
+    "Burgundy Rockstar Varsity Crewneck (Claim via Rockstar Discord)"
   ],
   "specialRewards": [
     { "action": "Complete all 7 Featured Community Missions", "reward": "GTA$500,000 (Within 72 Hours)" }
@@ -22,82 +23,88 @@
       "None this week"
     ],
     "forty": [
-      "Meth Labs (Including Upgrades)"
+      "Executive Offices (Including Upgrades & Modifications)"
     ],
     "thirty": [
-      "BF Raptor",
-      "BF Weevil",
-      "Declasse Draugur",
-      "Fathom FR36",
-      "MTL Dune",
-      "Rhino Tank",
-      "Western Company Rogue"
+      "Albany V-STR",
+      "Dinka Marquis",
+      "Nagasaki Outlaw",
+      "Nagasaki Weaponized Dinghy",
+      "Pegassi Infernus Classic",
+      "Pegassi Speeder",
+      "Principe Lectro",
+      "Shitzu Jetmax",
+      "Shitzu Longfin",
+      "Vapid Dominator ASP",
+      "Vulcar Nebula Turbo"
     ]
   },
   "salvageYard": [
-    { "robbery": "The Cargo Ship Robbery", "name": "Benefactor SM722", "type": "Top Tier" },
-    { "robbery": "The McTony Robbery", "name": "Annis ZR350", "type": "Standard Tier" },
-    { "robbery": "The Duggan Robbery", "name": "Dinka Sugoi", "type": "Low Tier" }
+    { "robbery": "The Gangbanger Robbery", "name": "Grotti Turismo Classic", "type": "Top Tier" },
+    { "robbery": "The Podium Robbery", "name": "Benefactor Schlagen GT", "type": "Standard Tier" },
+    { "robbery": "The McTony Robbery", "name": "Vapid Ellie", "type": "Low Tier" }
   ],
   "simeonVehicles": [
-    "Albany Alpha",
-    "BF Bifta",
-    "Emperor Habanero",
-    "Invetero Coquette BlackFin",
-    "Vapid Hustler"
+    "Benefactor Streiter",
+    "Dewbauchee Rapid GT Classic",
+    "LCC Avarus",
+    "Übermacht Oracle XS",
+    "Vapid Retinue"
   ],
   "luxuryAutos": [
-    "Declasse Tampa GT",
-    "Grotti GT750"
+    "Karin Woodlander",
+    "Übermacht Sentinel XS4"
   ],
   "lsCarMeet": {
-    "prizeRideRequirement": "Place Top 3 in the LS Car Meet Series for three days in a row",
+    "prizeRideRequirement": "Win a race in the LS Car Meet Series this week",
     "testTrack": [
-      "Dinka Enduro",
-      "Grotti Carbonizzare",
-      "Vapid Clique"
+      "Grotti GT500",
+      "Invetero Coquette",
+      "Vapid Riata"
     ],
-    "hsw": "Vapid Firebolt ASP"
+    "hsw": "Pfister Astrale"
   },
   "timeTrials": {
-    "regular": "Grove Street",
-    "hsw": "Textile City to Stab City",
-    "premium": "Wiwang Park"
+    "regular": "LSIA II",
+    "hsw": "Ron Alternates to Elysian Island",
+    "premium": "At the Races (Premium Race)"
   },
   "gunVan": [
-    "Tactical SMG (30% OFF)",
-    "Service Carbine (40% OFF for GTA+)"
+    "Service Carbine (30% OFF)",
+    "Military Rifle (40% OFF for GTA+ Members)"
   ],
   "gtaPlus": {
-    "duration": "May 7 - June 10, 2026",
+    "duration": "June 11 - July 13, 2026",
     "freeVehicles": [
-      "Übermacht Sentinel GTS",
-      "Junk Energy Inductor Bike",
-      "Magenta/Cyan Flip Chameleon Paint & Wheel Paint"
+      "Ocelot Stromberg",
+      "Teal/Purple Flip Chameleon Paint",
+      "Teal/Purple Flip Chameleon Wheel Paint"
     ],
     "clothing": [
-      "Junk x Jackal Tee (Sports)",
-      "Junk x Jackal Wide Pants (Designer Jeans)"
+      "Independence Day Jacket and Pants",
+      "Green Emissive Lady Liberty Mask",
+      "Feud Anniversary Baseball Shirt"
     ],
     "bonuses": [
-      "4X Junk Energy Skydives",
-      "2X Import/Export Sell Missions",
-      "2X Special Vehicle Work",
-      "4X Junk Energy Time Trials"
+      "5X GTA$ & RP on G's Caches",
+      "2X GTA$ & RP on Smuggler Sell Missions",
+      "2X GTA$ & RP on KnoWay Out Missions (Full Strand)",
+      "2X GTA$ & RP on Home Sweet Home (Michael's Mission)"
     ],
     "discounts": [
-      "60% OFF Executive Offices, Upgrades & Mods"
+      "60% OFF Hangars (Including Upgrades & Modifications)",
+      "60% OFF McKenzie Field Hangar (Oscar Guzman)"
     ],
     "vinewoodShowroom": [
-      "Annis S80RR (eCola)",
-      "Bollokan Envisage (Junk Race)",
-      "Bravado Gauntlet Hellfire",
-      "Coil Cyclone II",
-      "Declasse Scramjet",
-      "HVY Nightshark (Galaxy)",
-      "Pegassi Oppressor (Santo Capra)",
-      "Pegassi Toreador (Shark Camo)",
-      "Pegassi Zentorno (Rockstar Motorsport)"
+      "Albany Hermes (Amazing Albany II Livery)",
+      "Declasse Drift Walton L35 (Atomic Racing Livery)",
+      "Emperor Vectre (Mambas 24 Livery)",
+      "Grotti Turismo Classic",
+      "Ocelot Ardent (Conveyor Livery)",
+      "Ocelot R88",
+      "Överflöd Pipistrello (Splashes 76 Livery)",
+      "Pegassi Oppressor MK II (Sessanta Nove Multi-color Livery)",
+      "Vapid Dominator GT"
     ],
     "persistent": [
       "FREE Taxi services (shorter cooldown)",
@@ -112,10 +119,19 @@
     ],
     "vinewoodClub": [
       "Showroom: Rotating premium vehicles (20% off)",
-      "Garage: 100-car personal storage",
-      "Hangar: 5 extra storage slots",
-      "Workshop: Discounted mods (No rank req)",
-      "App: Manage earnings, ammo, and requests"
+      "Garage: Downtown Los Santos with 100 personal vehicle slots",
+      "Hangar Storage: 5 storage slots (McKenzie Field Hangar not required)",
+      "Workshop: Discounted mods (No rank requirements)",
+      "App: Manage earnings, ammo, and vehicle requests/claims"
+    ],
+    "gamesLibrary": [
+      "Grand Theft Auto V & GTA Online (PS5, Xbox Series X|S, PC)",
+      "GTA: The Trilogy - The Definitive Edition (Console, PC, Mobile)",
+      "Bully (App Store, Google Play, PlayStation, Xbox, PC)",
+      "Red Dead Redemption (PlayStation, Xbox, PC)",
+      "L.A. Noire (PlayStation, Xbox, PC)",
+      "GTA: Liberty City Stories & Chinatown Wars (Mobile)",
+      "Note: 20% discount to purchase listed titles permanently"
     ]
   }
 }
