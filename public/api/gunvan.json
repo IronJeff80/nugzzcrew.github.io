@@ -1,19 +1,19 @@
 {
-  "locationId": 29,
-  "zone": "Gun Van Location #29",
-  "description": "Hearty Taco, Mirror Park",
-  "mapPath": "map_29.jpg",
+  "locationId": 17,
+  "zone": "Gun Van Location #17",
+  "description": "Terminal (southwest corner)",
+  "mapPath": "map_17.jpg",
   "inventory": [
-    "Precision Rifle: -10 %",
-    "Service Carbine: -30 %",
+    "Stun Gun: -10 %",
     "Military Rifle: -10 %",
-    "Musket: -10 %",
-    "Assault Rifle: -10 %",
-    "Pool Cue: -10 %",
-    "Molotov: -10 %",
-    "Grenade: -10 %",
+    "Compact EMP Launcher: -50 %",
+    "Minigun: -10 %",
+    "Marksman Pistol: -10 %",
+    "Knuckle Duster: -10 %",
     "Pipe Bomb: -10 %",
+    "Tear Gas: -10 %",
+    "Molotov: -10 %",
     "Body armor: -10 %"
   ],
-  "updatedAt": "2026-06-17T07:16:08.336Z"
+  "updatedAt": "2026-06-25T06:12:15.427Z"
 }
