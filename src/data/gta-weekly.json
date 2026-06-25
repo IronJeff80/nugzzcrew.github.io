@@ -1,80 +1,83 @@
 {
-  "eventTitle": "Fine Art Collector Program",
-  "weekEnding": "June 24, 2026",
-  "fibFile": "The Brute Force File",
-  "weeklyChallenge": "Rob the Daily Vault during The Diamond Casino Heist Finale to receive GTA$100,000.",
-  "podium": "Shitzu Hakuchou Drag",
-  "prizeRide": "Declasse Draugur",
+  "eventTitle": "Acid Lab & FIB Operations",
+  "weekEnding": "July 1, 2026",
+  "fibFile": "The Fine Art File",
+  "weeklyChallenge": "Complete three FIB Files to receive GTA$100,000.",
+  "podium": "Invetero Coquette D10",
+  "prizeRide": "Obey I-Wagen",
   "bonuses": [
-    { "category": "3X GTA$ & RP", "name": "Community Race Series", "value": "3X" },
-    { "category": "2X GTA$ & RP", "name": "The Diamond Casino Heist Finale (Guaranteed Artwork)", "value": "2X" },
-    { "category": "2X GTA$ & RP", "name": "KnoWay Out Missions (4X for GTA+ Members)", "value": "2X" },
-    { "category": "2X GTA$ & RP", "name": "Casino Story Missions", "value": "2X" },
-    { "category": "2X GTA$ & RP", "name": "Drop Zone", "value": "2X" },
-    { "category": "2X MULTIPLIER", "name": "Casino Work Missions (GTA$, RP & Casino Chips)", "value": "2X" }
+    { "category": "4X GTA$", "name": "FIB Priority File (The Fine Art File)", "value": "4X" },
+    { "category": "2X GTA$ & RP", "name": "Acid Lab Sell Missions", "value": "2X" },
+    { "category": "2X GTA$ & RP", "name": "Fooligan Jobs", "value": "2X" },
+    { "category": "2X GTA$ & RP", "name": "Special Vehicle Races", "value": "2X" },
+    { "category": "2X GTA$ & RP", "name": "Community Combat Series", "value": "2X" },
+    { "category": "2X GTA$", "name": "Standard FIB Files", "value": "2X" }
   ],
   "loginRewards": [
+    "Burgundy Rockstar Varsity Crewneck (Claim via Rockstar Discord #discord-rewards)",
     "GTA$500,000 (Fine Art Collector Program - Within 72 Hours)",
     "Free Benefactor Turreted Limo (Claim from Warstock Cache & Carry)",
     "Mansion Owners: Curated collection of special gifts (Delivered upon Heist launch)"
   ],
   "specialRewards": [
     { "action": "Complete any Heist by July 13", "reward": "GTA$1,000,000 + NOOSE Outfit" },
-    { "action": "Claim Free Business Property", "reward": "Wonderama Arcade (FREE)" }
+    { "action": "MTL Brickade 6x6 Equipment", "reward": "Acid Lab Installation (FREE)" }
   ],
   "discounts": {
     "fifty": [
       "None this week"
     ],
     "forty": [
-      "Arcade Properties (Including Upgrades & Modifications)",
-      "Casino Master Penthouse (Including Upgrades & Modifications)",
-      "Master Penthouse Decorations (In Casino Store)"
+      "Darnell Bros. Garment Factory",
+      "MTL Brickade 6x6"
     ],
     "thirty": [
-      "Annis Savestra",
-      "Bravado Sprunk Buffalo",
-      "Buckingham Nimbus",
-      "Buckingham Shamal",
-      "Lampadati Casco",
-      "Lampadati Tropos Rallye",
-      "Vapid Caracara 4x4",
-      "Western Rampant Rocket"
+      "Annis Euros X32",
+      "Annis Remus",
+      "Declasse Hotring Sabre",
+      "Dewbauchee Specter",
+      "Dinka Jester Classic",
+      "HVY Dump",
+      "Karin Everon",
+      "Pegassi Zorrusso",
+      "Pfister Comet S2 Cabrio",
+      "Vapid Flash GT"
     ]
   },
   "salvageYard": [
-    { "robbery": "The Gangbanger Robbery", "name": "Benefactor LM87", "type": "Top Tier" },
-    { "robbery": "The Duggan Robbery", "name": "Lampadati Viseris", "type": "Standard Tier" },
-    { "robbery": "The Cargo Ship Robbery", "name": "Weeny Issi Rally", "type": "Low Tier" }
+    { "robbery": "The McTony Robbery", "name": "Lampadati Tigon", "type": "Top Tier" },
+    { "robbery": "The Podium Robbery", "name": "Invetero Coquette BlackFin", "type": "Standard Tier" },
+    { "robbery": "The Gangbanger Robbery", "name": "Vapid Clique", "type": "Low Tier" }
   ],
   "simeonVehicles": [
-    "Canis Kalahari",
-    "Declasse Vamos",
-    "Dewbauchee Seven-70",
-    "Enus Super Diamond",
-    "Invetero Coquette"
+    "Declasse Tornado Rat Rod",
+    "Enus Stafford",
+    "Pegassi Esskey",
+    "Vapid Blade",
+    "Weeny Dynasty"
   ],
   "luxuryAutos": [
-    "Dewbauchee Rapid GT X",
-    "Grotti Itali Classic"
+    "Declasse Walton L35 Stock",
+    "Karin Everon RS"
   ],
   "lsCarMeet": {
-    "prizeRideRequirement": "Place Top 2 in the LS Car Meet Series",
+    "prizeRideRequirement": "Place Top 5 in the LS Car Meet Series for four days in a row",
     "testTrack": [
-      "Canis Seminole Frontier",
-      "Coil Voltic",
-      "Dundreary Landstalker XL"
+      "Benefactor XLS",
+      "Declasse Tulip",
+      "Dinka Jester"
     ],
-    "hsw": "Pfister Astrale"
+    "hsw": "Maibatsu MonstroCiti"
   },
   "timeTrials": {
-    "regular": "Pillbox Hill",
-    "hsw": "Terminal to Chiliad Mountain State Wilderness",
-    "premium": "Down the Drain (Premium Race)"
+    "regular": "Elysian Island II",
+    "hsw": "Pacific Bluffs to Mount Gordo",
+    "premium": "Senora Freeway (Premium Race)"
   },
   "gunVan": [
-    "Compact EMP Launcher (50% OFF)",
-    "Military Rifle (30% OFF for GTA+ Members)"
+    "Baseball Bat (FREE)",
+    "Battle Rifle (50% OFF)",
+    "Stun Gun (30% OFF for GTA+ Members)"
   ],
   "gtaPlus": {
     "duration": "June 11 - July 13, 2026",
