@@ -9,19 +9,20 @@ import '../styles/global.css';
 // Use your verified Channel ID with the join trigger
 const channelJoinUrl = "https://www.youtube.com/channel/UCYNmnbEgm3G0m4avmwz_4Eg/join?v=dummy";
 
+// Updated to use your local PNG files located in public/images/
 const socials = [
-  { name: 'YouTube', url: channelJoinUrl, si: 'si-youtube' },
-  { name: 'Twitch', url: 'https://www.twitch.tv/officialnugzzcrew', si: 'si-twitch' },
-  { name: 'Kick', url: 'https://kick.com/officialnugzzcrew', si: 'si-kick' }, 
-  { name: 'Discord', url: 'https://discord.gg/officialnugzzcrew', si: 'si-discord' },
-  { name: 'TikTok', url: 'https://www.tiktok.com/@officialnugzzcrew', si: 'si-tiktok' },
-  { name: 'Instagram', url: 'https://www.instagram.com/officialnugzzcrew', si: 'si-instagram' },
-  { name: 'X', url: 'https://x.com/NugzzCrew', si: 'si-x' },
-  { name: 'Facebook', url: 'https://www.facebook.com/nugzzcrew', si: 'si-facebook' },
-  { name: 'Snapchat', url: 'https://www.snapchat.com/add/nugzzcrew', si: 'si-snapchat' },
-  { name: 'Suno', url: 'https://suno.com/@officialnugzzcrew', si: 'si-suno' },
-  { name: 'Shop', url: 'https://officialnugzzcrew-shop.fourthwall.com', lucide: 'shopping-bag' },
-  { name: 'Crew', url: 'https://socialclub.rockstargames.com/crew/official_nugzz_crew', lucide: 'users' },
+  { name: 'YouTube', url: channelJoinUrl, img: 'YouTube Logo.png' },
+  { name: 'Twitch', url: 'https://www.twitch.tv/officialnugzzcrew', img: 'Twitch Logo.png' }, 
+  { name: 'Kick', url: 'https://kick.com/officialnugzzcrew', img: 'Kick Logo.png' }, 
+  { name: 'Discord', url: 'https://discord.gg/officialnugzzcrew', img: 'Discord Logo.png' },
+  { name: 'TikTok', url: 'https://www.tiktok.com/@officialnugzzcrew', img: 'TikTok Logo.png' }, 
+  { name: 'Instagram', url: 'https://www.instagram.com/officialnugzzcrew', img: 'IG Logo.png' },
+  { name: 'X', url: 'https://x.com/NugzzCrew', img: 'X Logo.png' }, 
+  { name: 'Facebook', url: 'https://www.facebook.com/nugzzcrew', img: 'FB Logo.png' },
+  { name: 'Snapchat', url: 'https://www.snapchat.com/add/nugzzcrew', img: 'SnapChat Logo.png' },
+  { name: 'Suno', url: 'https://suno.com/@officialnugzzcrew', img: 'Suno Logo.png' },
+  { name: 'Shop', url: 'https://officialnugzzcrew-shop.fourthwall.com', img: 'FourthWall Logo.png' },
+  { name: 'Crew', url: 'https://socialclub.rockstargames.com/crew/official_nugzz_crew', img: 'Rockstar Logo.png' },
 ];
 ---
 
@@ -31,8 +32,6 @@ const socials = [
         <title>{title} | Official Nugzz Crew</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
         <link rel="icon" type="image/png" href="/Logo.png" />
-        <!-- UPDATED: Bumped to @latest to ensure newer icons like Suno are rendered -->
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/simple-icons-font@latest/font/simple-icons.min.css" />
         <script src="https://unpkg.com/lucide@latest"></script>
     </head>
     <body class="bg-black text-white antialiased">
@@ -65,15 +64,16 @@ const socials = [
                     </a>
                 </div>
 
+                <!-- Custom PNG rendering logic -->
                 <div class="flex justify-center md:justify-end gap-1.5 md:gap-3 w-full flex-wrap">
                     {socials.map((social) => (
-                        <a href={social.url} target="_blank" rel="noopener noreferrer" class="group transition-transform hover:scale-110 active:scale-95">
+                        <a href={social.url} target="_blank" rel="noopener noreferrer" class="group transition-transform hover:scale-110 active:scale-95" title={social.name}>
                             <div class="w-4 h-4 md:w-6 md:h-6 flex items-center justify-center">
-                                {social.si ? (
-                                    <i class={`si ${social.si} text-[10px] md:text-base text-zinc-400 group-hover:text-gold transition-colors`}></i>
-                                ) : (
-                                    <i data-lucide={social.lucide} class="w-3.5 h-3.5 md:w-5 md:h-5 text-zinc-400 group-hover:text-gold transition-colors"></i>
-                                )}
+                                <img 
+                                  src={`/images/${social.img}`} 
+                                  alt={`${social.name} Logo`} 
+                                  class="w-full h-full object-contain opacity-70 group-hover:opacity-100 transition-opacity" 
+                                />
                             </div>
                         </a>
                     ))}
@@ -107,13 +107,6 @@ const socials = [
         padding: 0;
         min-height: 100vh;
         overflow-x: hidden; 
-    }
-
-    .si {
-        display: flex !important;
-        align-items: center !important;
-        justify-content: center !important;
-        line-height: 1 !important;
     }
 
     .text-gold-bright {
