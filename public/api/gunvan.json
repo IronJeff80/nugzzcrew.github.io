@@ -4,16 +4,17 @@
   "description": "Palmer-Taylor Power Station",
   "mapPath": "map_9.jpg",
   "inventory": [
-    "Battle Rifle: -50 %",
-    "Stun Gun: -10 %",
-    "Combat Shotgun: -10 %",
-    "Minigun: -10 %",
-    "Pump Shotgun: -10 %",
-    "Baseball Bat: FREE",
-    "Grenade: -10 %",
-    "Pipe Bomb: -10 %",
+    "Compact EMP Launcher: -10 %",
+    "Heavy Rifle: -40 %",
+    "Railgun: -10 %",
+    "RPG: -10 %",
+    "Up-n-Atomizer: -10 %",
+    "Firework Launcher: FREE",
+    "Musket: FREE",
+    "Unknown (hash: -1916886713): -10 %",
     "Sticky Bomb: -10 %",
+    "Grenade: -10 %",
     "Body armor: -10 %"
   ],
-  "updatedAt": "2026-07-02T06:03:40.702Z"
+  "updatedAt": "2026-07-03T05:57:46.840Z"
 }
