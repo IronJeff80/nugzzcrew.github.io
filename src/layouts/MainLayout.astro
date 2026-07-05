@@ -6,6 +6,9 @@ interface Props {
 const { title } = Astro.props;
 import '../styles/global.css';
 
+// Get the base path from our config
+const basePath = import.meta.env.BASE_URL;
+
 // Use your verified Channel ID with the join trigger
 const channelJoinUrl = "https://www.youtube.com/channel/UCYNmnbEgm3G0m4avmwz_4Eg/join?v=dummy";
 
