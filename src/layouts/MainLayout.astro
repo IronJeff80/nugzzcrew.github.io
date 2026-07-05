@@ -6,7 +6,7 @@ interface Props {
 const { title } = Astro.props;
 import '../styles/global.css';
 
-// Get the base path from our config
+// Get the base path from our config for GitHub Pages subfolder routing
 const basePath = import.meta.env.BASE_URL;
 
 // Use your verified Channel ID with the join trigger
@@ -35,7 +35,6 @@ const socials = [
         <title>{title} | Official Nugzz Crew</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
         <link rel="icon" type="image/png" href={`${basePath}Logo.png`} />
-        <img src={`${basePath}Logo.png`} alt="Logo" class="w-6 h-6 md:w-9 md:h-9 object-contain" />
         <script src="https://unpkg.com/lucide@latest"></script>
     </head>
     <body class="bg-black text-white antialiased">
@@ -43,8 +42,8 @@ const socials = [
             <div class="max-w-7xl mx-auto flex flex-col items-center gap-3 md:grid md:grid-cols-3 md:gap-0">
    
                 <div class="flex md:justify-start w-full justify-center">
-                    <a href="/" class="flex items-center gap-2 group transition-opacity hover:opacity-90">
-                        <img src="/Logo.png" alt="Logo" class="w-6 h-6 md:w-9 md:h-9 object-contain" />
+                    <a href={basePath} class="flex items-center gap-2 group transition-opacity hover:opacity-90">
+                        <img src={`${basePath}Logo.png`} alt="Logo" class="w-6 h-6 md:w-9 md:h-9 object-contain" />
                         <span class="text-[clamp(11px,3vw,18px)] font-header text-gold uppercase tracking-tighter whitespace-nowrap">
                             Official Nugzz Crew
                         </span>
@@ -53,10 +52,10 @@ const socials = [
 
                 <div class="flex flex-col items-center gap-1.5 w-full">
                     <div class="flex justify-center gap-4 text-[9px] md:text-xs uppercase font-bold tracking-widest text-zinc-400">
-                        <a href="/" class="hover:text-gold transition-colors">Home</a>
-                        <a href="/gta" class="hover:text-gold transition-colors">GTA Bonuses</a>
-                        <a href="/generator" class="hover:text-gold transition-colors">DMO Gen</a>
-                        <a href="/gtaresources" class="hover:text-gold transition-colors">GTA Resources</a>
+                        <a href={basePath} class="hover:text-gold transition-colors">Home</a>
+                        <a href={`${basePath}gta`} class="hover:text-gold transition-colors">GTA Bonuses</a>
+                        <a href={`${basePath}generator`} class="hover:text-gold transition-colors">DMO Gen</a>
+                        <a href={`${basePath}gtaresources`} class="hover:text-gold transition-colors">GTA Resources</a>
                     </div>
                     <a 
                       href={channelJoinUrl} 
@@ -68,7 +67,6 @@ const socials = [
                     </a>
                 </div>
 
-                <!-- Custom PNG rendering logic -->
                 <div class="flex justify-center md:justify-end gap-1.5 md:gap-3 w-full flex-wrap">
                     {socials.map((social) => (
                         <a href={social.url} target="_blank" rel="noopener noreferrer" class="group transition-transform hover:scale-110 active:scale-95" title={social.name}>
@@ -111,12 +109,11 @@ const socials = [
         padding: 0;
         min-height: 100vh;
         overflow-x: hidden; 
-        /* --- NEW BACKGROUND PROPERTIES --- */
+        
+        /* --- FIXED BACKGROUND PATH --- */
         background-image: url('/nugzzcrew.github.io/images/bg-tile.png');
         background-repeat: repeat;
         background-size: 300px 300px;
-        /* Optionally add a blend mode if you want the bg-black to tint it:
-           background-blend-mode: overlay; */
     }
 
     .text-gold-bright {
