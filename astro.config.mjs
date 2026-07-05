@@ -4,9 +4,8 @@ import tailwindcss from '@tailwindcss/vite';
 
 // https://astro.build/config
 export default defineConfig({
-  // Tell Astro your official absolute URL
-  site: 'https://nugzzcrew.github.io',
-  
+  site: 'https://ironjeff80.github.io',
+  base: '/nugzzcrew.github.io',
   vite: {
     plugins: [tailwindcss()]
   }
