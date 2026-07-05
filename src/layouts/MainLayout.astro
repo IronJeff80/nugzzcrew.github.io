@@ -34,7 +34,8 @@ const socials = [
         <meta charset="utf-8" />
         <title>{title} | Official Nugzz Crew</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
-        <link rel="icon" type="image/png" href="/Logo.png" />
+        <link rel="icon" type="image/png" href={`${basePath}Logo.png`} />
+        <img src={`${basePath}Logo.png`} alt="Logo" class="w-6 h-6 md:w-9 md:h-9 object-contain" />
         <script src="https://unpkg.com/lucide@latest"></script>
     </head>
     <body class="bg-black text-white antialiased">
@@ -73,7 +74,7 @@ const socials = [
                         <a href={social.url} target="_blank" rel="noopener noreferrer" class="group transition-transform hover:scale-110 active:scale-95" title={social.name}>
                             <div class="w-4 h-4 md:w-6 md:h-6 flex items-center justify-center">
                                 <img 
-                                  src={`/images/${social.img}`} 
+                                  src={`${basePath}images/${social.img}`} 
                                   alt={`${social.name} Logo`} 
                                   class="w-full h-full object-contain opacity-70 group-hover:opacity-100 transition-opacity" 
                                 />
@@ -111,7 +112,7 @@ const socials = [
         min-height: 100vh;
         overflow-x: hidden; 
         /* --- NEW BACKGROUND PROPERTIES --- */
-        background-image: url('/images/bg-tile.png'); /* Change to your exact file name */
+        background-image: url('/nugzzcrew.github.io/images/bg-tile.png');
         background-repeat: repeat;
         background-size: 300px 300px;
         /* Optionally add a blend mode if you want the bg-black to tint it:
