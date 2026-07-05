@@ -1,8 +1,8 @@
 {
-  "locationId": 27,
-  "zone": "Gun Van Location #27",
-  "description": "Hookies, North Chumash",
-  "mapPath": "map_27.jpg",
+  "locationId": 3,
+  "zone": "Gun Van Location #3",
+  "description": "Merle Abrahams' house, Sandy Shores",
+  "mapPath": "map_3.jpg",
   "inventory": [
     "Compact EMP Launcher: -10 %",
     "Heavy Rifle: -40 %",
@@ -16,5 +16,5 @@
     "Grenade: -10 %",
     "Body armor: -10 %"
   ],
-  "updatedAt": "2026-07-04T05:50:29.645Z"
+  "updatedAt": "2026-07-05T06:09:27.902Z"
 }
