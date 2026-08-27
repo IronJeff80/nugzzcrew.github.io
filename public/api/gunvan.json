@@ -1,21 +1,19 @@
 {
-  "locationId": 13,
-  "zone": "Gun Van Location #13",
-  "description": "LT Weld Supply Co. / Lester's Warehouse, Murrieta Heights",
-  "mapPath": "map_13.jpg",
+  "locationId": 27,
+  "zone": "Gun Van Location #27",
+  "description": "Hookies, North Chumash",
+  "mapPath": "map_27.jpg",
   "inventory": [
-    "Unholy Hellbringer: -40 %",
+    "Military Rifle: -30 %",
+    "Precision Rifle: -10 %",
     "Railgun: -10 %",
-    "Combat Shotgun: -10 %",
-    "Heavy Sniper: -10 %",
-    "Pump Shotgun: -10 %",
-    "Knife: FREE",
-    "The Shocker: -10 %",
-    "Up-n-Atomizer: -10 %",
-    "Molotov: -10 %",
+    "Grenade Launcher: -10 %",
+    "Heavy Pistol: -10 %",
+    "Crowbar: -10 %",
     "Pipe Bomb: -10 %",
-    "Sticky Bomb: -10 %",
+    "Tear Gas: -10 %",
+    "Grenade: -10 %",
     "Body armor: -10 %"
   ],
-  "updatedAt": "2026-08-26T03:09:47.893Z"
+  "updatedAt": "2026-08-27T12:37:43.276Z"
 }
