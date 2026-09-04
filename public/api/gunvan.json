@@ -1,19 +1,19 @@
 {
-  "locationId": 19,
-  "zone": "Gun Van Location #19",
-  "description": "Popular Street, La Mesa",
-  "mapPath": "map_19.jpg",
+  "locationId": 7,
+  "zone": "Gun Van Location #7",
+  "description": "Paleto Forest Lumber Yard",
+  "mapPath": "map_7.jpg",
   "inventory": [
-    "Military Rifle: -30 %",
-    "Precision Rifle: -10 %",
+    "Stun Gun: -10 %",
     "Railgun: -10 %",
+    "Precision Rifle: -50 %",
     "Grenade Launcher: -10 %",
-    "Heavy Pistol: -10 %",
-    "Crowbar: -10 %",
-    "Pipe Bomb: -10 %",
+    "Flare Gun: -10 %",
+    "Knife: -10 %",
     "Tear Gas: -10 %",
-    "Grenade: -10 %",
+    "Molotov: -10 %",
+    "Sticky Bomb: -10 %",
     "Body armor: -10 %"
   ],
-  "updatedAt": "2026-09-03T07:01:13.326Z"
+  "updatedAt": "2026-09-04T07:07:45.633Z"
 }
