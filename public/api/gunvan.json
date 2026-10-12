@@ -1,8 +1,8 @@
 {
-  "locationId": 3,
-  "zone": "Gun Van Location #3",
-  "description": "Merle Abrahams' house, Sandy Shores",
-  "mapPath": "map_3.jpg",
+  "locationId": 29,
+  "zone": "Gun Van Location #29",
+  "description": "Hearty Taco, Mirror Park",
+  "mapPath": "map_29.jpg",
   "inventory": [
     "Service Carbine: -30 %",
     "Precision Rifle: -10 %",
@@ -17,5 +17,5 @@
     "Pipe Bomb: -10 %",
     "Body armor: -10 %"
   ],
-  "updatedAt": "2026-10-11T13:22:26.371Z"
+  "updatedAt": "2026-10-12T15:58:20.972Z"
 }
