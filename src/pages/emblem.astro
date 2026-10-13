@@ -22,12 +22,17 @@ import MainLayout from '../layouts/MainLayout.astro';
           <i data-lucide="image" class="w-4 h-4"></i>
           Select Source Image
         </label>
-        <div class="border-2 border-dashed border-zinc-700/50 rounded-2xl p-8 text-center hover:border-gold/50 transition-colors bg-black/30">
-          <input type="file" id="imageInput" accept="image/*" class="hidden" />
-          <label for="imageInput" class="cursor-pointer flex flex-col items-center gap-3">
-            <i data-lucide="upload-cloud" class="w-8 h-8 text-zinc-500"></i>
-            <span class="text-white font-bold uppercase text-sm tracking-tight">Click to Upload Image</span>
-            <span class="text-zinc-500 text-xs font-mono">PNG, JPG, SVG up to 5MB</span>
+        
+        <div class="relative border-2 border-dashed border-zinc-700/50 rounded-2xl p-8 text-center hover:border-gold/50 transition-colors bg-black/30 overflow-hidden min-h-[160px] flex items-center justify-center group">
+          <input type="file" id="imageInput" accept="image/*" class="opacity-0 absolute w-0 h-0" />
+          
+          <!-- Image Preview -->
+          <img id="imagePreview" src="" class="hidden absolute inset-0 w-full h-full object-contain p-4 z-0 opacity-50 group-hover:opacity-20 transition-opacity" />
+          
+          <label for="imageInput" class="cursor-pointer flex flex-col items-center gap-3 relative z-10 w-full">
+            <i data-lucide="upload-cloud" class="w-8 h-8 text-zinc-500" id="uploadIcon"></i>
+            <span class="text-white font-bold uppercase text-sm tracking-tight" id="uploadText">Click to Upload Image</span>
+            <span class="text-zinc-500 text-xs font-mono" id="uploadSubtext">PNG, JPG, SVG up to 5MB</span>
           </label>
         </div>
       </div>
@@ -59,11 +64,21 @@ import MainLayout from '../layouts/MainLayout.astro';
         </div>
       </div>
 
-      <!-- Action Button -->
-      <div class="pt-4 border-t border-zinc-700/50">
+      <!-- Action Button & Progress Bar -->
+      <div class="pt-4 border-t border-zinc-700/50 space-y-4">
         <button id="generateBtn" class="w-full bg-gold hover:bg-gold/80 text-black py-4 rounded-xl font-black uppercase italic tracking-tighter text-lg transition-all shadow-[0_0_30px_-5px_rgba(212,175,55,0.4)]">
           Generate Emblem Code
         </button>
+
+        <div id="progressContainer" class="hidden space-y-2">
+          <div class="flex justify-between text-[10px] text-zinc-400 font-bold uppercase tracking-widest">
+            <span id="progressStatus">Initializing...</span>
+            <span id="progressPercent">0%</span>
+          </div>
+          <div class="w-full bg-zinc-800 rounded-full h-1.5 overflow-hidden">
+            <div id="progressBar" class="bg-gold h-1.5 rounded-full w-0 transition-all duration-200"></div>
+          </div>
+        </div>
       </div>
       
     </div>
@@ -97,29 +112,94 @@ import MainLayout from '../layouts/MainLayout.astro';
     const outputSection = document.getElementById('outputSection');
     const copyBtn = document.getElementById('copyBtn');
     const outputCode = document.getElementById('outputCode');
+    
     const imageInput = document.getElementById('imageInput');
-    const uploadLabelText = document.querySelector('label[for="imageInput"] span.text-white');
+    const imagePreview = document.getElementById('imagePreview');
+    const uploadText = document.getElementById('uploadText');
+    const uploadIcon = document.getElementById('uploadIcon');
+    const uploadSubtext = document.getElementById('uploadSubtext');
 
-    // Handle file selection
-    if (imageInput && uploadLabelText) {
+    const progressContainer = document.getElementById('progressContainer');
+    const progressBar = document.getElementById('progressBar');
+    const progressPercent = document.getElementById('progressPercent');
+    const progressStatus = document.getElementById('progressStatus');
+
+    // Handle file selection and preview
+    if (imageInput && uploadText) {
       imageInput.addEventListener('change', (e) => {
-        if (e.target.files && e.target.files.length > 0) {
-          uploadLabelText.textContent = e.target.files[0].name;
-          uploadLabelText.classList.add('text-gold');
+        const file = e.target.files[0];
+        
+        if (file) {
+          uploadText.textContent = file.name;
+          uploadText.classList.add('text-gold');
+          uploadIcon.style.display = 'none';
+          uploadSubtext.style.display = 'none';
+          
+          // Read image for preview
+          const reader = new FileReader();
+          reader.onload = function(event) {
+            imagePreview.src = event.target.result;
+            imagePreview.classList.remove('hidden');
+          }
+          reader.readAsDataURL(file);
         } else {
-          uploadLabelText.textContent = 'Click to Upload Image';
-          uploadLabelText.classList.remove('text-gold');
+          uploadText.textContent = 'Click to Upload Image';
+          uploadText.classList.remove('text-gold');
+          uploadIcon.style.display = 'block';
+          uploadSubtext.style.display = 'block';
+          imagePreview.classList.add('hidden');
+          imagePreview.src = '';
         }
       });
     }
 
+    // Handle Generation and Progress Bar
     if (generateBtn) {
       generateBtn.addEventListener('click', () => {
-        outputSection.classList.remove('hidden');
-        outputCode.value = "// Your generated Rockstar Social Club emblem code will appear here.\n// Paste this into the browser console on the emblem editor page.\n\nconsole.log('Code execution started...');";
+        // Reset and show progress bar
+        outputSection.classList.add('hidden');
+        progressContainer.classList.remove('hidden');
+        generateBtn.disabled = true;
+        generateBtn.classList.add('opacity-50', 'cursor-not-allowed');
+        
+        let progress = 0;
+        progressBar.style.width = '0%';
+        progressPercent.textContent = '0%';
+        progressStatus.textContent = 'Analyzing image colors...';
+
+        const interval = setInterval(() => {
+          progress += Math.floor(Math.random() * 15) + 5;
+          if (progress > 100) progress = 100;
+          
+          progressBar.style.width = `${progress}%`;
+          progressPercent.textContent = `${progress}%`;
+
+          // Update status text based on progress
+          if (progress > 25 && progress < 60) {
+            progressStatus.textContent = 'Generating SVG paths...';
+          } else if (progress >= 60 && progress < 90) {
+            progressStatus.textContent = 'Formatting Rockstar emblem code...';
+          } else if (progress >= 90) {
+            progressStatus.textContent = 'Finalizing...';
+          }
+
+          if (progress === 100) {
+            clearInterval(interval);
+            
+            setTimeout(() => {
+              progressContainer.classList.add('hidden');
+              generateBtn.disabled = false;
+              generateBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+              
+              outputSection.classList.remove('hidden');
+              outputCode.value = "// Your generated Rockstar Social Club emblem code will appear here.\n// Paste this into the browser console on the emblem editor page.\n\nconsole.log('Code execution started...');";
+            }, 500);
+          }
+        }, 300);
       });
     }
 
+    // Copy to clipboard
     if (copyBtn) {
       copyBtn.addEventListener('click', () => {
         outputCode.select();
