@@ -1,8 +1,8 @@
 {
-  "locationId": 1,
-  "zone": "Gun Van Location #1",
-  "description": "No Marks Cleaners, Paleto Bay",
-  "mapPath": "map_1.jpg",
+  "locationId": 17,
+  "zone": "Gun Van Location #17",
+  "description": "Terminal (southwest corner)",
+  "mapPath": "map_17.jpg",
   "inventory": [
     "Service Carbine: -30 %",
     "Precision Rifle: -10 %",
@@ -17,5 +17,5 @@
     "Pipe Bomb: -10 %",
     "Body armor: -10 %"
   ],
-  "updatedAt": "2026-10-08T13:55:04.813Z"
+  "updatedAt": "2026-10-13T14:30:48.969Z"
 }
