@@ -174,13 +174,13 @@ import MainLayout from '../layouts/MainLayout.astro';
         <span>Copy Code</span>
       </button>
 
-      <details class="group border-t border-zinc-800 pt-3">
+      <details class="group border-t border-zinc-800 pt-3" open>
         <summary class="text-[10px] text-zinc-400 font-bold uppercase tracking-widest cursor-pointer flex items-center gap-2 hover:text-gold transition-colors list-none">
           <i data-lucide="chevron-down" class="w-3 h-3 group-open:rotate-180 transition-transform"></i>
           Show raw code
         </summary>
         <div class="pt-3">
-          <textarea id="outputCode" readonly class="w-full h-32 bg-black border border-zinc-800 rounded-xl p-3 text-zinc-300 font-mono text-[9px] focus:outline-none focus:border-gold/50 resize-none"></textarea>
+          <textarea id="outputCode" readonly class="w-full h-48 bg-black border border-zinc-800 rounded-xl p-3 text-zinc-300 font-mono text-[9px] focus:outline-none focus:border-gold/50 resize-y" placeholder="// Generate an emblem to see the console code here"></textarea>
         </div>
       </details>
     </div>
@@ -417,9 +417,56 @@ import MainLayout from '../layouts/MainLayout.astro';
         outputStats.classList.remove('hidden');
         readyStatus.classList.remove('hidden');
 
-        const snippet = `/* NUGZZ CREW EMBLEM\n * Source: ${currentFileName}\n * Size: ${size} bytes\n */\n\nconst svgData = ${JSON.stringify(result.svg || '')};\nconst layerData = ${JSON.stringify(result.lmin || result.lfull || '')};\n\n// Paste into editor console\nconsole.log('Emblem ready', svgData.length, layerData.length);`;
+        // Proper Social Club console payload
+        const svgRaw = result.svg || '';
+        const layerRaw = result.lmin || result.lfull || '[]';
+        const svgB64 = btoa(unescape(encodeURIComponent(svgRaw)));
+        const layerB64 = btoa(unescape(encodeURIComponent(layerRaw)));
+
+        const snippet = `/* OFFICIAL NUGZZ CREW EMBLEM
+ * Source: ${currentFileName}
+ * Size: ${size.toLocaleString()} bytes
+ * Paste into Social Club emblem editor console (F12)
+ */
+
+var svgData = ${JSON.stringify(svgB64)};
+var layerData = ${JSON.stringify(layerB64)};
+
+var request = new XMLHttpRequest();
+request.open("POST", "/emblems/save", true);
+request.setRequestHeader("Content-Type", "application/json");
+request.setRequestHeader("__RequestVerificationToken", document.getElementsByName("__RequestVerificationToken")[0].value);
+request.setRequestHeader("X-Requested-With", "XMLHttpRequest");
+request.onreadystatechange = function() {
+  if (request.readyState === 4) {
+    try {
+      var a = JSON.parse(request.responseText);
+      if (a.Status === 200) {
+        window.location.href = "https://socialclub.rockstargames.com/emblems/edit/" + a.EmblemId;
+      } else {
+        alert(a.Message || (a.Error && a.Error.Message) || "Save failed");
+      }
+    } catch (err) {
+      alert("Response error: " + request.responseText.slice(0, 200));
+    }
+  }
+};
+request.send(JSON.stringify({
+  crewId: "0",
+  emblemId: "",
+  parentId: "",
+  parentType: "",
+  hash: (document.getElementById("editorField-hash") || {}).value || "",
+  svgData: svgData,
+  layerData: layerData
+}));`;
+
         outputCode.value = snippet;
         copyBtn.disabled = false;
+
+        // Auto-open the raw code section so it's visible
+        const details = outputCode.closest('details');
+        if (details) details.open = true;
       } catch (e) {
         outputCode.value = '// Error: ' + e.message;
       }
@@ -451,9 +498,17 @@ import MainLayout from '../layouts/MainLayout.astro';
     }
 
     if (copyBtn) {
-      copyBtn.addEventListener('click', () => {
-        outputCode.select();
-        document.execCommand('copy');
+      copyBtn.addEventListener('click', async () => {
+        const text = outputCode.value;
+        if (!text || text.startsWith('//')) return;
+
+        try {
+          await navigator.clipboard.writeText(text);
+        } catch {
+          outputCode.select();
+          document.execCommand('copy');
+        }
+
         const orig = copyBtn.innerHTML;
         copyBtn.innerHTML = '<i data-lucide="check" class="w-4 h-4 text-green-500"></i><span class="text-green-500">Copied!</span>';
         if (window.lucide) window.lucide.createIcons();
