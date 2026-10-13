@@ -3,201 +3,299 @@ import MainLayout from '../layouts/MainLayout.astro';
 ---
 
 <MainLayout title="Emblem Creator">
-  <div class="max-w-4xl mx-auto py-12 px-4 md:px-6 space-y-12">
+  <div class="max-w-[1400px] mx-auto py-8 px-4 md:px-6">
     
-    <section class="text-center">
-      <h1 class="text-[clamp(40px,6vw,80px)] font-black italic uppercase leading-[0.8] text-white tracking-tighter drop-shadow-lg mb-4">
+    <section class="mb-8">
+      <h1 class="text-3xl md:text-4xl font-black italic uppercase leading-none text-white tracking-tighter drop-shadow-md">
         Emblem <span class="text-gold">Creator</span>
       </h1>
-      <p class="text-zinc-400 font-bold uppercase tracking-widest text-sm italic">
-        Convert Images to Custom GTA Crew Emblems
+      <p class="text-zinc-400 font-bold uppercase tracking-widest text-[10px] mt-1 italic">
+        Image and Text to Emblem Code
       </p>
     </section>
 
-    <div class="bg-zinc-900/40 backdrop-blur-md border border-zinc-700/50 p-8 rounded-[2.5rem] shadow-2xl space-y-8">
+    <div class="flex flex-col lg:flex-row gap-6">
       
-      <!-- Upload Section -->
-      <div class="space-y-4">
-        <label class="text-gold font-black uppercase tracking-widest text-[10px] drop-shadow-sm flex items-center gap-2">
-          <i data-lucide="image" class="w-4 h-4"></i>
-          Select Source Image
-        </label>
+      <!-- Left Column: Settings -->
+      <div class="w-full lg:w-80 flex-shrink-0 space-y-6">
         
-        <div class="relative border-2 border-dashed border-zinc-700/50 rounded-2xl p-8 text-center hover:border-gold/50 transition-colors bg-black/30 overflow-hidden min-h-[160px] flex items-center justify-center group">
-          <input type="file" id="imageInput" accept="image/*" class="opacity-0 absolute w-0 h-0" />
+        <!-- Source Module -->
+        <div class="bg-zinc-900/60 backdrop-blur-md border border-zinc-700/50 rounded-2xl p-5 shadow-lg">
+          <h2 class="text-[10px] text-zinc-500 font-black uppercase tracking-widest mb-4">Source</h2>
           
-          <!-- Image Preview -->
-          <img id="imagePreview" src="" class="hidden absolute inset-0 w-full h-full object-contain p-4 z-0 opacity-50 group-hover:opacity-20 transition-opacity" />
+          <div class="flex bg-black rounded-xl p-1 border border-zinc-800 mb-4">
+            <button class="flex-1 bg-zinc-800 text-gold text-xs font-bold py-2 rounded-lg uppercase tracking-tight shadow-sm">Image</button>
+            <button class="flex-1 text-zinc-400 hover:text-white text-xs font-bold py-2 rounded-lg uppercase tracking-tight transition-colors">Text</button>
+          </div>
+
+          <div class="relative border border-dashed border-zinc-600 rounded-xl p-3 hover:border-gold/50 transition-colors bg-black/40 group overflow-hidden">
+            <input type="file" id="imageInput" accept="image/*" class="opacity-0 absolute inset-0 w-full h-full cursor-pointer z-20" />
+            
+            <div class="flex items-center gap-3 relative z-10 pointer-events-none">
+              <div class="w-10 h-10 rounded-full bg-zinc-800 border border-zinc-700 flex items-center justify-center shrink-0" id="sourceThumbContainer">
+                <i data-lucide="image" class="w-4 h-4 text-zinc-400" id="sourceIcon"></i>
+                <img id="sourceThumb" src="" class="hidden w-full h-full object-cover rounded-full" />
+              </div>
+              <div class="flex flex-col overflow-hidden">
+                <span class="text-white font-mono text-xs font-bold truncate" id="uploadText">Select Image...</span>
+                <span class="text-zinc-500 text-[9px] uppercase tracking-wider mt-0.5" id="uploadSubtext">Click to browse</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Settings Module -->
+        <div class="bg-zinc-900/60 backdrop-blur-md border border-zinc-700/50 rounded-2xl p-5 shadow-lg space-y-5">
+          <div class="flex justify-between items-center">
+            <h2 class="text-[10px] text-zinc-500 font-black uppercase tracking-widest">Settings</h2>
+          </div>
+
+          <!-- Resolution -->
+          <div class="space-y-2">
+            <label class="text-white text-xs font-bold flex items-center gap-1.5">
+              Resolution <i data-lucide="info" class="w-3 h-3 text-zinc-500"></i>
+            </label>
+            <div class="flex bg-black rounded-lg p-1 border border-zinc-800">
+              <button class="flex-1 bg-zinc-800 text-gold text-[10px] font-bold py-1.5 rounded-md uppercase">Auto</button>
+              <button class="flex-1 text-zinc-400 hover:text-white text-[10px] font-bold py-1.5 rounded-md uppercase">128</button>
+              <button class="flex-1 text-zinc-400 hover:text-white text-[10px] font-bold py-1.5 rounded-md uppercase">256</button>
+              <button class="flex-1 text-zinc-400 hover:text-white text-[10px] font-bold py-1.5 rounded-md uppercase">512</button>
+            </div>
+          </div>
+
+          <!-- Method -->
+          <div class="space-y-2">
+            <label class="text-white text-xs font-bold flex items-center gap-1.5">
+              Method <i data-lucide="info" class="w-3 h-3 text-zinc-500"></i>
+            </label>
+            <div class="flex bg-black rounded-lg p-1 border border-zinc-800">
+              <button class="flex-1 bg-zinc-800 text-gold text-[10px] font-bold py-1.5 rounded-md uppercase">Auto</button>
+              <button class="flex-1 text-zinc-400 hover:text-white text-[10px] font-bold py-1.5 rounded-md uppercase">Rows</button>
+              <button class="flex-1 text-zinc-400 hover:text-white text-[10px] font-bold py-1.5 rounded-md uppercase">Cols</button>
+            </div>
+          </div>
+
+          <!-- Detail -->
+          <div class="space-y-2">
+            <label class="text-white text-xs font-bold flex items-center gap-1.5">
+              Detail <i data-lucide="info" class="w-3 h-3 text-zinc-500"></i>
+            </label>
+            <div class="flex bg-black rounded-lg p-1 border border-zinc-800">
+              <button class="flex-1 bg-zinc-800 text-gold text-[10px] font-bold py-1.5 rounded-md uppercase">Auto</button>
+              <button class="flex-1 text-zinc-400 hover:text-white text-[10px] font-bold py-1.5 rounded-md uppercase">Low</button>
+              <button class="flex-1 text-zinc-400 hover:text-white text-[10px] font-bold py-1.5 rounded-md uppercase">Med</button>
+              <button class="flex-1 text-zinc-400 hover:text-white text-[10px] font-bold py-1.5 rounded-md uppercase">High</button>
+            </div>
+          </div>
+
+          <!-- Toggles -->
+          <div class="space-y-3 pt-3 border-t border-zinc-800">
+            <label class="flex items-center justify-between cursor-pointer">
+              <span class="text-white text-xs font-bold flex items-center gap-1.5">
+                Auto-optimize <i data-lucide="info" class="w-3 h-3 text-zinc-500"></i>
+              </span>
+              <div class="relative">
+                <input type="checkbox" class="sr-only peer" checked>
+                <div class="w-8 h-4 bg-zinc-700 rounded-full peer peer-checked:after:translate-x-full peer-checked:bg-gold after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-3 after:w-3 after:transition-all"></div>
+              </div>
+            </label>
+
+            <label class="flex items-center justify-between cursor-pointer">
+              <span class="text-white text-xs font-bold flex items-center gap-1.5">
+                Pixelization <i data-lucide="info" class="w-3 h-3 text-zinc-500"></i>
+              </span>
+              <div class="relative">
+                <input type="checkbox" class="sr-only peer">
+                <div class="w-8 h-4 bg-zinc-700 rounded-full peer peer-checked:after:translate-x-full peer-checked:bg-gold after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-3 after:w-3 after:transition-all"></div>
+              </div>
+            </label>
+
+            <label class="flex items-center justify-between cursor-pointer">
+              <span class="text-white text-xs font-bold flex items-center gap-1.5">
+                Crop empty edges <i data-lucide="info" class="w-3 h-3 text-zinc-500"></i>
+              </span>
+              <div class="relative">
+                <input type="checkbox" class="sr-only peer" checked>
+                <div class="w-8 h-4 bg-zinc-700 rounded-full peer peer-checked:after:translate-x-full peer-checked:bg-gold after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-3 after:w-3 after:transition-all"></div>
+              </div>
+            </label>
+          </div>
+
+          <button class="w-full bg-zinc-800 hover:bg-zinc-700 text-white text-[10px] font-black uppercase tracking-widest py-3 rounded-xl transition-colors mt-2">
+            Reset to defaults
+          </button>
+        </div>
+      </div>
+
+      <!-- Center Column: Preview Grid -->
+      <div class="flex-grow flex flex-col min-h-[500px]">
+        <div class="bg-black border border-zinc-800 rounded-2xl flex-grow relative overflow-hidden flex items-center justify-center p-8 shadow-inner" style="background-image: linear-gradient(45deg, #18181b 25%, transparent 25%), linear-gradient(-45deg, #18181b 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #18181b 75%), linear-gradient(-45deg, transparent 75%, #18181b 75%); background-size: 20px 20px; background-position: 0 0, 0 10px, 10px -10px, -10px 0px;">
           
-          <label for="imageInput" class="cursor-pointer flex flex-col items-center gap-3 relative z-10 w-full">
-            <i data-lucide="upload-cloud" class="w-8 h-8 text-zinc-500" id="uploadIcon"></i>
-            <span class="text-white font-bold uppercase text-sm tracking-tight" id="uploadText">Click to Upload Image</span>
-            <span class="text-zinc-500 text-xs font-mono" id="uploadSubtext">PNG, JPG, SVG up to 5MB</span>
-          </label>
+          <img id="mainPreview" src="" class="hidden max-w-full max-h-full object-contain filter drop-shadow-2xl scale-95 transition-transform duration-500" />
+          
+          <div id="previewPlaceholder" class="text-zinc-600 flex flex-col items-center gap-4">
+            <i data-lucide="image-plus" class="w-16 h-16 opacity-50"></i>
+            <span class="text-xs font-bold uppercase tracking-widest opacity-50">Upload an image to preview</span>
+          </div>
+
         </div>
       </div>
 
-      <!-- Settings Grid -->
-      <div class="grid md:grid-cols-2 gap-6">
-        <div class="space-y-4">
-          <label class="text-gold font-black uppercase tracking-widest text-[10px] drop-shadow-sm flex items-center gap-2">
-            <i data-lucide="sliders" class="w-4 h-4"></i>
-            Detail Level
-          </label>
-          <input type="range" id="detailSlider" min="1" max="10" value="5" class="w-full accent-gold bg-zinc-800 rounded-lg appearance-none h-2" />
-          <div class="flex justify-between text-[10px] text-zinc-500 font-bold uppercase">
-            <span>Simple</span>
-            <span>Complex</span>
+      <!-- Right Column: Output -->
+      <div class="w-full lg:w-80 flex-shrink-0 space-y-6">
+        
+        <!-- Output Module -->
+        <div class="bg-zinc-900/60 backdrop-blur-md border border-zinc-700/50 rounded-2xl p-5 shadow-lg">
+          <h2 class="text-[10px] text-zinc-500 font-black uppercase tracking-widest mb-4">Output</h2>
+          
+          <div class="space-y-1 mb-4 hidden" id="outputStats">
+            <div class="flex justify-between text-[10px] font-mono font-bold">
+              <span class="text-zinc-400">SIZE</span>
+              <span class="text-white"><span class="text-gold">45.245</span> / 1,250,000</span>
+            </div>
+            <div class="w-full bg-zinc-800 h-1.5 rounded-full overflow-hidden">
+              <div class="bg-green-500 h-full w-[5%] shadow-[0_0_10px_rgba(34,197,94,0.5)]"></div>
+            </div>
+          </div>
+
+          <div class="bg-black/50 border border-green-500/30 rounded-xl p-4 mb-4 hidden" id="readyStatus">
+            <div class="flex items-center gap-2 mb-1">
+              <div class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
+              <span class="text-green-500 text-xs font-black uppercase tracking-tight">Ready to copy</span>
+            </div>
+            <p class="text-zinc-400 text-[10px] leading-tight">Copy the code and paste it into the editor console.</p>
+          </div>
+
+          <button id="copyBtn" disabled class="w-full bg-white hover:bg-gray-200 text-black disabled:bg-zinc-800 disabled:text-zinc-600 font-black uppercase text-sm py-4 rounded-xl transition-colors tracking-tighter mb-4 shadow-md flex items-center justify-center gap-2">
+            <i data-lucide="copy" class="w-4 h-4"></i>
+            <span>Copy Code</span>
+          </button>
+
+          <details class="group border-t border-zinc-800 pt-3">
+            <summary class="text-[10px] text-zinc-400 font-bold uppercase tracking-widest cursor-pointer flex items-center gap-2 hover:text-gold transition-colors list-none">
+              <i data-lucide="chevron-down" class="w-3 h-3 group-open:rotate-180 transition-transform"></i>
+              Show raw code
+            </summary>
+            <div class="pt-3">
+              <textarea id="outputCode" readonly class="w-full h-32 bg-black border border-zinc-800 rounded-xl p-3 text-zinc-300 font-mono text-[9px] focus:outline-none focus:border-gold/50 resize-none"></textarea>
+            </div>
+          </details>
+        </div>
+
+        <!-- Mini Previews -->
+        <div class="bg-zinc-900/60 backdrop-blur-md border border-zinc-700/50 rounded-2xl p-5 shadow-lg">
+          <h2 class="text-[10px] text-zinc-500 font-black uppercase tracking-widest mb-6">Preview Sizes</h2>
+          
+          <div class="flex items-end justify-center gap-8 h-32 relative pb-6">
+            <div class="flex flex-col items-center gap-2">
+              <div class="w-24 h-24 border border-zinc-700 rounded-full flex items-center justify-center overflow-hidden bg-black relative">
+                <img class="mini-preview hidden w-full h-full object-contain p-2" src="" />
+              </div>
+              <span class="text-[9px] text-zinc-500 font-mono absolute bottom-0">128</span>
+            </div>
+
+            <div class="flex flex-col items-center gap-2">
+              <div class="w-16 h-16 border border-zinc-700 rounded-full flex items-center justify-center overflow-hidden bg-black relative">
+                <img class="mini-preview hidden w-full h-full object-contain p-1.5" src="" />
+              </div>
+              <span class="text-[9px] text-zinc-500 font-mono absolute bottom-0">64</span>
+            </div>
+
+            <div class="flex flex-col items-center gap-2">
+              <div class="w-10 h-10 border border-zinc-700 rounded-full flex items-center justify-center overflow-hidden bg-black relative">
+                <img class="mini-preview hidden w-full h-full object-contain p-1" src="" />
+              </div>
+              <span class="text-[9px] text-zinc-500 font-mono absolute bottom-0">32</span>
+            </div>
           </div>
         </div>
 
-        <div class="space-y-4">
-          <label class="text-gold font-black uppercase tracking-widest text-[10px] drop-shadow-sm flex items-center gap-2">
-            <i data-lucide="palette" class="w-4 h-4"></i>
-            Color Smoothing
-          </label>
-          <input type="range" id="smoothSlider" min="1" max="10" value="5" class="w-full accent-gold bg-zinc-800 rounded-lg appearance-none h-2" />
-          <div class="flex justify-between text-[10px] text-zinc-500 font-bold uppercase">
-            <span>Sharp</span>
-            <span>Smooth</span>
-          </div>
-        </div>
       </div>
 
-      <!-- Action Button & Progress Bar -->
-      <div class="pt-4 border-t border-zinc-700/50 space-y-4">
-        <button id="generateBtn" class="w-full bg-gold hover:bg-gold/80 text-black py-4 rounded-xl font-black uppercase italic tracking-tighter text-lg transition-all shadow-[0_0_30px_-5px_rgba(212,175,55,0.4)]">
-          Generate Emblem Code
-        </button>
-
-        <div id="progressContainer" class="hidden space-y-2">
-          <div class="flex justify-between text-[10px] text-zinc-400 font-bold uppercase tracking-widest">
-            <span id="progressStatus">Initializing...</span>
-            <span id="progressPercent">0%</span>
-          </div>
-          <div class="w-full bg-zinc-800 rounded-full h-1.5 overflow-hidden">
-            <div id="progressBar" class="bg-gold h-1.5 rounded-full w-0 transition-all duration-200"></div>
-          </div>
-        </div>
-      </div>
-      
     </div>
-
-    <!-- Output Section -->
-    <div class="bg-black/60 backdrop-blur-xl border border-gold/40 rounded-[2.5rem] overflow-hidden shadow-2xl hidden" id="outputSection">
-      <div class="bg-zinc-900/60 p-6 border-b border-gold/20 flex justify-between items-center">
-        <h3 class="text-xl font-black italic uppercase text-white tracking-tighter drop-shadow-md">
-          Generated <span class="text-gold">Code</span>
-        </h3>
-        <button id="copyBtn" class="bg-zinc-800 hover:bg-zinc-700 text-gold px-4 py-2 rounded-lg font-bold uppercase text-[10px] tracking-widest transition-colors flex items-center gap-2 border border-zinc-600">
-          <i data-lucide="copy" class="w-3 h-3"></i>
-          Copy to Clipboard
-        </button>
-      </div>
-      <div class="p-6">
-        <textarea id="outputCode" readonly class="w-full h-64 bg-black border border-zinc-800 rounded-xl p-4 text-zinc-300 font-mono text-xs focus:outline-none focus:border-gold/50 resize-none overflow-y-auto"></textarea>
-      </div>
-    </div>
-
   </div>
 </MainLayout>
 
 <script is:inline>
-  function initEmblemCreator() {
+  function initEmblemDashboard() {
     if (window.lucide) {
       window.lucide.createIcons();
     }
 
-    const generateBtn = document.getElementById('generateBtn');
-    const outputSection = document.getElementById('outputSection');
+    const imageInput = document.getElementById('imageInput');
+    const sourceThumb = document.getElementById('sourceThumb');
+    const sourceIcon = document.getElementById('sourceIcon');
+    const uploadText = document.getElementById('uploadText');
+    const uploadSubtext = document.getElementById('uploadSubtext');
+    
+    const mainPreview = document.getElementById('mainPreview');
+    const previewPlaceholder = document.getElementById('previewPlaceholder');
+    const miniPreviews = document.querySelectorAll('.mini-preview');
+    
+    const outputStats = document.getElementById('outputStats');
+    const readyStatus = document.getElementById('readyStatus');
     const copyBtn = document.getElementById('copyBtn');
     const outputCode = document.getElementById('outputCode');
-    
-    const imageInput = document.getElementById('imageInput');
-    const imagePreview = document.getElementById('imagePreview');
-    const uploadText = document.getElementById('uploadText');
-    const uploadIcon = document.getElementById('uploadIcon');
-    const uploadSubtext = document.getElementById('uploadSubtext');
 
-    const progressContainer = document.getElementById('progressContainer');
-    const progressBar = document.getElementById('progressBar');
-    const progressPercent = document.getElementById('progressPercent');
-    const progressStatus = document.getElementById('progressStatus');
-
-    // Handle file selection and preview
-    if (imageInput && uploadText) {
+    if (imageInput) {
       imageInput.addEventListener('change', (e) => {
         const file = e.target.files[0];
         
         if (file) {
+          // Update Sidebar Source UI
           uploadText.textContent = file.name;
+          uploadSubtext.textContent = 'Change image';
           uploadText.classList.add('text-gold');
-          uploadIcon.style.display = 'none';
-          uploadSubtext.style.display = 'none';
+          sourceIcon.classList.add('hidden');
           
-          // Read image for preview
           const reader = new FileReader();
           reader.onload = function(event) {
-            imagePreview.src = event.target.result;
-            imagePreview.classList.remove('hidden');
+            const dataUrl = event.target.result;
+            
+            // Set Thumbnails & Previews
+            sourceThumb.src = dataUrl;
+            sourceThumb.classList.remove('hidden');
+            
+            mainPreview.src = dataUrl;
+            mainPreview.classList.remove('hidden');
+            setTimeout(() => mainPreview.classList.remove('scale-95'), 50); // pop animation
+            
+            previewPlaceholder.classList.add('hidden');
+
+            miniPreviews.forEach(img => {
+              img.src = dataUrl;
+              img.classList.remove('hidden');
+            });
+
+            // Simulate "Auto Generate"
+            outputStats.classList.remove('hidden');
+            readyStatus.classList.remove('hidden');
+            copyBtn.disabled = false;
+            
+            outputCode.value = "/* \n * OFFICIAL NUGZZ CREW EMBLEM GENERATOR \n * Generated from: " + file.name + "\n */\n\nconsole.log('Emblem generation initialized...');\n// Core execution payload would appear here.";
           }
           reader.readAsDataURL(file);
-        } else {
-          uploadText.textContent = 'Click to Upload Image';
-          uploadText.classList.remove('text-gold');
-          uploadIcon.style.display = 'block';
-          uploadSubtext.style.display = 'block';
-          imagePreview.classList.add('hidden');
-          imagePreview.src = '';
         }
       });
     }
 
-    // Handle Generation and Progress Bar
-    if (generateBtn) {
-      generateBtn.addEventListener('click', () => {
-        // Reset and show progress bar
-        outputSection.classList.add('hidden');
-        progressContainer.classList.remove('hidden');
-        generateBtn.disabled = true;
-        generateBtn.classList.add('opacity-50', 'cursor-not-allowed');
-        
-        let progress = 0;
-        progressBar.style.width = '0%';
-        progressPercent.textContent = '0%';
-        progressStatus.textContent = 'Analyzing image colors...';
-
-        const interval = setInterval(() => {
-          progress += Math.floor(Math.random() * 15) + 5;
-          if (progress > 100) progress = 100;
-          
-          progressBar.style.width = `${progress}%`;
-          progressPercent.textContent = `${progress}%`;
-
-          // Update status text based on progress
-          if (progress > 25 && progress < 60) {
-            progressStatus.textContent = 'Generating SVG paths...';
-          } else if (progress >= 60 && progress < 90) {
-            progressStatus.textContent = 'Formatting Rockstar emblem code...';
-          } else if (progress >= 90) {
-            progressStatus.textContent = 'Finalizing...';
-          }
-
-          if (progress === 100) {
-            clearInterval(interval);
-            
-            setTimeout(() => {
-              progressContainer.classList.add('hidden');
-              generateBtn.disabled = false;
-              generateBtn.classList.remove('opacity-50', 'cursor-not-allowed');
-              
-              outputSection.classList.remove('hidden');
-              outputCode.value = "// Your generated Rockstar Social Club emblem code will appear here.\n// Paste this into the browser console on the emblem editor page.\n\nconsole.log('Code execution started...');";
-            }, 500);
-          }
-        }, 300);
+    // Toggle Button Logic for Segmented Controls
+    const buttonGroups = document.querySelectorAll('.flex.bg-black.rounded-lg');
+    buttonGroups.forEach(group => {
+      const buttons = group.querySelectorAll('button');
+      buttons.forEach(btn => {
+        btn.addEventListener('click', () => {
+          // Reset all in group
+          buttons.forEach(b => {
+            b.classList.remove('bg-zinc-800', 'text-gold');
+            b.classList.add('text-zinc-400');
+          });
+          // Activate clicked
+          btn.classList.remove('text-zinc-400');
+          btn.classList.add('bg-zinc-800', 'text-gold');
+        });
       });
-    }
+    });
 
     // Copy to clipboard
     if (copyBtn) {
@@ -205,18 +303,18 @@ import MainLayout from '../layouts/MainLayout.astro';
         outputCode.select();
         document.execCommand('copy');
         
-        const originalText = copyBtn.innerHTML;
-        copyBtn.innerHTML = '<i data-lucide="check" class="w-3 h-3"></i> Copied!';
+        const originalHtml = copyBtn.innerHTML;
+        copyBtn.innerHTML = '<i data-lucide="check" class="w-4 h-4 text-green-500"></i><span class="text-green-500">Copied!</span>';
         if (window.lucide) window.lucide.createIcons();
         
         setTimeout(() => {
-          copyBtn.innerHTML = originalText;
+          copyBtn.innerHTML = originalHtml;
           if (window.lucide) window.lucide.createIcons();
         }, 2000);
       });
     }
   }
 
-  window.addEventListener('load', initEmblemCreator);
-  document.addEventListener('astro:page-load', initEmblemCreator);
+  window.addEventListener('load', initEmblemDashboard);
+  document.addEventListener('astro:page-load', initEmblemDashboard);
 </script>
