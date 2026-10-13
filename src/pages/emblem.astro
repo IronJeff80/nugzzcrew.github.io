@@ -55,11 +55,11 @@ import MainLayout from '../layouts/MainLayout.astro';
         <label class="text-white text-xs font-bold flex items-center gap-1.5">
           Resolution <i data-lucide="info" class="w-3 h-3 text-zinc-500"></i>
         </label>
-        <div class="flex bg-black rounded-lg p-1 border border-zinc-800">
-          <button class="flex-1 text-zinc-400 hover:text-white text-[10px] font-bold py-1.5 rounded-md uppercase">Auto</button>
-          <button class="flex-1 text-zinc-400 hover:text-white text-[10px] font-bold py-1.5 rounded-md uppercase">128</button>
-          <button class="flex-1 bg-zinc-800 text-gold text-[10px] font-bold py-1.5 rounded-md uppercase">256</button>
-          <button class="flex-1 text-zinc-400 hover:text-white text-[10px] font-bold py-1.5 rounded-md uppercase">512</button>
+        <div class="flex bg-black rounded-lg p-1 border border-zinc-800" data-setting="resolution">
+          <button data-value="auto" class="flex-1 text-zinc-400 hover:text-white text-[10px] font-bold py-1.5 rounded-md uppercase">Auto</button>
+          <button data-value="128" class="flex-1 text-zinc-400 hover:text-white text-[10px] font-bold py-1.5 rounded-md uppercase">128</button>
+          <button data-value="256" class="flex-1 bg-zinc-800 text-gold text-[10px] font-bold py-1.5 rounded-md uppercase">256</button>
+          <button data-value="512" class="flex-1 text-zinc-400 hover:text-white text-[10px] font-bold py-1.5 rounded-md uppercase">512</button>
         </div>
       </div>
 
@@ -68,10 +68,10 @@ import MainLayout from '../layouts/MainLayout.astro';
         <label class="text-white text-xs font-bold flex items-center gap-1.5">
           Method <i data-lucide="info" class="w-3 h-3 text-zinc-500"></i>
         </label>
-        <div class="flex bg-black rounded-lg p-1 border border-zinc-800">
-          <button class="flex-1 bg-zinc-800 text-gold text-[10px] font-bold py-1.5 rounded-md uppercase">Auto</button>
-          <button class="flex-1 text-zinc-400 hover:text-white text-[10px] font-bold py-1.5 rounded-md uppercase">Rows</button>
-          <button class="flex-1 text-zinc-400 hover:text-white text-[10px] font-bold py-1.5 rounded-md uppercase">Cols</button>
+        <div class="flex bg-black rounded-lg p-1 border border-zinc-800" data-setting="method">
+          <button data-value="auto" class="flex-1 bg-zinc-800 text-gold text-[10px] font-bold py-1.5 rounded-md uppercase">Auto</button>
+          <button data-value="rows" class="flex-1 text-zinc-400 hover:text-white text-[10px] font-bold py-1.5 rounded-md uppercase">Rows</button>
+          <button data-value="cols" class="flex-1 text-zinc-400 hover:text-white text-[10px] font-bold py-1.5 rounded-md uppercase">Cols</button>
         </div>
       </div>
 
@@ -80,11 +80,11 @@ import MainLayout from '../layouts/MainLayout.astro';
         <label class="text-white text-xs font-bold flex items-center gap-1.5">
           Detail <i data-lucide="info" class="w-3 h-3 text-zinc-500"></i>
         </label>
-        <div class="flex bg-black rounded-lg p-1 border border-zinc-800">
-          <button class="flex-1 bg-zinc-800 text-gold text-[10px] font-bold py-1.5 rounded-md uppercase">Auto</button>
-          <button class="flex-1 text-zinc-400 hover:text-white text-[10px] font-bold py-1.5 rounded-md uppercase">Low</button>
-          <button class="flex-1 text-zinc-400 hover:text-white text-[10px] font-bold py-1.5 rounded-md uppercase">Med</button>
-          <button class="flex-1 text-zinc-400 hover:text-white text-[10px] font-bold py-1.5 rounded-md uppercase">High</button>
+        <div class="flex bg-black rounded-lg p-1 border border-zinc-800" data-setting="detail">
+          <button data-value="auto" class="flex-1 bg-zinc-800 text-gold text-[10px] font-bold py-1.5 rounded-md uppercase">Auto</button>
+          <button data-value="low" class="flex-1 text-zinc-400 hover:text-white text-[10px] font-bold py-1.5 rounded-md uppercase">Low</button>
+          <button data-value="med" class="flex-1 text-zinc-400 hover:text-white text-[10px] font-bold py-1.5 rounded-md uppercase">Med</button>
+          <button data-value="high" class="flex-1 text-zinc-400 hover:text-white text-[10px] font-bold py-1.5 rounded-md uppercase">High</button>
         </div>
       </div>
 
@@ -95,7 +95,7 @@ import MainLayout from '../layouts/MainLayout.astro';
             Auto-optimize <i data-lucide="info" class="w-3 h-3 text-zinc-500"></i>
           </span>
           <div class="relative">
-            <input type="checkbox" class="sr-only peer" checked>
+            <input type="checkbox" id="autoOptimize" class="sr-only peer" checked>
             <div class="w-8 h-4 bg-zinc-700 rounded-full peer peer-checked:after:translate-x-full peer-checked:bg-gold after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-3 after:w-3 after:transition-all"></div>
           </div>
         </label>
@@ -105,7 +105,7 @@ import MainLayout from '../layouts/MainLayout.astro';
             Pixelization <i data-lucide="info" class="w-3 h-3 text-zinc-500"></i>
           </span>
           <div class="relative">
-            <input type="checkbox" class="sr-only peer">
+            <input type="checkbox" id="pixelization" class="sr-only peer">
             <div class="w-8 h-4 bg-zinc-700 rounded-full peer peer-checked:after:translate-x-full peer-checked:bg-gold after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-3 after:w-3 after:transition-all"></div>
           </div>
         </label>
@@ -115,13 +115,13 @@ import MainLayout from '../layouts/MainLayout.astro';
             Crop empty edges <i data-lucide="info" class="w-3 h-3 text-zinc-500"></i>
           </span>
           <div class="relative">
-            <input type="checkbox" class="sr-only peer" checked>
+            <input type="checkbox" id="cropEdges" class="sr-only peer" checked>
             <div class="w-8 h-4 bg-zinc-700 rounded-full peer peer-checked:after:translate-x-full peer-checked:bg-gold after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-3 after:w-3 after:transition-all"></div>
           </div>
         </label>
       </div>
 
-      <button class="w-full bg-zinc-800 hover:bg-zinc-700 text-white text-[10px] font-black uppercase tracking-widest py-3 rounded-xl transition-colors mt-2">
+      <button id="resetBtn" class="w-full bg-zinc-800 hover:bg-zinc-700 text-white text-[10px] font-black uppercase tracking-widest py-3 rounded-xl transition-colors mt-2">
         Reset to defaults
       </button>
     </div>
@@ -131,13 +131,16 @@ import MainLayout from '../layouts/MainLayout.astro';
   <div class="flex-grow flex flex-col min-h-[500px]">
     <div class="bg-black border border-zinc-800 rounded-2xl flex-grow relative overflow-hidden flex items-center justify-center p-8 shadow-inner" style="background-image: linear-gradient(45deg, #18181b 25%, transparent 25%), linear-gradient(-45deg, #18181b 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #18181b 75%), linear-gradient(-45deg, transparent 75%, #18181b 75%); background-size: 20px 20px; background-position: 0 0, 0 10px, 10px -10px, -10px 0px;">
       
-      <img id="mainPreview" src="" class="hidden max-w-full max-h-full object-contain filter drop-shadow-2xl scale-95 transition-transform duration-500" />
+      <canvas id="mainPreview" class="hidden max-w-full max-h-full object-contain filter drop-shadow-2xl scale-95 transition-transform duration-500"></canvas>
       
       <div id="previewPlaceholder" class="text-zinc-600 flex flex-col items-center gap-4">
         <i data-lucide="image-plus" class="w-16 h-16 opacity-50"></i>
         <span class="text-xs font-bold uppercase tracking-widest opacity-50">Upload an image to preview</span>
       </div>
 
+      <div id="processing" class="hidden absolute inset-0 bg-black/60 flex items-center justify-center">
+        <span class="text-gold text-xs font-bold uppercase tracking-widest">Generating...</span>
+      </div>
     </div>
   </div>
 
@@ -151,10 +154,10 @@ import MainLayout from '../layouts/MainLayout.astro';
       <div class="space-y-1 mb-4 hidden" id="outputStats">
         <div class="flex justify-between text-[10px] font-mono font-bold">
           <span class="text-zinc-400">SIZE</span>
-          <span class="text-white"><span class="text-gold">45.245</span> / 1,250,000</span>
+          <span class="text-white"><span class="text-gold" id="sizeValue">0</span> / 1,250,000</span>
         </div>
         <div class="w-full bg-zinc-800 h-1.5 rounded-full overflow-hidden">
-          <div class="bg-green-500 h-full w-[5%] shadow-[0_0_10px_rgba(34,197,94,0.5)]"></div>
+          <div id="sizeBar" class="bg-green-500 h-full w-[0%] shadow-[0_0_10px_rgba(34,197,94,0.5)]"></div>
         </div>
       </div>
 
@@ -189,21 +192,21 @@ import MainLayout from '../layouts/MainLayout.astro';
       <div class="flex items-end justify-center gap-8 h-32 relative pb-6">
         <div class="flex flex-col items-center gap-2">
           <div class="w-24 h-24 border border-zinc-700 rounded-full flex items-center justify-center overflow-hidden bg-black relative">
-            <img class="mini-preview hidden w-full h-full object-contain p-2" src="" />
+            <canvas class="mini-preview hidden w-full h-full"></canvas>
           </div>
           <span class="text-[9px] text-zinc-500 font-mono absolute bottom-0">256</span>
         </div>
 
         <div class="flex flex-col items-center gap-2">
           <div class="w-16 h-16 border border-zinc-700 rounded-full flex items-center justify-center overflow-hidden bg-black relative">
-            <img class="mini-preview hidden w-full h-full object-contain p-1.5" src="" />
+            <canvas class="mini-preview hidden w-full h-full"></canvas>
           </div>
           <span class="text-[9px] text-zinc-500 font-mono absolute bottom-0">128</span>
         </div>
 
         <div class="flex flex-col items-center gap-2">
           <div class="w-10 h-10 border border-zinc-700 rounded-full flex items-center justify-center overflow-hidden bg-black relative">
-            <img class="mini-preview hidden w-full h-full object-contain p-1" src="" />
+            <canvas class="mini-preview hidden w-full h-full"></canvas>
           </div>
           <span class="text-[9px] text-zinc-500 font-mono absolute bottom-0">64</span>
         </div>
@@ -215,99 +218,247 @@ import MainLayout from '../layouts/MainLayout.astro';
 </div>
 </MainLayout>
 
+<script src="/emblem-engine.js"></script>
 <script is:inline>
   function initEmblemDashboard() {
-    if (window.lucide) {
-      window.lucide.createIcons();
-    }
+    if (window.lucide) window.lucide.createIcons();
 
     const imageInput = document.getElementById('imageInput');
     const sourceThumb = document.getElementById('sourceThumb');
     const sourceIcon = document.getElementById('sourceIcon');
     const uploadText = document.getElementById('uploadText');
     const uploadSubtext = document.getElementById('uploadSubtext');
-    
     const mainPreview = document.getElementById('mainPreview');
     const previewPlaceholder = document.getElementById('previewPlaceholder');
+    const processing = document.getElementById('processing');
     const miniPreviews = document.querySelectorAll('.mini-preview');
-    
     const outputStats = document.getElementById('outputStats');
     const readyStatus = document.getElementById('readyStatus');
     const copyBtn = document.getElementById('copyBtn');
     const outputCode = document.getElementById('outputCode');
+    const sizeValue = document.getElementById('sizeValue');
+    const sizeBar = document.getElementById('sizeBar');
+    const autoOptimize = document.getElementById('autoOptimize');
+    const pixelization = document.getElementById('pixelization');
+    const cropEdges = document.getElementById('cropEdges');
+    const resetBtn = document.getElementById('resetBtn');
 
-    if (imageInput) {
-      imageInput.addEventListener('change', (e) => {
-        const file = e.target.files[0];
-        
-        if (file) {
-          // Update Sidebar Source UI
-          uploadText.textContent = file.name;
-          uploadSubtext.textContent = 'Change image';
-          uploadText.classList.add('text-gold');
-          sourceIcon.classList.add('hidden');
-          
-          const reader = new FileReader();
-          reader.onload = function(event) {
-            const dataUrl = event.target.result;
-            
-            // Set Thumbnails & Previews
-            sourceThumb.src = dataUrl;
-            sourceThumb.classList.remove('hidden');
-            
-            mainPreview.src = dataUrl;
-            mainPreview.classList.remove('hidden');
-            setTimeout(() => mainPreview.classList.remove('scale-95'), 50); // pop animation
-            
-            previewPlaceholder.classList.add('hidden');
+    let currentImageData = null;
+    let currentFileName = '';
 
-            miniPreviews.forEach(img => {
-              img.src = dataUrl;
-              img.classList.remove('hidden');
-            });
+    function getSetting(name) {
+      const group = document.querySelector(`[data-setting="${name}"]`);
+      if (!group) return null;
+      const active = group.querySelector('.bg-zinc-800');
+      return active ? active.dataset.value : null;
+    }
 
-            // Simulate "Auto Generate"
-            outputStats.classList.remove('hidden');
-            readyStatus.classList.remove('hidden');
-            copyBtn.disabled = false;
-            
-            outputCode.value = "/* \n * OFFICIAL NUGZZ CREW EMBLEM GENERATOR \n * Generated from: " + file.name + "\n */\n\nconsole.log('Emblem generation initialized...');\n// Core execution payload would appear here.";
-          }
-          reader.readAsDataURL(file);
+    function setActive(group, value) {
+      const buttons = group.querySelectorAll('button');
+      buttons.forEach(b => {
+        b.classList.remove('bg-zinc-800', 'text-gold');
+        b.classList.add('text-zinc-400');
+        if (b.dataset.value === value) {
+          b.classList.remove('text-zinc-400');
+          b.classList.add('bg-zinc-800', 'text-gold');
         }
       });
     }
 
-    // Toggle Button Logic for Segmented Controls
-    const buttonGroups = document.querySelectorAll('.flex.bg-black.rounded-lg');
-    buttonGroups.forEach(group => {
-      const buttons = group.querySelectorAll('button');
-      buttons.forEach(btn => {
+    // Segmented control clicks
+    document.querySelectorAll('[data-setting]').forEach(group => {
+      group.querySelectorAll('button').forEach(btn => {
         btn.addEventListener('click', () => {
-          // Reset all in group
-          buttons.forEach(b => {
-            b.classList.remove('bg-zinc-800', 'text-gold');
-            b.classList.add('text-zinc-400');
-          });
-          // Activate clicked
-          btn.classList.remove('text-zinc-400');
-          btn.classList.add('bg-zinc-800', 'text-gold');
+          setActive(group, btn.dataset.value);
+          if (currentImageData) generateEmblem();
         });
       });
     });
 
-    // Copy to clipboard
+    [autoOptimize, pixelization, cropEdges].forEach(el => {
+      if (el) el.addEventListener('change', () => { if (currentImageData) generateEmblem(); });
+    });
+
+    if (resetBtn) {
+      resetBtn.addEventListener('click', () => {
+        setActive(document.querySelector('[data-setting="resolution"]'), '256');
+        setActive(document.querySelector('[data-setting="method"]'), 'auto');
+        setActive(document.querySelector('[data-setting="detail"]'), 'auto');
+        autoOptimize.checked = true;
+        pixelization.checked = false;
+        cropEdges.checked = true;
+        if (currentImageData) generateEmblem();
+      });
+    }
+
+    function loadImageToData(file, cb) {
+      const img = new Image();
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        canvas.width = 512;
+        canvas.height = 512;
+        const ctx = canvas.getContext('2d');
+        // optional crop empty edges
+        if (cropEdges.checked) {
+          // simple content bounds
+          const temp = document.createElement('canvas');
+          temp.width = img.width;
+          temp.height = img.height;
+          const tctx = temp.getContext('2d');
+          tctx.drawImage(img, 0, 0);
+          const id = tctx.getImageData(0, 0, img.width, img.height);
+          let minX = img.width, minY = img.height, maxX = 0, maxY = 0;
+          for (let y = 0; y < img.height; y++) {
+            for (let x = 0; x < img.width; x++) {
+              if (id.data[(y * img.width + x) * 4 + 3] > 10) {
+                if (x < minX) minX = x;
+                if (x > maxX) maxX = x;
+                if (y < minY) minY = y;
+                if (y > maxY) maxY = y;
+              }
+            }
+          }
+          if (maxX > minX && maxY > minY) {
+            const w = maxX - minX + 1, h = maxY - minY + 1;
+            const scale = Math.min(512 / w, 512 / h);
+            const dw = w * scale, dh = h * scale;
+            const ox = (512 - dw) / 2, oy = (512 - dh) / 2;
+            ctx.clearRect(0, 0, 512, 512);
+            ctx.drawImage(img, minX, minY, w, h, ox, oy, dw, dh);
+          } else {
+            ctx.drawImage(img, 0, 0, 512, 512);
+          }
+        } else {
+          ctx.drawImage(img, 0, 0, 512, 512);
+        }
+        const data = ctx.getImageData(0, 0, 512, 512);
+        cb(data);
+      };
+      img.src = URL.createObjectURL(file);
+    }
+
+    async function generateEmblem() {
+      if (!currentImageData || typeof findBestEncode !== 'function') {
+        outputCode.value = '// Engine not loaded';
+        return;
+      }
+      processing.classList.remove('hidden');
+      copyBtn.disabled = true;
+
+      const res = getSetting('resolution');
+      const method = getSetting('method');
+      const detail = getSetting('detail');
+      const auto = autoOptimize.checked;
+      const pix = pixelization.checked;
+
+      const opts = {
+        N: res === 'auto' ? 'auto' : parseInt(res, 10),
+        autoN: 256,
+        method: method === 'auto' ? 'auto' : method,
+        autofit: auto,
+        plOn: !pix,
+        budget: 1250000,
+        precision: 3,
+        overlap: 2,
+        alphaMode: 'keep',
+        dither: false,
+        smoothPct: 0,
+        noise: 0,
+        brightness: 0,
+        contrast: 0,
+        saturation: 100,
+        ladder: [512, 384, 256, 192, 128],
+        toleranceLadder: typeof TUNING !== 'undefined' ? TUNING.toleranceLadder : undefined
+      };
+
+      // map detail to tol for non-auto
+      if (detail !== 'auto' && !auto) {
+        const dMap = { low: 20, med: 59, high: 100 };
+        opts.tol = typeof detailToTolerance === 'function' ? detailToTolerance(dMap[detail] || 59) : 520;
+        opts.autofit = false;
+      }
+
+      const yieldFn = typeof makeYield === 'function' ? makeYield() : () => Promise.resolve();
+      const raw = new Uint8ClampedArray(currentImageData.data);
+
+      try {
+        const result = await findBestEncode(raw, 512, opts, yieldFn, false, () => false);
+        if (!result) {
+          outputCode.value = '// No result';
+          processing.classList.add('hidden');
+          return;
+        }
+
+        // render preview
+        if (typeof renderCoverage === 'function') {
+          const rendered = renderCoverage(result, 512);
+          const ctx = mainPreview.getContext('2d');
+          mainPreview.width = 512;
+          mainPreview.height = 512;
+          const id = new ImageData(new Uint8ClampedArray(rendered), 512, 512);
+          ctx.putImageData(id, 0, 0);
+          mainPreview.classList.remove('hidden', 'scale-95');
+          previewPlaceholder.classList.add('hidden');
+
+          // mini previews
+          miniPreviews.forEach((c, i) => {
+            const size = [256, 128, 64][i];
+            c.width = size;
+            c.height = size;
+            const mctx = c.getContext('2d');
+            mctx.drawImage(mainPreview, 0, 0, size, size);
+            c.classList.remove('hidden');
+          });
+        }
+
+        const size = result.enc || 0;
+        sizeValue.textContent = size.toLocaleString();
+        sizeBar.style.width = Math.min(100, (size / 1250000) * 100) + '%';
+        outputStats.classList.remove('hidden');
+        readyStatus.classList.remove('hidden');
+
+        const snippet = `/* NUGZZ CREW EMBLEM\n * Source: ${currentFileName}\n * Size: ${size} bytes\n */\n\nconst svgData = ${JSON.stringify(result.svg || '')};\nconst layerData = ${JSON.stringify(result.lmin || result.lfull || '')};\n\n// Paste into editor console\nconsole.log('Emblem ready', svgData.length, layerData.length);`;
+        outputCode.value = snippet;
+        copyBtn.disabled = false;
+      } catch (e) {
+        outputCode.value = '// Error: ' + e.message;
+      }
+      processing.classList.add('hidden');
+    }
+
+    if (imageInput) {
+      imageInput.addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+        currentFileName = file.name;
+        uploadText.textContent = file.name;
+        uploadSubtext.textContent = 'Change image';
+        uploadText.classList.add('text-gold');
+        sourceIcon.classList.add('hidden');
+
+        const reader = new FileReader();
+        reader.onload = (ev) => {
+          sourceThumb.src = ev.target.result;
+          sourceThumb.classList.remove('hidden');
+        };
+        reader.readAsDataURL(file);
+
+        loadImageToData(file, (data) => {
+          currentImageData = data;
+          generateEmblem();
+        });
+      });
+    }
+
     if (copyBtn) {
       copyBtn.addEventListener('click', () => {
         outputCode.select();
         document.execCommand('copy');
-        
-        const originalHtml = copyBtn.innerHTML;
+        const orig = copyBtn.innerHTML;
         copyBtn.innerHTML = '<i data-lucide="check" class="w-4 h-4 text-green-500"></i><span class="text-green-500">Copied!</span>';
         if (window.lucide) window.lucide.createIcons();
-        
         setTimeout(() => {
-          copyBtn.innerHTML = originalHtml;
+          copyBtn.innerHTML = orig;
           if (window.lucide) window.lucide.createIcons();
         }, 2000);
       });
