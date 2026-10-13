@@ -463,12 +463,14 @@ request.send(JSON.stringify({
 
         outputCode.value = snippet;
         copyBtn.disabled = false;
+        console.log('[Emblem] Payload ready, length:', snippet.length);
 
         // Auto-open the raw code section so it's visible
         const details = outputCode.closest('details');
         if (details) details.open = true;
       } catch (e) {
-        outputCode.value = '// Error: ' + e.message;
+        console.error('[Emblem] Generation failed:', e);
+        outputCode.value = '// Error: ' + e.message + '\n// Check browser console for details';
       }
       processing.classList.add('hidden');
     }
@@ -492,6 +494,8 @@ request.send(JSON.stringify({
 
         loadImageToData(file, (data) => {
           currentImageData = data;
+          // Clear any old placeholder immediately
+          outputCode.value = `/* Generating emblem from ${file.name}... */\n// Please wait`;
           generateEmblem();
         });
       });
