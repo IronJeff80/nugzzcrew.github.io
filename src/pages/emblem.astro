@@ -1,78 +1,127 @@
-<section class="text-center">
-  <h1 class="text-[clamp(40px,6vw,80px)] font-black italic uppercase leading-[0.8] text-white tracking-tighter drop-shadow-lg mb-4">
-    Emblem <span class="text-gold">Creator</span>
-  </h1>
-  <p class="text-zinc-400 font-bold uppercase tracking-widest text-sm italic">
-    Convert Images to Custom GTA Crew Emblems
-  </p>
-</section>
+---
+import MainLayout from '../layouts/MainLayout.astro';
+---
 
-<div class="bg-zinc-900/40 backdrop-blur-md border border-zinc-700/50 p-8 rounded-[2.5rem] shadow-2xl space-y-8">
-  
-  <!-- Upload Section -->
-  <div class="space-y-4">
-    <label class="text-gold font-black uppercase tracking-widest text-[10px] drop-shadow-sm flex items-center gap-2">
-      <i data-lucide="image" class="w-4 h-4"></i>
-      Select Source Image
-    </label>
-    <div class="border-2 border-dashed border-zinc-700/50 rounded-2xl p-8 text-center hover:border-gold/50 transition-colors bg-black/30">
-      <input type="file" id="imageInput" accept="image/*" class="hidden" />
-      <label for="imageInput" class="cursor-pointer flex flex-col items-center gap-3">
-        <i data-lucide="upload-cloud" class="w-8 h-8 text-zinc-500"></i>
-        <span class="text-white font-bold uppercase text-sm tracking-tight">Click to Upload Image</span>
-        <span class="text-zinc-500 text-xs font-mono">PNG, JPG, SVG up to 5MB</span>
-      </label>
+<MainLayout title="Emblem Creator">
+  <div class="max-w-4xl mx-auto py-12 px-4 md:px-6 space-y-12">
+    
+    <section class="text-center">
+      <h1 class="text-[clamp(40px,6vw,80px)] font-black italic uppercase leading-[0.8] text-white tracking-tighter drop-shadow-lg mb-4">
+        Emblem <span class="text-gold">Creator</span>
+      </h1>
+      <p class="text-zinc-400 font-bold uppercase tracking-widest text-sm italic">
+        Convert Images to Custom GTA Crew Emblems
+      </p>
+    </section>
+
+    <div class="bg-zinc-900/40 backdrop-blur-md border border-zinc-700/50 p-8 rounded-[2.5rem] shadow-2xl space-y-8">
+      
+      <!-- Upload Section -->
+      <div class="space-y-4">
+        <label class="text-gold font-black uppercase tracking-widest text-[10px] drop-shadow-sm flex items-center gap-2">
+          <i data-lucide="image" class="w-4 h-4"></i>
+          Select Source Image
+        </label>
+        <div class="border-2 border-dashed border-zinc-700/50 rounded-2xl p-8 text-center hover:border-gold/50 transition-colors bg-black/30">
+          <input type="file" id="imageInput" accept="image/*" class="hidden" />
+          <label for="imageInput" class="cursor-pointer flex flex-col items-center gap-3">
+            <i data-lucide="upload-cloud" class="w-8 h-8 text-zinc-500"></i>
+            <span class="text-white font-bold uppercase text-sm tracking-tight">Click to Upload Image</span>
+            <span class="text-zinc-500 text-xs font-mono">PNG, JPG, SVG up to 5MB</span>
+          </label>
+        </div>
+      </div>
+
+      <!-- Settings Grid -->
+      <div class="grid md:grid-cols-2 gap-6">
+        <div class="space-y-4">
+          <label class="text-gold font-black uppercase tracking-widest text-[10px] drop-shadow-sm flex items-center gap-2">
+            <i data-lucide="sliders" class="w-4 h-4"></i>
+            Detail Level
+          </label>
+          <input type="range" id="detailSlider" min="1" max="10" value="5" class="w-full accent-gold bg-zinc-800 rounded-lg appearance-none h-2" />
+          <div class="flex justify-between text-[10px] text-zinc-500 font-bold uppercase">
+            <span>Simple</span>
+            <span>Complex</span>
+          </div>
+        </div>
+
+        <div class="space-y-4">
+          <label class="text-gold font-black uppercase tracking-widest text-[10px] drop-shadow-sm flex items-center gap-2">
+            <i data-lucide="palette" class="w-4 h-4"></i>
+            Color Smoothing
+          </label>
+          <input type="range" id="smoothSlider" min="1" max="10" value="5" class="w-full accent-gold bg-zinc-800 rounded-lg appearance-none h-2" />
+          <div class="flex justify-between text-[10px] text-zinc-500 font-bold uppercase">
+            <span>Sharp</span>
+            <span>Smooth</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Action Button -->
+      <div class="pt-4 border-t border-zinc-700/50">
+        <button id="generateBtn" class="w-full bg-gold hover:bg-gold/80 text-black py-4 rounded-xl font-black uppercase italic tracking-tighter text-lg transition-all shadow-[0_0_30px_-5px_rgba(212,175,55,0.4)]">
+          Generate Emblem Code
+        </button>
+      </div>
+      
     </div>
-  </div>
 
-  <!-- Settings Grid -->
-  <div class="grid md:grid-cols-2 gap-6">
-    <div class="space-y-4">
-      <label class="text-gold font-black uppercase tracking-widest text-[10px] drop-shadow-sm flex items-center gap-2">
-        <i data-lucide="sliders" class="w-4 h-4"></i>
-        Detail Level
-      </label>
-      <input type="range" id="detailSlider" min="1" max="10" value="5" class="w-full accent-gold bg-zinc-800 rounded-lg appearance-none h-2" />
-      <div class="flex justify-between text-[10px] text-zinc-500 font-bold uppercase">
-        <span>Simple</span>
-        <span>Complex</span>
+    <!-- Output Section -->
+    <div class="bg-black/60 backdrop-blur-xl border border-gold/40 rounded-[2.5rem] overflow-hidden shadow-2xl hidden" id="outputSection">
+      <div class="bg-zinc-900/60 p-6 border-b border-gold/20 flex justify-between items-center">
+        <h3 class="text-xl font-black italic uppercase text-white tracking-tighter drop-shadow-md">
+          Generated <span class="text-gold">Code</span>
+        </h3>
+        <button id="copyBtn" class="bg-zinc-800 hover:bg-zinc-700 text-gold px-4 py-2 rounded-lg font-bold uppercase text-[10px] tracking-widest transition-colors flex items-center gap-2 border border-zinc-600">
+          <i data-lucide="copy" class="w-3 h-3"></i>
+          Copy to Clipboard
+        </button>
+      </div>
+      <div class="p-6">
+        <textarea id="outputCode" readonly class="w-full h-64 bg-black border border-zinc-800 rounded-xl p-4 text-zinc-300 font-mono text-xs focus:outline-none focus:border-gold/50 resize-none overflow-y-auto"></textarea>
       </div>
     </div>
 
-    <div class="space-y-4">
-      <label class="text-gold font-black uppercase tracking-widest text-[10px] drop-shadow-sm flex items-center gap-2">
-        <i data-lucide="palette" class="w-4 h-4"></i>
-        Color Smoothing
-      </label>
-      <input type="range" id="smoothSlider" min="1" max="10" value="5" class="w-full accent-gold bg-zinc-800 rounded-lg appearance-none h-2" />
-      <div class="flex justify-between text-[10px] text-zinc-500 font-bold uppercase">
-        <span>Sharp</span>
-        <span>Smooth</span>
-      </div>
-    </div>
   </div>
+</MainLayout>
 
-  <!-- Action Button -->
-  <div class="pt-4 border-t border-zinc-700/50">
-    <button id="generateBtn" class="w-full bg-gold hover:bg-gold/80 text-black py-4 rounded-xl font-black uppercase italic tracking-tighter text-lg transition-all shadow-[0_0_30px_-5px_rgba(212,175,55,0.4)]">
-      Generate Emblem Code
-    </button>
-  </div>
-  
-</div>
+<script is:inline>
+  function initEmblemCreator() {
+    if (window.lucide) {
+      window.lucide.createIcons();
+    }
 
-<!-- Output Section -->
-<div class="bg-black/60 backdrop-blur-xl border border-gold/40 rounded-[2.5rem] overflow-hidden shadow-2xl hidden" id="outputSection">
-  <div class="bg-zinc-900/60 p-6 border-b border-gold/20 flex justify-between items-center">
-    <h3 class="text-xl font-black italic uppercase text-white tracking-tighter drop-shadow-md">
-      Generated <span class="text-gold">Code</span>
-    </h3>
-    <button id="copyBtn" class="bg-zinc-800 hover:bg-zinc-700 text-gold px-4 py-2 rounded-lg font-bold uppercase text-[10px] tracking-widest transition-colors flex items-center gap-2 border border-zinc-600">
-      <i data-lucide="copy" class="w-3 h-3"></i>
-      Copy to Clipboard
-    </button>
-  </div>
-  <div class="p-6">
-    <textarea id="outputCode" readonly class="w-full h-64 bg-black border border-zinc-800 rounded-xl p-4 text-zinc-300 font-mono text-xs focus:outline-none focus:border-gold/50 resize-none overflow-y-auto"></textarea>
-  </div>
-</div>
+    const generateBtn = document.getElementById('generateBtn');
+    const outputSection = document.getElementById('outputSection');
+    const copyBtn = document.getElementById('copyBtn');
+    const outputCode = document.getElementById('outputCode');
+
+    if (generateBtn) {
+      generateBtn.addEventListener('click', () => {
+        outputSection.classList.remove('hidden');
+        outputCode.value = "// Your generated Rockstar Social Club emblem code will appear here.\n// Paste this into the browser console on the emblem editor page.\n\nconsole.log('Code execution started...');";
+      });
+    }
+
+    if (copyBtn) {
+      copyBtn.addEventListener('click', () => {
+        outputCode.select();
+        document.execCommand('copy');
+        
+        const originalText = copyBtn.innerHTML;
+        copyBtn.innerHTML = '<i data-lucide="check" class="w-3 h-3"></i> Copied!';
+        if (window.lucide) window.lucide.createIcons();
+        
+        setTimeout(() => {
+          copyBtn.innerHTML = originalText;
+          if (window.lucide) window.lucide.createIcons();
+        }, 2000);
+      });
+    }
+  }
+
+  window.addEventListener('load', initEmblemCreator);
+  document.addEventListener('astro:page-load', initEmblemCreator);
+</script>
