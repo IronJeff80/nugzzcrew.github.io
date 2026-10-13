@@ -97,6 +97,21 @@ import MainLayout from '../layouts/MainLayout.astro';
     const outputSection = document.getElementById('outputSection');
     const copyBtn = document.getElementById('copyBtn');
     const outputCode = document.getElementById('outputCode');
+    const imageInput = document.getElementById('imageInput');
+    const uploadLabelText = document.querySelector('label[for="imageInput"] span.text-white');
+
+    // Handle file selection
+    if (imageInput && uploadLabelText) {
+      imageInput.addEventListener('change', (e) => {
+        if (e.target.files && e.target.files.length > 0) {
+          uploadLabelText.textContent = e.target.files[0].name;
+          uploadLabelText.classList.add('text-gold');
+        } else {
+          uploadLabelText.textContent = 'Click to Upload Image';
+          uploadLabelText.classList.remove('text-gold');
+        }
+      });
+    }
 
     if (generateBtn) {
       generateBtn.addEventListener('click', () => {
