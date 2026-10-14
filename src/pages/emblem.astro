@@ -145,10 +145,10 @@ import MainLayout from '../layouts/MainLayout.astro';
   </div>
 
   <!-- Right Column: Output -->
-  <div class="w-full lg:w-80 flex-shrink-0 space-y-6">
+  <div class="w-full lg:w-80 flex-shrink-0 flex flex-col gap-6">
     
     <!-- Output Module -->
-    <div class="bg-zinc-900/60 backdrop-blur-md border border-zinc-700/50 rounded-2xl p-5 shadow-lg">
+    <div class="bg-zinc-900/60 backdrop-blur-md border border-zinc-700/50 rounded-2xl p-5 shadow-lg flex flex-col flex-grow">
       <h2 class="text-[10px] text-zinc-500 font-black uppercase tracking-widest mb-4">Output</h2>
       
       <div class="space-y-1 mb-4 hidden" id="outputStats">
@@ -174,13 +174,13 @@ import MainLayout from '../layouts/MainLayout.astro';
         <span>Copy Code</span>
       </button>
 
-      <details class="group border-t border-zinc-800 pt-3" open>
+      <details class="group border-t border-zinc-800 pt-3 flex-grow flex flex-col" open>
         <summary class="text-[10px] text-zinc-400 font-bold uppercase tracking-widest cursor-pointer flex items-center gap-2 hover:text-gold transition-colors list-none">
           <i data-lucide="chevron-down" class="w-3 h-3 group-open:rotate-180 transition-transform"></i>
           Show raw code
         </summary>
-        <div class="pt-3">
-          <textarea id="outputCode" readonly class="w-full h-48 bg-black border border-zinc-800 rounded-xl p-3 text-zinc-300 font-mono text-[9px] focus:outline-none focus:border-gold/50 resize-y" placeholder="// Generate an emblem to see the console code here"></textarea>
+        <div class="pt-3 flex-grow flex flex-col min-h-0">
+          <textarea id="outputCode" readonly class="w-full flex-grow min-h-[180px] bg-black border border-zinc-800 rounded-xl p-3 text-zinc-300 font-mono text-[9px] focus:outline-none focus:border-gold/50 resize-none" placeholder="// Generate an emblem to see the console code here"></textarea>
         </div>
       </details>
     </div>
