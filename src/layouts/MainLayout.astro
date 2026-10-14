@@ -43,7 +43,7 @@ const navLinks = [
         <script src="https://unpkg.com/lucide@latest"></script>
     </head>
     <body class="bg-black text-white antialiased">
-        <nav class="sticky top-0 z-50 bg-black/95 backdrop-blur-md border-b border-zinc-800 px-3 py-3 md:px-4">
+        <nav id="site-header" class="sticky top-0 z-50 bg-black/95 backdrop-blur-md border-b border-zinc-800 px-3 py-3 md:px-4">
             <div class="max-w-7xl mx-auto relative flex flex-col items-center gap-1.5">
                 <!-- Top row: hamburger left + centered logo/title -->
                 <div class="relative flex items-center justify-center w-full min-h-[48px]">
@@ -87,10 +87,11 @@ const navLinks = [
             class="fixed top-0 left-0 h-full w-80 md:w-96 max-w-[90vw] bg-black/98 border-r border-zinc-800 z-50 transform -translate-x-full transition-transform duration-300 ease-in-out overflow-y-auto"
             aria-hidden="true"
         >
-            <div class="flex items-center justify-between p-5 border-b border-zinc-800">
+            <!-- Top bar matched to header height -->
+            <div id="menu-header" class="flex items-center justify-between px-5 border-b border-zinc-800 min-h-[88px]">
                 <span class="font-header text-gold text-base uppercase tracking-wider">Menu</span>
                 <button id="menu-close" aria-label="Close menu" class="text-zinc-400 hover:text-gold">
-                    <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                     </svg>
                 </button>
@@ -149,8 +150,20 @@ const navLinks = [
             const menu = document.getElementById('nav-menu');
             const overlay = document.getElementById('nav-overlay');
             const links = document.querySelectorAll('.nav-link');
+            const header = document.getElementById('site-header');
+            const menuHeader = document.getElementById('menu-header');
+
+            // Match menu top bar height to actual header height
+            function syncMenuHeaderHeight() {
+              if (header && menuHeader) {
+                menuHeader.style.minHeight = header.offsetHeight + 'px';
+              }
+            }
+            syncMenuHeaderHeight();
+            window.addEventListener('resize', syncMenuHeaderHeight);
 
             function openMenu() {
+              syncMenuHeaderHeight();
               menu.classList.remove('-translate-x-full');
               menu.setAttribute('aria-hidden', 'false');
               overlay.classList.remove('hidden');
