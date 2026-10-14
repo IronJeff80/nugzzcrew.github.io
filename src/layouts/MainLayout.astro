@@ -67,16 +67,6 @@ const navLinks = [
                         </span>
                     </a>
                 </div>
-
-                <!-- Membership link centered under logo/title -->
-                <a 
-                    href={channelJoinUrl} 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    class="text-[clamp(8px,2vw,10px)] text-gold-bright uppercase tracking-[0.2em] font-black text-center transition-all hover:text-white hover:scale-105 active:scale-95"
-                >
-                    Join The Fam Bam Membership
-                </a>
             </div>
         </nav>
 
@@ -113,7 +103,17 @@ const navLinks = [
             <slot /> 
         </main>
 
-        <footer class="pt-3 pb-6 md:pt-4 md:pb-8 text-center text-zinc-600 text-[10px] uppercase tracking-widest border-t border-zinc-900 mt-20">
+        <!-- Back to Home button -->
+        <div class="text-center py-8">
+            <a 
+                href="/" 
+                class="inline-block px-6 py-3 bg-zinc-900 border border-zinc-700 rounded-lg text-gold hover:border-gold hover:bg-zinc-800 transition-all uppercase tracking-widest text-sm font-bold"
+            >
+                &larr; Back To Home
+            </a>
+        </div>
+
+        <footer class="pt-3 pb-3 md:pt-4 md:pb-4 text-center text-zinc-600 text-[10px] uppercase tracking-widest border-t border-zinc-900 mt-4">
             <!-- Social icons -->
             <div class="flex justify-center flex-wrap gap-3 md:gap-4 mb-2">
                 {socials.map((social) => (
