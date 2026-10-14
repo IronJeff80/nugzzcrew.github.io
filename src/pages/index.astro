@@ -1,5 +1,7 @@
 ---
 import MainLayout from '../layouts/MainLayout.astro';
+
+const channelJoinUrl = "https://www.youtube.com/channel/UCYNmnbEgm3G0m4avmwz_4Eg/join?v=dummy";
 ---
 
 <MainLayout title="Home">
@@ -35,10 +37,15 @@ import MainLayout from '../layouts/MainLayout.astro';
           <p class="text-zinc-500 mt-2 text-sm md:text-base">Get the latest on bonuses, car meets, and robberies.</p>
         </a>
   
-        <div class="p-6 md:p-8 bg-zinc-900 border border-zinc-800 rounded-2xl text-left">
-          <h2 class="text-xl md:text-2xl uppercase font-black italic text-gold">The Fam Bam</h2>
+        <a 
+          href={channelJoinUrl} 
+          target="_blank" 
+          rel="noopener noreferrer"
+          class="p-6 md:p-8 bg-zinc-900 border border-zinc-800 rounded-2xl hover:border-gold transition-all group text-left"
+        >
+          <h2 class="text-xl md:text-2xl group-hover:text-gold transition-colors uppercase font-black italic">The Fam Bam &rarr;</h2>
           <p class="text-zinc-500 mt-2 text-sm md:text-base">Catch every live stream and join the best community on YouTube.</p>
-        </div>
+        </a>
       </div>
   </section>
 </MainLayout>
