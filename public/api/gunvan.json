@@ -1,8 +1,8 @@
 {
-  "locationId": 17,
-  "zone": "Gun Van Location #17",
-  "description": "Terminal (southwest corner)",
-  "mapPath": "map_17.jpg",
+  "locationId": 8,
+  "zone": "Gun Van Location #8",
+  "description": "Next to Ortega's Trailer, Zancudo River",
+  "mapPath": "map_8.jpg",
   "inventory": [
     "Service Carbine: -30 %",
     "Precision Rifle: -10 %",
@@ -17,5 +17,5 @@
     "Pipe Bomb: -10 %",
     "Body armor: -10 %"
   ],
-  "updatedAt": "2026-10-13T14:30:48.969Z"
+  "updatedAt": "2026-10-14T12:17:07.344Z"
 }
