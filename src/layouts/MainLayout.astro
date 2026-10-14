@@ -24,6 +24,14 @@ const socials = [
   { name: 'Shop', url: 'https://officialnugzzcrew-shop.fourthwall.com', img: 'FourthWall Logo.png' },
   { name: 'Crew', url: 'https://socialclub.rockstargames.com/crew/official_nugzz_crew', img: 'Rockstar Logo.png' },
 ];
+
+const navLinks = [
+  { href: '/', label: 'Home' },
+  { href: '/gta', label: 'GTA Bonuses' },
+  { href: '/generator', label: 'DMO Gen' },
+  { href: '/gtaresources', label: 'GTA Resources' },
+  { href: '/emblem', label: 'Emblem Creator' },
+];
 ---
 
 <html lang="en">
@@ -36,57 +44,96 @@ const socials = [
     </head>
     <body class="bg-black text-white antialiased">
         <nav class="sticky top-0 z-50 bg-black/95 backdrop-blur-md border-b border-zinc-800 px-3 py-3 md:px-4">
-            <div class="max-w-7xl mx-auto flex flex-col items-center gap-3 md:grid md:grid-cols-3 md:gap-0">
-   
-                <div class="flex md:justify-start w-full justify-center">
+            <div class="max-w-7xl mx-auto relative flex flex-col items-center gap-1.5">
+                <!-- Top row: hamburger left + centered logo/title -->
+                <div class="relative flex items-center justify-center w-full min-h-[40px]">
+                    <!-- Hamburger button (left) -->
+                    <button 
+                        id="menu-toggle" 
+                        aria-label="Open menu" 
+                        aria-expanded="false"
+                        class="absolute left-0 md:left-2 flex items-center justify-center w-10 h-10 text-zinc-300 hover:text-gold transition-colors"
+                    >
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                        </svg>
+                    </button>
+
+                    <!-- Centered logo + title (clickable home) -->
                     <a href="/" class="flex items-center gap-2 group transition-opacity hover:opacity-90">
-                        <img src="/Logo.png" alt="Logo" class="w-6 h-6 md:w-9 md:h-9 object-contain" />
-                        <span class="text-[clamp(11px,3vw,18px)] font-header text-gold uppercase tracking-tighter whitespace-nowrap">
+                        <img src="/Logo.png" alt="Logo" class="w-7 h-7 md:w-9 md:h-9 object-contain" />
+                        <span class="text-[clamp(12px,3.2vw,20px)] font-header text-gold uppercase tracking-tighter whitespace-nowrap">
                             Official Nugzz Crew
                         </span>
                     </a>
                 </div>
 
-                <div class="flex flex-col items-center gap-1.5 w-full">
-                    <div class="flex justify-center gap-4 text-[9px] md:text-xs uppercase font-bold tracking-widest text-zinc-400">
-                        <a href="/" class="hover:text-gold transition-colors">Home</a>
-                        <a href="/gta" class="hover:text-gold transition-colors">GTA Bonuses</a>
-                        <a href="/generator" class="hover:text-gold transition-colors">DMO Gen</a>
-                        <a href="/gtaresources" class="hover:text-gold transition-colors">GTA Resources</a>
-                        <a href="/emblem" class="hover:text-gold transition-colors">Emblem Creator</a>
-                    </div>
-                    <a 
-                      href={channelJoinUrl} 
-                      target="_blank" 
-                      rel="noopener noreferrer"
-                      class="text-[clamp(8px,2vw,10px)] text-gold-bright uppercase tracking-[0.2em] font-black text-center transition-all hover:text-white hover:scale-105 active:scale-95"
-                    >
-                        Join The Fam Bam Membership
-                    </a>
-                </div>
-
-                <!-- Custom PNG rendering logic -->
-                <div class="flex justify-center md:justify-end gap-1.5 md:gap-3 w-full flex-wrap">
-                    {socials.map((social) => (
-                        <a href={social.url} target="_blank" rel="noopener noreferrer" class="group transition-transform hover:scale-110 active:scale-95" title={social.name}>
-                            <div class="w-4 h-4 md:w-6 md:h-6 flex items-center justify-center">
-                                <img 
-                                  src={`/images/${social.img}`} 
-                                  alt={`${social.name} Logo`} 
-                                  class="w-full h-full object-contain opacity-70 group-hover:opacity-100 transition-opacity" 
-                                />
-                            </div>
-                        </a>
-                    ))}
-                </div>
+                <!-- Membership link centered under logo/title -->
+                <a 
+                    href={channelJoinUrl} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    class="text-[clamp(8px,2vw,10px)] text-gold-bright uppercase tracking-[0.2em] font-black text-center transition-all hover:text-white hover:scale-105 active:scale-95"
+                >
+                    Join The Fam Bam Membership
+                </a>
             </div>
         </nav>
+
+        <!-- Slide-out menu (left side) -->
+        <div id="nav-overlay" class="fixed inset-0 bg-black/60 z-40 hidden"></div>
+        <aside 
+            id="nav-menu" 
+            class="fixed top-0 left-0 h-full w-72 max-w-[85vw] bg-black/98 border-r border-zinc-800 z-50 transform -translate-x-full transition-transform duration-300 ease-in-out overflow-y-auto"
+            aria-hidden="true"
+        >
+            <div class="flex items-center justify-between p-4 border-b border-zinc-800">
+                <span class="font-header text-gold text-sm uppercase tracking-wider">Menu</span>
+                <button id="menu-close" aria-label="Close menu" class="text-zinc-400 hover:text-gold">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+
+            <nav class="flex flex-col p-4 gap-1">
+                {navLinks.map((link) => (
+                    <a 
+                        href={link.href} 
+                        class="nav-link px-4 py-3 rounded-lg text-zinc-300 hover:text-gold hover:bg-zinc-900/70 transition-colors uppercase tracking-widest text-sm font-bold"
+                    >
+                        {link.label}
+                    </a>
+                ))}
+            </nav>
+        </aside>
         
         <main class="relative z-10">
             <slot /> 
         </main>
 
-        <footer class="p-10 text-center text-zinc-600 text-[10px] uppercase tracking-widest border-t border-zinc-900 mt-20">
+        <footer class="p-8 md:p-10 text-center text-zinc-600 text-[10px] uppercase tracking-widest border-t border-zinc-900 mt-20">
+            <!-- Social icons -->
+            <div class="flex justify-center flex-wrap gap-3 md:gap-4 mb-6">
+                {socials.map((social) => (
+                    <a 
+                        href={social.url} 
+                        target="_blank" 
+                        rel="noopener noreferrer" 
+                        class="group transition-transform hover:scale-110 active:scale-95" 
+                        title={social.name}
+                    >
+                        <div class="w-6 h-6 md:w-7 md:h-7 flex items-center justify-center">
+                            <img 
+                                src={`/images/${social.img}`} 
+                                alt={`${social.name} Logo`} 
+                                class="w-full h-full object-contain opacity-70 group-hover:opacity-100 transition-opacity" 
+                            />
+                        </div>
+                    </a>
+                ))}
+            </div>
+
             &copy; 2026 Official Nugzz Crew | Built for The Fam Bam
         </footer>
 
@@ -94,6 +141,44 @@ const socials = [
           function initIcons() { if (window.lucide) window.lucide.createIcons(); }
           window.addEventListener('load', initIcons);
           document.addEventListener('astro:page-load', initIcons);
+
+          // Hamburger menu logic
+          function initMenu() {
+            const toggle = document.getElementById('menu-toggle');
+            const closeBtn = document.getElementById('menu-close');
+            const menu = document.getElementById('nav-menu');
+            const overlay = document.getElementById('nav-overlay');
+            const links = document.querySelectorAll('.nav-link');
+
+            function openMenu() {
+              menu.classList.remove('-translate-x-full');
+              menu.setAttribute('aria-hidden', 'false');
+              overlay.classList.remove('hidden');
+              toggle.setAttribute('aria-expanded', 'true');
+              document.body.style.overflow = 'hidden';
+            }
+
+            function closeMenu() {
+              menu.classList.add('-translate-x-full');
+              menu.setAttribute('aria-hidden', 'true');
+              overlay.classList.add('hidden');
+              toggle.setAttribute('aria-expanded', 'false');
+              document.body.style.overflow = '';
+            }
+
+            toggle?.addEventListener('click', openMenu);
+            closeBtn?.addEventListener('click', closeMenu);
+            overlay?.addEventListener('click', closeMenu);
+            links.forEach(link => link.addEventListener('click', closeMenu));
+
+            // Close on Escape
+            document.addEventListener('keydown', (e) => {
+              if (e.key === 'Escape') closeMenu();
+            });
+          }
+
+          window.addEventListener('load', initMenu);
+          document.addEventListener('astro:page-load', initMenu);
         </script>
     </body>
 </html>
