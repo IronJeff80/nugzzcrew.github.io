@@ -47,15 +47,15 @@ const navLinks = [
             <div class="max-w-7xl mx-auto relative flex flex-col items-center gap-1.5">
                 <!-- Top row: hamburger left + centered logo/title -->
                 <div class="relative flex items-center justify-center w-full min-h-[48px]">
-                    <!-- Hamburger button (left) - larger to fit header -->
+                    <!-- Hamburger button (left) - much larger to match header -->
                     <button 
                         id="menu-toggle" 
                         aria-label="Open menu" 
                         aria-expanded="false"
-                        class="absolute left-0 md:left-1 flex items-center justify-center w-12 h-12 text-zinc-300 hover:text-gold transition-colors"
+                        class="absolute left-0 md:left-2 flex items-center justify-center w-16 h-16 text-zinc-300 hover:text-gold transition-colors"
                     >
-                        <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                        <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 6h16M4 12h16M4 18h16" />
                         </svg>
                     </button>
 
@@ -80,7 +80,7 @@ const navLinks = [
             </div>
         </nav>
 
-        <!-- Slide-out menu (left side) - larger to fit header -->
+        <!-- Slide-out menu (left side) -->
         <div id="nav-overlay" class="fixed inset-0 bg-black/60 z-40 hidden"></div>
         <aside 
             id="nav-menu" 
