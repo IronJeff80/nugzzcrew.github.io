@@ -353,10 +353,12 @@ import MainLayout from '../layouts/MainLayout.astro';
 
       const opts = {
         N: res === 'auto' ? 'auto' : parseInt(res, 10),
-        autoN: 256,
+        autoN: 512,                 // prefer higher resolution when budget allows
         method: method === 'auto' ? 'auto' : method,
         autofit: auto,
-        plOn: !pix,
+        pareto: auto,               // max-SSIM search under budget (best quality)
+        paretoLadder: [512, 384, 320, 256, 192, 160, 128, 96, 80, 64],
+        plOn: !pix,                 // keep piecewise-linear for gradients
         budget: 1250000,
         precision: 3,
         overlap: 2,
