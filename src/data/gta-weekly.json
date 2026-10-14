@@ -1,20 +1,20 @@
 {
-  "eventTitle": "Halloween Week 2",
-  "weekEnding": "October 14, 2026",
-  "eventDates": "October 8–14, 2026",
-  "fibFile": "The Black Box File",
+  "eventTitle": "Halloween Week 3",
+  "weekEnding": "October 21, 2026",
+  "eventDates": "October 15–21, 2026",
+  "fibFile": "The Brute Force File",
   "primaryTargets": [
-    "Pumpkin",
-    "A Winding Road Home",
-    "Winter, Nowhere in Particular"
+    "Twindifference",
+    "Teckels",
+    "A Cast of Characters"
   ],
-  "weeklyChallenge": "Win two Adversary Modes to receive the Pink Skull Emissive Mask and GTA$100,000",
-  "podium": "Annis Savestra",
-  "prizeRide": "Declasse Walton L35",
-  "prizeRideRequirement": "Place Top 4 in the LS Car Meet Series for two days in a row",
+  "weeklyChallenge": "Win three Races for GTA$100,000 and the Orange Glow Skeletal Onesie",
+  "podium": "Grotti LSCM Cheetah Classic",
+  "prizeRide": "Dinka Kanjo SJ",
+  "prizeRideRequirement": "Place Top 5 in the LS Car Meet Series",
   "weeklyRewards": [
-    "Play GTA Online through October 14 to receive the Twilight Knife T-Shirt",
-    "Complete five Payphone Hits through October 14 to receive GTA$500,000 within 72 hours of completion",
+    "Play GTA Online through October 21 to receive the Butchery and Other Hobbies T-Shirt",
+    "Complete Don't Fuck With Dre before October 21 to receive GTA$500,000 within 72 hours of completion",
     "Complete all Weekly Challenges through November 4 to receive GTA$2,000,000 within 72 hours of completion"
   ],
   "bonuses": [
@@ -65,16 +65,16 @@
     }
   ],
   "loginRewards": [
-    "Twilight Knife T-Shirt (Free for playing GTA Online through Oct 14)"
+    "Butchery and Other Hobbies T-Shirt (Free for playing GTA Online through Oct 21)"
   ],
   "specialRewards": [
     {
-      "action": "Complete 5 Payphone Hits through Oct 14",
+      "action": "Complete Don't Fuck With Dre before Oct 21",
       "reward": "GTA$500,000 (within 72 hours)"
     },
     {
-      "action": "Win 2 Adversary Modes",
-      "reward": "Pink Skull Emissive Mask + GTA$100,000"
+      "action": "Win three Races",
+      "reward": "Orange Glow Skeletal Onesie + GTA$100,000"
     },
     {
       "action": "Complete all Weekly Challenges through Nov 4",
@@ -95,16 +95,15 @@
       "LCC Sanctus"
     ],
     "thirty": [
-      "Annis Remus",
-      "Benefactor Terrorbyte",
-      "BF Club",
-      "Bravado Greenwood",
-      "Dinka Jester RR",
-      "Emperor ETR1",
-      "Grotti Itali GTO",
-      "Karin Hotring Everon",
-      "Pegassi Tempesta",
-      "Übermacht SC1"
+      "Annis Hardy",
+      "BF Raptor",
+      "Buckingham Miljet",
+      "Buckingham Tug",
+      "Dinka Sugoi",
+      "Karin Calico GTF",
+      "Nagasaki Weaponized Dinghy",
+      "Vapid Winky",
+      "Western Company Annihilator"
     ]
   },
   "gunVan": [
@@ -112,36 +111,36 @@
     "Combat Shotgun",
     "El Strickler",
     "Knife",
+    "Baseball Bat",
     "Pipe Bombs",
     "The Shocker (FREE)",
-    "Baseball Bat (FREE)",
     "Service Carbine (30% OFF)",
     "Up-n-Atomizer (50% OFF for GTA+ Members)",
     "Unholy Hellbringer (50% OFF for GTA+ Members)",
     "Widowmaker (50% OFF for GTA+ Members)"
   ],
   "rotatingContent": {
-    "fibPriorityFile": "The Black Box File",
+    "fibPriorityFile": "The Brute Force File",
     "kortzCenterPrimaryTargets": [
-      "Pumpkin",
-      "A Winding Road Home",
-      "Winter, Nowhere in Particular"
+      "Twindifference",
+      "Teckels",
+      "A Cast of Characters"
     ]
   },
   "salvageYard": [
     {
-      "robbery": "The McTony Robbery",
-      "name": "Pfister Growler",
+      "robbery": "The Gangbanger Robbery",
+      "name": "Grotti Itali RSX",
       "type": "Top Tier"
     },
     {
-      "robbery": "The Gangbanger Robbery",
+      "robbery": "The Podium Robbery",
       "name": "Albany Fränken Stange",
       "type": "Standard Tier"
     },
     {
-      "robbery": "The Podium Robbery",
-      "name": "Willard Eudora",
+      "robbery": "The Cargo Ship Robbery",
+      "name": "BF Weevil",
       "type": "Low Tier"
     }
   ],
@@ -157,8 +156,8 @@
     "Übermacht Sentinel XS4"
   ],
   "lsCarMeet": {
-    "prizeRide": "Declasse Walton L35",
-    "prizeRideRequirement": "Place Top 4 in the LS Car Meet Series for two days in a row",
+    "prizeRide": "Dinka Kanjo SJ",
+    "prizeRideRequirement": "Place Top 5 in the LS Car Meet Series",
     "testTrack": [
       "Declasse Vamos",
       "Dewbauchee Seven-70",
@@ -167,9 +166,9 @@
     "hsw": "Maibatsu MonstroCiti"
   },
   "timeTrials": {
-    "regular": "Terminal to Chiliad Mountain State Wilderness",
-    "hsw": "Tongva Valley",
-    "premium": "The Commute"
+    "regular": "Coast to Coast",
+    "hsw": "Pacific Bluffs to Mount Gordo",
+    "premium": "Criminal Records"
   },
   "halloweenSeason": {
     "duration": "October 1 - November 4, 2026",
