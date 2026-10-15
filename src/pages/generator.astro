@@ -47,6 +47,7 @@ const wheelImages = {
 };
 
 const preferredRimCats = ["Bennys Bespoke", "Bennys Originals", "Race"];
+const randomizableRimCats = Object.keys(wheelCategories).filter(c => c !== "Bike");
 const tireDesigns = ["None", "White lines", "Classic", "Retro", "Red", "Blue"];
 const windowTints = ["Clear", "Green"];
 const neonOptions = ["Crew", "Pure White", "Blue", "Electric Blue", "Mint Green", "Lime Green", "Yellow", "Golden Shower", "Orange", "Red", "Poncho Pink", "Hot Pink", "Purple", "Blacklight"];
@@ -59,7 +60,7 @@ const realisticNames = ["Black", "Graphite", "Anthracite Gray", "Black Steel", "
   <div class="max-w-6xl mx-auto px-4 py-12">
     <div class="mb-10 text-center">
       <h1 class="text-4xl font-header text-gold uppercase tracking-tighter mb-2">DMO Generator</h1>
-      <p class="text-zinc-400 uppercase text-xs tracking-[0.2em]">Named colors stay on their texture • Custom RGB/HEX on any texture • Secondary always filled</p>
+      <p class="text-zinc-400 uppercase text-xs tracking-[0.2em]">Named colors stay on their texture • Custom RGB/HEX on any texture • Secondary always filled • Bike rims manual only</p>
     </div>
 
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
@@ -233,7 +234,7 @@ const realisticNames = ["Black", "Graphite", "Anthracite Gray", "Black Steel", "
   </div>
 </MainLayout>
 
-<script is:inline define:vars={{ allUnselected, wheelCategories, byTexture, preferredRimCats, wheelImages, vividNames, realisticNames }}>
+<script is:inline define:vars={{ allUnselected, wheelCategories, byTexture, preferredRimCats, randomizableRimCats, wheelImages, vividNames, realisticNames }}>
   const hexMap = {};
   allUnselected.forEach(c => { hexMap[c.name] = c.hex; });
 
@@ -342,7 +343,6 @@ const realisticNames = ["Black", "Graphite", "Anthracite Gray", "Black Steel", "
     const preferred = vivid ? vividNames : realisticNames;
     const textureColors = (byTexture[texture] || []).map(c => c.name);
 
-    // Primary: prefer named color under this texture, else Custom
     const primCandidates = allUnselected.filter(c => textureColors.includes(c.name) || !vivid);
     const primPick = pickFrom(primCandidates, preferred);
     if (primPick && textureColors.includes(primPick.name)) {
@@ -351,7 +351,6 @@ const realisticNames = ["Black", "Graphite", "Anthracite Gray", "Black Steel", "
       document.getElementById('primary').value = 'Custom';
     }
 
-    // Secondary: ALWAYS fill. Prefer different named or Custom
     const secCandidates = allUnselected.filter(c => textureColors.includes(c.name) || !vivid);
     const secPick = pickFrom(secCandidates, preferred);
     if (secPick && textureColors.includes(secPick.name) && Math.random() > 0.3) {
@@ -360,7 +359,6 @@ const realisticNames = ["Black", "Graphite", "Anthracite Gray", "Black Steel", "
       document.getElementById('secondary').value = 'Custom';
     }
 
-    // If either is Custom, generate a color (vivid bias for vivid builds)
     if (document.getElementById('primary').value === 'Custom' || document.getElementById('secondary').value === 'Custom') {
       let r, g, b;
       if (vivid) {
@@ -394,7 +392,8 @@ const realisticNames = ["Black", "Graphite", "Anthracite Gray", "Black Steel", "
       document.getElementById('neonRgb').value = Math.random() > 0.5 ? `${r}, ${g}, ${b}` : `#${r.toString(16).padStart(2,'0')}${g.toString(16).padStart(2,'0')}${b.toString(16).padStart(2,'0')}`;
     }
 
-    const cat = vivid ? randomFrom(preferredRimCats) : randomFrom(Object.keys(wheelCategories));
+    // Bike excluded from randomizer
+    const cat = vivid ? randomFrom(preferredRimCats) : randomFrom(randomizableRimCats);
     document.getElementById('wheelCategory').value = cat;
     populateRims();
     const styles = wheelCategories[cat];
