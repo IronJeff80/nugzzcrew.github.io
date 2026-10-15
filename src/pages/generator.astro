@@ -113,16 +113,16 @@ const realisticNames = ["Black", "Graphite", "Anthracite Gray", "Black Steel", "
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div class="space-y-1">
               <label class="text-[10px] text-zinc-500 uppercase font-black">Primary:</label>
-              <div class="flex gap-2 items-center">
-                <select id="primary" class="flex-1 bg-black border border-zinc-800 rounded-lg p-3 text-white text-sm outline-none focus:border-gold"></select>
-                <div id="primaryPrev" class="w-8 h-12 rounded border border-zinc-700 bg-zinc-800 shrink-0"></div>
+              <div class="flex gap-2 items-stretch">
+                <select id="primary" class="min-w-0 flex-1 bg-black border border-zinc-800 rounded-lg p-3 text-white text-sm outline-none focus:border-gold"></select>
+                <div id="primaryPrev" class="w-10 h-12 rounded border border-zinc-700 bg-zinc-800 flex-shrink-0"></div>
               </div>
             </div>
             <div class="space-y-1">
               <label class="text-[10px] text-zinc-500 uppercase font-black">Secondary:</label>
-              <div class="flex gap-2 items-center">
-                <select id="secondary" class="flex-1 bg-black border border-zinc-800 rounded-lg p-3 text-white text-sm outline-none focus:border-gold"></select>
-                <div id="secondaryPrev" class="w-8 h-12 rounded border border-zinc-700 bg-zinc-800 shrink-0"></div>
+              <div class="flex gap-2 items-stretch">
+                <select id="secondary" class="min-w-0 flex-1 bg-black border border-zinc-800 rounded-lg p-3 text-white text-sm outline-none focus:border-gold"></select>
+                <div id="secondaryPrev" class="w-10 h-12 rounded border border-zinc-700 bg-zinc-800 flex-shrink-0"></div>
               </div>
             </div>
           </div>
@@ -140,16 +140,16 @@ const realisticNames = ["Black", "Graphite", "Anthracite Gray", "Black Steel", "
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div class="space-y-1">
               <label class="text-[10px] text-zinc-500 uppercase font-black">Pearlescent (unselected only):</label>
-              <div class="flex gap-2 items-center">
-                <select id="pearl" class="flex-1 bg-black border border-zinc-800 rounded-lg p-3 text-white text-sm outline-none focus:border-gold"></select>
-                <div id="pearlPrev" class="w-8 h-12 rounded border border-zinc-700 bg-zinc-800 shrink-0"></div>
+              <div class="flex gap-2 items-stretch">
+                <select id="pearl" class="min-w-0 flex-1 bg-black border border-zinc-800 rounded-lg p-3 text-white text-sm outline-none focus:border-gold"></select>
+                <div id="pearlPrev" class="w-10 h-12 rounded border border-zinc-700 bg-zinc-800 flex-shrink-0"></div>
               </div>
             </div>
             <div class="space-y-1">
               <label class="text-[10px] text-zinc-500 uppercase font-black">Interior (unselected only):</label>
-              <div class="flex gap-2 items-center">
-                <select id="interior" class="flex-1 bg-black border border-zinc-800 rounded-lg p-3 text-white text-sm outline-none focus:border-gold"></select>
-                <div id="interiorPrev" class="w-8 h-12 rounded border border-zinc-700 bg-zinc-800 shrink-0"></div>
+              <div class="flex gap-2 items-stretch">
+                <select id="interior" class="min-w-0 flex-1 bg-black border border-zinc-800 rounded-lg p-3 text-white text-sm outline-none focus:border-gold"></select>
+                <div id="interiorPrev" class="w-10 h-12 rounded border border-zinc-700 bg-zinc-800 flex-shrink-0"></div>
               </div>
             </div>
           </div>
@@ -180,9 +180,9 @@ const realisticNames = ["Black", "Graphite", "Anthracite Gray", "Black Steel", "
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div class="space-y-1">
               <label class="text-[10px] text-zinc-500 uppercase font-black">Rim Color (unselected only):</label>
-              <div class="flex gap-2 items-center">
-                <select id="rimColor" class="flex-1 bg-black border border-zinc-800 rounded-lg p-3 text-white text-sm outline-none focus:border-gold"></select>
-                <div id="rimColorPrev" class="w-8 h-12 rounded border border-zinc-700 bg-zinc-800 shrink-0"></div>
+              <div class="flex gap-2 items-stretch">
+                <select id="rimColor" class="min-w-0 flex-1 bg-black border border-zinc-800 rounded-lg p-3 text-white text-sm outline-none focus:border-gold"></select>
+                <div id="rimColorPrev" class="w-10 h-12 rounded border border-zinc-700 bg-zinc-800 flex-shrink-0"></div>
               </div>
             </div>
             <div>
@@ -196,11 +196,11 @@ const realisticNames = ["Black", "Graphite", "Anthracite Gray", "Black Steel", "
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4 items-end">
             <div class="space-y-1">
               <label class="text-[10px] text-zinc-500 uppercase font-black">Neon:</label>
-              <div class="flex gap-2 items-center">
-                <select id="neon" class="flex-1 bg-black border border-zinc-800 rounded-lg p-3 text-white text-sm outline-none focus:border-gold">
+              <div class="flex gap-2 items-stretch">
+                <select id="neon" class="min-w-0 flex-1 bg-black border border-zinc-800 rounded-lg p-3 text-white text-sm outline-none focus:border-gold">
                   {neonOptions.map(c => <option value={c}>{c}</option>)}
                 </select>
-                <div id="neonPrev" class="w-8 h-12 rounded border border-zinc-700 bg-zinc-800 shrink-0"></div>
+                <div id="neonPrev" class="w-10 h-12 rounded border border-zinc-700 bg-zinc-800 flex-shrink-0"></div>
               </div>
             </div>
             <div class="flex items-center gap-3 p-3 bg-zinc-800/50 rounded-lg border border-zinc-700 h-[46px]">
@@ -392,7 +392,6 @@ const realisticNames = ["Black", "Graphite", "Anthracite Gray", "Black Steel", "
       document.getElementById('neonRgb').value = Math.random() > 0.5 ? `${r}, ${g}, ${b}` : `#${r.toString(16).padStart(2,'0')}${g.toString(16).padStart(2,'0')}${b.toString(16).padStart(2,'0')}`;
     }
 
-    // Bike excluded from randomizer
     const cat = vivid ? randomFrom(preferredRimCats) : randomFrom(randomizableRimCats);
     document.getElementById('wheelCategory').value = cat;
     populateRims();
