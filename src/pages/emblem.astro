@@ -138,8 +138,14 @@ import MainLayout from '../layouts/MainLayout.astro';
         <span class="text-xs font-bold uppercase tracking-widest opacity-50">Upload an image to preview</span>
       </div>
 
-      <div id="processing" class="hidden absolute inset-0 bg-black/60 flex items-center justify-center">
-        <span class="text-gold text-xs font-bold uppercase tracking-widest">Generating...</span>
+      <div id="processing" class="hidden absolute inset-0 bg-black/75 backdrop-blur-sm flex items-center justify-center z-10 px-6">
+        <div class="w-full max-w-[280px] text-center">
+          <p id="progressLabel" class="text-gold text-xs font-black uppercase tracking-widest mb-3">Generating</p>
+          <div class="w-full h-2.5 bg-zinc-800 rounded-full overflow-hidden border border-zinc-700" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="progressTrack">
+            <div id="progressBar" class="h-full w-0 bg-gold transition-[width] duration-200 ease-out"></div>
+          </div>
+          <p id="progressPct" class="text-zinc-400 text-[10px] font-mono mt-2 tracking-widest">0%</p>
+        </div>
       </div>
     </div>
   </div>
@@ -313,6 +319,7 @@ import MainLayout from '../layouts/MainLayout.astro';
       });
     }
 
+    // Segmented control clicks
     document.querySelectorAll('[data-setting]').forEach(group => {
       group.querySelectorAll('button').forEach(btn => {
         btn.addEventListener('click', () => {
@@ -331,11 +338,226 @@ import MainLayout from '../layouts/MainLayout.astro';
         setActive(document.querySelector('[data-setting="resolution"]'), '256');
         setActive(document.querySelector('[data-setting="method"]'), 'auto');
         setActive(document.querySelector('[data-setting="detail"]'), 'auto');
-        if (autoOptimize) autoOptimize.checked = true;
-        if (pixelization) pixelization.checked = false;
-        if (cropEdges) cropEdges.checked = true;
+        autoOptimize.checked = true;
+        pixelization.checked = false;
+        cropEdges.checked = true;
         if (currentImageData) generateEmblem();
       });
+    }
+
+    function loadImageToData(file, cb) {
+      const img = new Image();
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        canvas.width = 512;
+        canvas.height = 512;
+        const ctx = canvas.getContext('2d');
+        // optional crop empty edges
+        if (cropEdges.checked) {
+          // simple content bounds
+          const temp = document.createElement('canvas');
+          temp.width = img.width;
+          temp.height = img.height;
+          const tctx = temp.getContext('2d');
+          tctx.drawImage(img, 0, 0);
+          const id = tctx.getImageData(0, 0, img.width, img.height);
+          let minX = img.width, minY = img.height, maxX = 0, maxY = 0;
+          for (let y = 0; y < img.height; y++) {
+            for (let x = 0; x < img.width; x++) {
+              if (id.data[(y * img.width + x) * 4 + 3] > 10) {
+                if (x < minX) minX = x;
+                if (x > maxX) maxX = x;
+                if (y < minY) minY = y;
+                if (y > maxY) maxY = y;
+              }
+            }
+          }
+          if (maxX > minX && maxY > minY) {
+            const w = maxX - minX + 1, h = maxY - minY + 1;
+            const scale = Math.min(512 / w, 512 / h);
+            const dw = w * scale, dh = h * scale;
+            const ox = (512 - dw) / 2, oy = (512 - dh) / 2;
+            ctx.clearRect(0, 0, 512, 512);
+            ctx.drawImage(img, minX, minY, w, h, ox, oy, dw, dh);
+          } else {
+            ctx.drawImage(img, 0, 0, 512, 512);
+          }
+        } else {
+          ctx.drawImage(img, 0, 0, 512, 512);
+        }
+        const data = ctx.getImageData(0, 0, 512, 512);
+        cb(data);
+      };
+      img.src = URL.createObjectURL(file);
+    }
+
+    const progressBar = document.getElementById('progressBar');
+    const progressLabel = document.getElementById('progressLabel');
+    const progressPct = document.getElementById('progressPct');
+    const progressTrack = document.getElementById('progressTrack');
+    let runId = 0;
+
+    function setProgress(pct, label) {
+      const clamped = Math.max(0, Math.min(100, Math.round(pct)));
+      if (progressBar) progressBar.style.width = clamped + '%';
+      if (progressPct) progressPct.textContent = clamped + '%';
+      if (progressTrack) progressTrack.setAttribute('aria-valuenow', String(clamped));
+      if (label && progressLabel) progressLabel.textContent = label;
+    }
+
+    async function generateEmblem() {
+      if (!currentImageData || typeof findBestEncode !== 'function') {
+        outputCode.value = '// Engine not loaded';
+        processing.classList.add('hidden');
+        return;
+      }
+      const myRun = ++runId;
+      setProgress(4, 'Preparing image');
+      processing.classList.remove('hidden');
+      copyBtn.disabled = true;
+
+      const res = getSetting('resolution');
+      const method = getSetting('method');
+      const detail = getSetting('detail');
+      const auto = autoOptimize.checked;
+      const pix = pixelization.checked;
+
+      const opts = {
+        N: res === 'auto' ? 'auto' : parseInt(res, 10),
+        autoN: 512,
+        method: method === 'auto' ? 'auto' : method,
+        autofit: auto,
+        pareto: auto,
+        paretoLadder: [512, 384, 320, 256, 192, 160, 128, 96, 80, 64],
+        plOn: !pix,
+        budget: 1250000,
+        precision: 3,
+        overlap: 2,
+        alphaMode: 'keep',
+        dither: false,
+        smoothPct: 0,
+        noise: 0,
+        brightness: 0,
+        contrast: 0,
+        saturation: 100,
+        ladder: [512, 384, 256, 192, 128],
+        toleranceLadder: typeof TUNING !== 'undefined' ? TUNING.toleranceLadder : undefined
+      };
+
+      if (detail !== 'auto' && !auto) {
+        const dMap = { low: 20, med: 59, high: 100 };
+        opts.tol = typeof detailToTolerance === 'function' ? detailToTolerance(dMap[detail] || 59) : 520;
+        opts.autofit = false;
+      }
+
+      const baseYield = typeof makeYield === 'function' ? makeYield() : () => Promise.resolve();
+      let steps = 0;
+      const yieldFn = () => {
+        steps += 1;
+        const pct = Math.min(92, 8 + (1 - Math.exp(-steps / 40)) * 84);
+        if (myRun === runId) setProgress(pct, 'Encoding');
+        return baseYield();
+      };
+      const raw = new Uint8ClampedArray(currentImageData.data);
+
+      try {
+        setProgress(8, 'Encoding');
+        const result = await findBestEncode(raw, 512, opts, yieldFn, false, () => myRun !== runId);
+        if (myRun !== runId) return;
+        if (!result) {
+          outputCode.value = '// No result';
+          setProgress(0, 'Failed');
+          processing.classList.add('hidden');
+          return;
+        }
+
+        setProgress(96, 'Rendering preview');
+
+        if (typeof renderCoverage === 'function') {
+          const rendered = renderCoverage(result, 512);
+          const ctx = mainPreview.getContext('2d');
+          mainPreview.width = 512;
+          mainPreview.height = 512;
+          const id = new ImageData(new Uint8ClampedArray(rendered), 512, 512);
+          ctx.putImageData(id, 0, 0);
+          mainPreview.classList.remove('hidden', 'scale-95');
+          previewPlaceholder.classList.add('hidden');
+
+          miniPreviews.forEach((c, i) => {
+            const size = [256, 128, 64][i];
+            c.width = size;
+            c.height = size;
+            const mctx = c.getContext('2d');
+            mctx.drawImage(mainPreview, 0, 0, size, size);
+            c.classList.remove('hidden');
+          });
+        }
+
+        const size = result.enc || 0;
+        sizeValue.textContent = size.toLocaleString();
+        const sizePct = Math.min(100, (size / 1250000) * 100);
+        sizeBar.style.width = sizePct + '%';
+        sizeBar.className = sizePct > 90 ? 'bg-red-500 h-full' : sizePct > 70 ? 'bg-yellow-500 h-full' : 'bg-green-500 h-full';
+        outputStats.classList.remove('hidden');
+        readyStatus.classList.remove('hidden');
+
+        const svgRaw = result.svg || '';
+        const layerRaw = result.lmin || result.lfull || '[]';
+        const svgB64 = btoa(unescape(encodeURIComponent(svgRaw)));
+        const layerB64 = btoa(unescape(encodeURIComponent(layerRaw)));
+
+        const snippet = `/* OFFICIAL NUGZZ CREW EMBLEM
+ * Source: ${currentFileName}
+ * Size: ${size.toLocaleString()} bytes
+ * Paste into Social Club emblem editor console (F12)
+ */
+
+var svgData = ${JSON.stringify(svgB64)};
+var layerData = ${JSON.stringify(layerB64)};
+
+var request = new XMLHttpRequest();
+request.open("POST", "/emblems/save", true);
+request.setRequestHeader("Content-Type", "application/json");
+request.setRequestHeader("__RequestVerificationToken", document.getElementsByName("__RequestVerificationToken")[0].value);
+request.setRequestHeader("X-Requested-With", "XMLHttpRequest");
+request.onreadystatechange = function() {
+  if (request.readyState === 4) {
+    try {
+      var a = JSON.parse(request.responseText);
+      if (a.Status === 200) {
+        window.location.href = "https://socialclub.rockstargames.com/emblems/edit/" + a.EmblemId;
+      } else {
+        alert(a.Message || (a.Error && a.Error.Message) || "Save failed");
+      }
+    } catch (err) {
+      alert("Response error: " + request.responseText.slice(0, 200));
+    }
+  }
+};
+request.send(JSON.stringify({
+  crewId: "0",
+  emblemId: "",
+  parentId: "",
+  parentType: "",
+  hash: (document.getElementById("editorField-hash") || {}).value || "",
+  svgData: svgData,
+  layerData: layerData
+}));`;
+
+        outputCode.value = snippet;
+        copyBtn.disabled = false;
+        console.log('[Emblem] Payload ready, length:', snippet.length);
+
+        const details = outputCode.closest('details');
+        if (details) details.open = true;
+        setProgress(100, 'Done');
+      } catch (e) {
+        if (myRun !== runId) return;
+        console.error('[Emblem] Generation failed:', e);
+        outputCode.value = '// Error: ' + (e && e.message ? e.message : e) + '\n// Check browser console for details';
+        setProgress(0, 'Failed');
+      }
+      if (myRun === runId) processing.classList.add('hidden');
     }
 
     if (imageInput) {
@@ -343,88 +565,46 @@ import MainLayout from '../layouts/MainLayout.astro';
         const file = e.target.files[0];
         if (!file) return;
         currentFileName = file.name;
+        uploadText.textContent = file.name;
+        uploadSubtext.textContent = 'Change image';
+        uploadText.classList.add('text-gold');
+        sourceIcon.classList.add('hidden');
+
         const reader = new FileReader();
         reader.onload = (ev) => {
-          currentImageData = ev.target.result;
-          sourceThumb.src = currentImageData;
+          sourceThumb.src = ev.target.result;
           sourceThumb.classList.remove('hidden');
-          sourceIcon.classList.add('hidden');
-          uploadText.textContent = file.name;
-          uploadSubtext.textContent = 'Click to change';
-          generateEmblem();
         };
         reader.readAsDataURL(file);
+
+        loadImageToData(file, (data) => {
+          currentImageData = data;
+          // Clear any old placeholder immediately
+          outputCode.value = `/* Generating emblem from ${file.name}... */\n// Please wait`;
+          generateEmblem();
+        });
       });
     }
 
-    function generateEmblem() {
-      if (!currentImageData || !window.findBestEncode) return;
-      processing.classList.remove('hidden');
-      setTimeout(() => {
-        try {
-          const resolution = getSetting('resolution') || '256';
-          const method = getSetting('method') || 'auto';
-          const detail = getSetting('detail') || 'auto';
-          const result = window.findBestEncode(currentImageData, {
-            resolution: resolution === 'auto' ? 256 : parseInt(resolution),
-            method,
-            detail,
-            autoOptimize: autoOptimize?.checked ?? true,
-            pixelization: pixelization?.checked ?? false,
-            cropEdges: cropEdges?.checked ?? true
-          });
-          if (result && result.svgData) {
-            mainPreview.classList.remove('hidden');
-            previewPlaceholder.classList.add('hidden');
-            // Simple preview render
-            const ctx = mainPreview.getContext('2d');
-            const img = new Image();
-            img.onload = () => {
-              mainPreview.width = img.width;
-              mainPreview.height = img.height;
-              ctx.drawImage(img, 0, 0);
-            };
-            img.src = currentImageData;
-
-            const size = result.svgData.length;
-            sizeValue.textContent = size.toLocaleString();
-            const pct = Math.min(100, (size / 1250000) * 100);
-            sizeBar.style.width = pct + '%';
-            sizeBar.className = pct > 90 ? 'bg-red-500 h-full' : pct > 70 ? 'bg-yellow-500 h-full' : 'bg-green-500 h-full';
-            outputStats.classList.remove('hidden');
-            readyStatus.classList.remove('hidden');
-            outputCode.value = result.consoleCode || result.svgData;
-            copyBtn.disabled = false;
-
-            miniPreviews.forEach((canvas, i) => {
-              const sizes = [256, 128, 64];
-              canvas.classList.remove('hidden');
-              const c = canvas.getContext('2d');
-              const im = new Image();
-              im.onload = () => {
-                canvas.width = sizes[i];
-                canvas.height = sizes[i];
-                c.drawImage(im, 0, 0, sizes[i], sizes[i]);
-              };
-              im.src = currentImageData;
-            });
-          }
-        } catch (err) {
-          console.error(err);
-        }
-        processing.classList.add('hidden');
-      }, 100);
-    }
-
     if (copyBtn) {
-      copyBtn.addEventListener('click', () => {
-        navigator.clipboard.writeText(outputCode.value).then(() => {
-          const span = copyBtn.querySelector('span');
-          if (span) {
-            span.textContent = 'Copied!';
-            setTimeout(() => span.textContent = 'Copy Code', 2000);
-          }
-        });
+      copyBtn.addEventListener('click', async () => {
+        const text = outputCode.value;
+        if (!text || text.startsWith('//')) return;
+
+        try {
+          await navigator.clipboard.writeText(text);
+        } catch {
+          outputCode.select();
+          document.execCommand('copy');
+        }
+
+        const orig = copyBtn.innerHTML;
+        copyBtn.innerHTML = '<i data-lucide="check" class="w-4 h-4 text-green-500"></i><span class="text-green-500">Copied!</span>';
+        if (window.lucide) window.lucide.createIcons();
+        setTimeout(() => {
+          copyBtn.innerHTML = orig;
+          if (window.lucide) window.lucide.createIcons();
+        }, 2000);
       });
     }
   }
