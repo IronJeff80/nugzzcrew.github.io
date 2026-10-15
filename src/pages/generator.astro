@@ -249,7 +249,12 @@ const realisticNames = [
 
 <script is:inline define:vars={{ allUnselected, wheelCategories, byTexture, preferredRimCats, randomizableRimCats, wheelImages, vividNames, realisticNames }}>
   const hexMap = {};
-  allUnselected.forEach(c => { hexMap[c.name] = c.hex; });
+  const colorLookup = {};
+  allUnselected.forEach(c => {
+    const key = c.texture + '|' + c.name;
+    hexMap[key] = c.hex;
+    colorLookup[key] = c;
+  });
 
   function parseColor(input) {
     if (!input) return null;
@@ -283,27 +288,29 @@ const realisticNames = [
     return pool[Math.floor(Math.random() * pool.length)];
   }
 
+  function makeOption(c) {
+    const key = c.texture + '|' + c.name;
+    return `<option value="${key}">${c.texture} - ${c.name}</option>`;
+  }
+
   function populatePrimary() {
     const sel = document.getElementById('primary');
-    const unique = [...new Set(allUnselected.map(c => c.name))];
     sel.innerHTML = '<option value="">-- Select --</option><option value="Custom">Custom RGB / HEX</option>' +
-      unique.map(name => `<option value="${name}">${name}</option>`).join('');
+      allUnselected.map(makeOption).join('');
   }
 
   function populateSecondary() {
     const sel = document.getElementById('secondary');
     const list = getUnselectedForFlag('secondary');
-    const unique = [...new Set(list.map(c => c.name))];
     sel.innerHTML = '<option value="">-- Select --</option><option value="Custom">Custom RGB / HEX</option>' +
-      unique.map(name => `<option value="${name}">${name}</option>`).join('');
+      list.map(makeOption).join('');
   }
 
   function populateUnselectedOnly(selectId, flag) {
     const sel = document.getElementById(selectId);
     const list = getUnselectedForFlag(flag);
-    const unique = [...new Set(list.map(c => c.name))];
     sel.innerHTML = '<option value="">-- Select --</option>' +
-      unique.map(name => `<option value="${name}">${name}</option>`).join('');
+      list.map(makeOption).join('');
   }
 
   function getColorForPreview(id) {
@@ -365,6 +372,15 @@ const realisticNames = [
     return [vary(), vary(), vary()];
   }
 
+  function setColorSelect(id, colorObj) {
+    if (!colorObj) return;
+    const key = colorObj.texture + '|' + colorObj.name;
+    const sel = document.getElementById(id);
+    if (sel && [...sel.options].some(o => o.value === key)) {
+      sel.value = key;
+    }
+  }
+
   function randomBuild(vivid) {
     const texture = vivid 
       ? randomFrom(['Other','Matte','Metallic','Worn']) 
@@ -376,7 +392,7 @@ const realisticNames = [
 
     const primPick = pickFrom(allUnselected, preferred);
     if (primPick && Math.random() > 0.18) {
-      document.getElementById('primary').value = primPick.name;
+      setColorSelect('primary', primPick);
     } else {
       document.getElementById('primary').value = 'Custom';
     }
@@ -384,7 +400,7 @@ const realisticNames = [
     const secList = getUnselectedForFlag('secondary');
     const secPick = pickFrom(secList, preferred);
     if (secPick && Math.random() > 0.28) {
-      document.getElementById('secondary').value = secPick.name;
+      setColorSelect('secondary', secPick);
     } else {
       document.getElementById('secondary').value = 'Custom';
     }
@@ -405,13 +421,13 @@ const realisticNames = [
 
     const pearlPreferred = vivid ? preferred : realisticNames;
     const pearlPick = pickFrom(getUnselectedForFlag('pearl'), pearlPreferred);
-    if (pearlPick) document.getElementById('pearl').value = pearlPick.name;
+    if (pearlPick) setColorSelect('pearl', pearlPick);
 
     const rimPick = pickFrom(getUnselectedForFlag('rim'), preferred);
-    if (rimPick) document.getElementById('rimColor').value = rimPick.name;
+    if (rimPick) setColorSelect('rimColor', rimPick);
 
     const intPick = pickFrom(getUnselectedForFlag('interior'), preferred);
-    if (intPick) document.getElementById('interior').value = intPick.name;
+    if (intPick) setColorSelect('interior', intPick);
 
     if (Math.random() < 0.5) {
       document.getElementById('neon').value = 'Crew';
@@ -451,6 +467,16 @@ const realisticNames = [
     document.getElementById('wheelExpanded').classList.add('hidden');
   });
 
+  function formatColor(val) {
+    if (!val) return 'N/A';
+    if (val === 'Custom') return 'Custom RGB/HEX';
+    if (val.includes('|')) {
+      const [tex, name] = val.split('|');
+      return `${tex} - ${name}`;
+    }
+    return val;
+  }
+
   document.getElementById('mainGenerateBtn').addEventListener('click', () => {
     const get = id => document.getElementById(id).value || 'N/A';
     const plateRaw = document.getElementById('plate').value.trim();
@@ -463,13 +489,13 @@ Plate: ${plateOut}
 Windows: ${get('windows')}
 Headlights: ${get('headlights')}
 Texture: ${get('texture')}
-Primary: ${get('primary')}
-Secondary: ${get('secondary')}
-Pearlescent: ${get('pearl')}
-Interior: ${get('interior')}
+Primary: ${formatColor(get('primary'))}
+Secondary: ${formatColor(get('secondary'))}
+Pearlescent: ${formatColor(get('pearl'))}
+Interior: ${formatColor(get('interior'))}
 Wheel Category: ${get('wheelCategory')}
 Rim Style: ${get('rimStyle')}
-Rim Color: ${get('rimColor')}
+Rim Color: ${formatColor(get('rimColor'))}
 Tires: ${get('tires')}
 Neon: ${get('neon')}
 Activator: ${document.getElementById('activator').checked ? 'Yes' : 'No'}
