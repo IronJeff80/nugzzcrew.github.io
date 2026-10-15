@@ -134,7 +134,10 @@ const realisticNames = ["Black", "Graphite", "Anthracite Gray", "Black Steel", "
 
           <div id="rgbInputArea" class="bg-gold/10 p-4 rounded-xl border border-gold/50" style="display:none;">
             <label class="block text-[10px] text-gold uppercase font-black mb-2">Custom Paint Color (RGB or HEX) on selected texture:</label>
-            <input type="text" id="sharedRgb" placeholder="212, 175, 55  or  #d4af37" class="w-full bg-black border-2 border-gold rounded-lg p-3 text-white text-sm font-mono outline-none" />
+            <div class="flex gap-2 items-stretch">
+              <input type="text" id="sharedRgb" placeholder="212, 175, 55  or  #d4af37" class="min-w-0 flex-1 bg-black border-2 border-gold rounded-lg p-3 text-white text-sm font-mono outline-none" />
+              <div id="sharedRgbPrev" class="w-12 h-12 rounded border border-gold/60 bg-zinc-800 flex-shrink-0"></div>
+            </div>
           </div>
 
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -211,7 +214,10 @@ const realisticNames = ["Black", "Graphite", "Anthracite Gray", "Black Steel", "
 
           <div id="neonRgbArea" class="bg-blue-500/10 p-4 rounded-xl border border-blue-500/50" style="display:none;">
             <label class="block text-[10px] text-blue-400 uppercase font-black mb-2">Neon Custom Color (RGB or HEX):</label>
-            <input type="text" id="neonRgb" placeholder="0, 255, 255  or  #00ffff" class="w-full bg-black border-2 border-blue-500 rounded-lg p-3 text-white text-sm font-mono outline-none" />
+            <div class="flex gap-2 items-stretch">
+              <input type="text" id="neonRgb" placeholder="0, 255, 255  or  #00ffff" class="min-w-0 flex-1 bg-black border-2 border-blue-500 rounded-lg p-3 text-white text-sm font-mono outline-none" />
+              <div id="neonRgbPrev" class="w-12 h-12 rounded border border-blue-500/60 bg-zinc-800 flex-shrink-0"></div>
+            </div>
           </div>
         </div>
 
@@ -310,6 +316,13 @@ const realisticNames = ["Black", "Graphite", "Anthracite Gray", "Black Steel", "
       if (box) box.style.backgroundColor = getColorForPreview(id);
     });
 
+    // Live custom input previews
+    const paintBox = document.getElementById('sharedRgbPrev');
+    if (paintBox) paintBox.style.backgroundColor = parseColor(document.getElementById('sharedRgb').value) || '#333';
+
+    const neonBox = document.getElementById('neonRgbPrev');
+    if (neonBox) neonBox.style.backgroundColor = parseColor(document.getElementById('neonRgb').value) || '#333';
+
     const paintCustom = document.getElementById('primary').value === 'Custom' || 
                         document.getElementById('secondary').value === 'Custom' || 
                         document.getElementById('crewBoth').checked;
@@ -349,7 +362,6 @@ const realisticNames = ["Black", "Graphite", "Anthracite Gray", "Black Steel", "
 
     const preferred = vivid ? vividNames : realisticNames;
 
-    // Primary: any unselected
     const primPick = pickFrom(allUnselected, preferred);
     if (primPick && Math.random() > 0.25) {
       document.getElementById('primary').value = primPick.name;
@@ -357,7 +369,6 @@ const realisticNames = ["Black", "Graphite", "Anthracite Gray", "Black Steel", "
       document.getElementById('primary').value = 'Custom';
     }
 
-    // Secondary: ONLY the ones that drop unselected as secondary
     const secList = getUnselectedForFlag('secondary');
     const secPick = pickFrom(secList, preferred);
     if (secPick && Math.random() > 0.35) {
