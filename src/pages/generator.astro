@@ -53,7 +53,13 @@ const windowTints = ["Clear", "Green"];
 const neonOptions = ["Crew", "Pure White", "Blue", "Electric Blue", "Mint Green", "Lime Green", "Yellow", "Golden Shower", "Orange", "Red", "Poncho Pink", "Hot Pink", "Purple", "Blacklight"];
 
 const vividNames = ["Blaze Red", "Candy Red", "Bright Green", "Lime Green", "Race Yellow", "Sunrise Orange", "Hot Pink", "Fluorescent Blue", "Pfister Pink", "Ultra Blue", "Lightning Blue", "Dew Yellow", "Gasoline Green", "Bright Purple", "Orange", "Yellow", "Green Bright", "Epsilon Blue"];
-const realisticNames = ["Black", "Graphite", "Anthracite Gray", "Black Steel", "Cast Iron Silver", "Shadow Silver", "Midnight Blue", "Dark Blue", "Harbor Blue", "BeechWood Brown", "Bison Brown", "Chocolate Brown", "Saddle Brown", "Olive Drab", "Foliage Green", "Desert Tan", "Gun Metal", "Rolled Steel"];
+const realisticNames = [
+  "Anthracite Gray", "BeechWood Brown", "Bison Brown", "Black Steel", "Bleached Brown", "Blue Silver", "Bluish Silver",
+  "Cast Iron Silver", "Chocolate Brown", "Creek Brown", "Dark Blue", "Dark Brown", "Dark Green", "Dark Silver",
+  "Desert Tan", "Feltzer Brown", "Foliage Green", "Forest Green", "Graphite", "Gun Metal", "Harbor Blue",
+  "Hunter Green", "Light Brown", "Midnight Blue", "Olive Drab", "Saddle Brown", "Shadow Silver", "Rolled Steel",
+  "Steel", "Silver", "Off White", "Sea Foam Blue", "Maui Blue Poly", "Medium Brown", "Light Brown"
+];
 ---
 
 <MainLayout title="DMO Generator" description="Unselected-only GTA Online DMO generator. Official Nugzz Crew.">
@@ -316,7 +322,6 @@ const realisticNames = ["Black", "Graphite", "Anthracite Gray", "Black Steel", "
       if (box) box.style.backgroundColor = getColorForPreview(id);
     });
 
-    // Live custom input previews
     const paintBox = document.getElementById('sharedRgbPrev');
     if (paintBox) paintBox.style.backgroundColor = parseColor(document.getElementById('sharedRgb').value) || '#333';
 
@@ -353,17 +358,24 @@ const realisticNames = ["Black", "Graphite", "Anthracite Gray", "Black Steel", "
 
   function randomFrom(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
 
+  function randomMutedRgb() {
+    // Muted real-world range: not pure black, not neon
+    const base = 40 + Math.floor(Math.random() * 90);
+    const vary = () => Math.max(20, Math.min(180, base + Math.floor(Math.random() * 60 - 30)));
+    return [vary(), vary(), vary()];
+  }
+
   function randomBuild(vivid) {
     const texture = vivid 
       ? randomFrom(['Other','Matte','Metallic','Worn']) 
-      : randomFrom(['Metallic','Utility','Worn','Metals']);
+      : randomFrom(['Metallic','Utility','Worn','Metals','Matte']);
     document.getElementById('texture').value = texture;
     refreshAll();
 
     const preferred = vivid ? vividNames : realisticNames;
 
     const primPick = pickFrom(allUnselected, preferred);
-    if (primPick && Math.random() > 0.25) {
+    if (primPick && Math.random() > 0.2) {
       document.getElementById('primary').value = primPick.name;
     } else {
       document.getElementById('primary').value = 'Custom';
@@ -371,7 +383,7 @@ const realisticNames = ["Black", "Graphite", "Anthracite Gray", "Black Steel", "
 
     const secList = getUnselectedForFlag('secondary');
     const secPick = pickFrom(secList, preferred);
-    if (secPick && Math.random() > 0.35) {
+    if (secPick && Math.random() > 0.3) {
       document.getElementById('secondary').value = secPick.name;
     } else {
       document.getElementById('secondary').value = 'Custom';
@@ -384,16 +396,16 @@ const realisticNames = ["Black", "Graphite", "Anthracite Gray", "Black Steel", "
         g = Math.floor(Math.random()*200);
         b = Math.floor(Math.random()*200);
       } else {
-        r = Math.floor(Math.random()*80);
-        g = Math.floor(Math.random()*80);
-        b = Math.floor(Math.random()*80);
+        [r, g, b] = randomMutedRgb();
       }
       document.getElementById('sharedRgb').value = Math.random() > 0.5 
         ? `${r}, ${g}, ${b}` 
         : `#${r.toString(16).padStart(2,'0')}${g.toString(16).padStart(2,'0')}${b.toString(16).padStart(2,'0')}`;
     }
 
-    const pearlPick = pickFrom(getUnselectedForFlag('pearl'), vivid ? preferred : ['Black', 'Graphite']);
+    // Pearl: muted variety, not locked to black
+    const pearlPreferred = vivid ? preferred : realisticNames.filter(n => !n.toLowerCase().includes('black'));
+    const pearlPick = pickFrom(getUnselectedForFlag('pearl'), pearlPreferred);
     if (pearlPick) document.getElementById('pearl').value = pearlPick.name;
 
     const rimPick = pickFrom(getUnselectedForFlag('rim'), preferred);
@@ -402,7 +414,7 @@ const realisticNames = ["Black", "Graphite", "Anthracite Gray", "Black Steel", "
     const intPick = pickFrom(getUnselectedForFlag('interior'), preferred);
     if (intPick) document.getElementById('interior').value = intPick.name;
 
-    if (Math.random() < 0.6) {
+    if (Math.random() < 0.55) {
       document.getElementById('neon').value = 'Crew';
       const r = Math.floor(Math.random()*256);
       const g = Math.floor(Math.random()*256);
