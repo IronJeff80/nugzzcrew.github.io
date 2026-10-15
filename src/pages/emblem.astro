@@ -497,7 +497,8 @@ import MainLayout from '../layouts/MainLayout.astro';
         sizeValue.textContent = size.toLocaleString();
         const sizePct = Math.min(100, (size / 1250000) * 100);
         sizeBar.style.width = sizePct + '%';
-        sizeBar.className = sizePct > 90 ? 'bg-red-500 h-full' : sizePct > 70 ? 'bg-yellow-500 h-full' : 'bg-green-500 h-full';
+        const fits = size <= 1250000;
+        sizeBar.className = (fits ? 'bg-green-500' : 'bg-red-500') + ' h-full';
         outputStats.classList.remove('hidden');
         readyStatus.classList.remove('hidden');
 
