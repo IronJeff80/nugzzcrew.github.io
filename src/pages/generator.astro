@@ -1,24 +1,63 @@
 ---
 import MainLayout from '../layouts/MainLayout.astro';
+import colors from '../data/colors.json';
 
-// FULL SAVE EDITOR LIST
-const primaryUnselected = ["Custom RGB", "Alloy", "Anthracite Gray", "Baby Blue", "BeechWood Brown", "Bison Brown", "Black", "Black Poly", "Black Steel", "Blaze Red", "Bleached Brown", "Blue", "Blue Silver", "Bluish Silver", "Bright Blue/Slate Blue", "Bright Green", "Bright Orange", "Bright Purple", "Bright Red", "Bronze", "Brown", "Brushed Aluminium", "Brushed Black Steel", "Brushed Gold", "Brushed Steel", "Cabernet Red", "Candy Red", "Carbon Black", "Cast Iron Silver", "Champagne", "Chocolate Brown", "Chrome", "Cream", "Creek Brown", "Dark Blue", "Dark Brown", "Dark Earth", "Dark Green", "Dark Red", "Dark Silver", "Dark Steel", "Desert Tan", "Dew Yellow/Yellow Bird", "Diamond Blue", "Epsilon Blue", "Feltzer Brown", "Fluorescent Blue", "Foliage Green", "Forest Green", "Formula Red", "Frost White", "Galaxy Blue", "Garnet Red", "Gasoline Green", "Gold", "Golden Red", "Grace Red", "Graphite", "Gray", "Green", "Green Bright", "Gun Metal", "Harbor Blue", "Honey Beige", "Hot Pink", "Hunter Green", "Ice White", "Lava Red", "Light Blue", "Light Brown", "Light Gray", "Light Orange", "Lightning Blue", "Lime Green", "MP100", "Maple Brown", "Mariner Blue", "Maui Blue Poly", "Medium Brown", "Midnight Blue", "Midnight Purple", "Midnight Purple/V Dark Blue", "Midnight Silver", "Moss Brown", "Nautical Blue", "Off White", "Olive Army Green", "Olive Drab", "Olive Green", "Orange", "Orange 2", "Pea Green/Securicor Green", "Pfister Pink", "Police Blue", "Pure Gold", "Pure White", "Race Yellow", "Racing Blue", "Racing Green", "Red", "Rolled Steel", "Saddle Brown", "Salmon Pink", "Sandy Brown", "Saxon Blue", "Schafter Purple", "Sea Foam Blue", "Sea Green", "Sea Wash", "Shadow Silver", "Shawdow Silver", "Sienna Brown", "Silver", "Silver Grey", "Spinnaker Purple", "Stone Silver", "Straw Beige", "Straw Brown", "Sunrise Orange", "Sunset Red", "Surf Blue", "Taxi Yellow", "Torino Red", "Ultra Blue", "White", "Wine Red", "Woodbeach Brown", "Yellow"];
+const unselectedColors = colors.filter(c => 
+  !c.primary || !c.secondary || !c.pearl || !c.rim || !c.interior
+);
 
-const secondaryUnselected = ["Custom RGB", ...primaryUnselected.slice(1)];
-const pearlUnselected = primaryUnselected.slice(1);
-const rimUnselected = primaryUnselected.slice(1);
-const interiorUnselected = primaryUnselected.slice(1);
+const byTexture = {};
+unselectedColors.forEach(c => {
+  if (!byTexture[c.texture]) byTexture[c.texture] = [];
+  byTexture[c.texture].push(c);
+});
 
-const textures = ["Metallic", "Rim", "Utility", "MP100(Super Shiny)", "Other(Shiny)", "Brushed(Shiny/Matte)", "Matte", "Worn"];
+const textureOrder = ["Chrome", "Hidden", "Other", "Metallic", "Rim", "Utility", "Metals", "Matte", "Worn"];
+
+const wheelCategories = {
+  "Bennys Bespoke": ["Stock", "Chrome OG Hunnels", "Gold OG Hunnels", "Chrome Wires", "Gold Wires", "Chrome Spoked Out", "Gold Spoked Out", "Chrome Knock-Offs", "Gold Knock-Offs", "Chrome Bigger Worm", "Gold Bigger Worm", "Chrome Vintage Wire", "Gold Vintage Wire", "Chrome Classic Wire", "Gold Classic Wire", "Chrome Smoothie", "Gold Smoothie", "Chrome Classic Rod", "Gold Classic Rod", "Chrome Dollar", "Gold Dollar", "Chrome Mighty Star", "Gold Mighty Star", "Chrome Decadent Dish", "Gold Decadent Dish", "Chrome Razor Style", "Gold Razor Style", "Chrome Celtic Knot", "Gold Celtic Knot", "Chrome Warrior Dish", "Gold Warrior Dish", "Gold Big Dog Spokes"],
+  "Bennys Originals": ["Stock", "OG Hunnels", "OG Hunnels (Chrome Lip)", "Knock-Offs", "Knock-Offs (Chrome Lip)", "Spoked Out", "Spoked Out (Chrome Lip)", "Vintage Wire", "Vintage Wire (Chrome Lip)", "Smoothie", "Smoothie (Chrome Lip)", "Smoothie (Solid Color)", "Rod Me Up", "Rod Me Up (Chrome Lip)", "Rod Me Up (Solid Color)", "Clean", "Lotta Chrome", "Spindles", "Viking", "Triple Spoke", "Pharaoh", "Tiger Style", "Three Wheelin", "Big Bar", "Biohazard", "Waves", "Lick Lick", "Spiralizer", "Hypnotics", "Psycho-Delle", "Half Cut", "Super Electric"],
+  "Race": ["Stock", "Classic 5", "Classic 5 (Striped)", "Retro Star", "Retro Star (Striped)", "Triplex", "Triplex (Striped)", "70s Spec", "70s Spec (Striped)", "Super 5R", "Super 5R (Striped)", "Speedster", "Speedster (Striped)", "GP-90", "GP-90 (Striped)", "Superspoke", "Superspoke (Striped)", "Gridline", "Gridline (Striped)", "Snowflake", "Snowflake (Striped)"],
+  "Bike": ["Stock", "Speedway", "Street Special", "Racer", "Track Star", "Overlord", "Trident", "Triple Threat", "Stiletto", "Wires", "Bobber", "Solidus", "Ice Shield", "Loops", "Romper Racing", "Warp Drive", "Snowflake", "Holy Spoke", "Old Skool Triple", "Futura", "Quarter Mile King", "Cartwheel", "Double Five", "Shrunken", "Simple Six", "Celtic", "Razer", "Twisted", "Morning Star", "Jagged Spokes", "Eidolon", "Enigma", "Big Spokes", "Webs", "Hotplate", "Bobsta"],
+  "High End": ["Stock", "Shadow", "Hypher", "Blade", "Diamond", "Supa Gee", "Chromatic Z", "Mercie Chip", "Obey RS", "GT Chrome", "Cheetah RR", "Solar", "Split Ten", "Dash VIP", "LozSpeed Ten", "Carbon Inferno", "Carbon Shadow", "Carbon Z", "Carbon Solar", "Cheetah Carbon R", "Carbon S Racer"],
+  "Lowrider": ["Stock", "Flare", "Wired", "Triple Golds", "Big Worm", "Seven Fives", "Split Six", "Fresh Mesh", "Lead Sled", "Turbine", "Super Fin", "Classic Rod", "Dollar", "Dukes", "Low Five", "Gooch"],
+  "Muscle": ["Stock", "Classic Five", "Dukes", "Muscle Freak", "Kracka", "Azreal", "Mecha", "Black Top", "Drag SPL", "Revolver", "Classic Rod", "Fairlie", "Spooner", "Five Star", "Old School", "El Jefe", "Dodman", "Six Gun", "Mercenary"],
+  "Offroad": ["Stock", "Raider", "Mudslinger", "Nevis", "Cairngorm", "Amazon", "Challenger", "Dune Basher", "Five Star", "Rock Crawler", "Mil Spec Steele", "Retro Steele", "Heavy Duty Steele", "Concave Steele", "Police Issue Steele", "Lightweight Steele", "Dukes", "Avalanche", "Mountain Man", "Ridge Climber", "Concave 5", "Flat Six", "All Terrain Monster", "Drag SPL", "Concave Rally Master", "Rugged Snowflake"],
+  "Sport": ["Stock", "Inferno", "Deep Five", "Lozspeed Mk.V", "Diamond Cut", "Chrono", "Feroci RR", "Fifty Nine", "Mercie", "Synthetic Z", "Organic Type 0", "Endo v1", "GT One", "Duper 7", "Uzer", "Ground Ride", "S Racer", "Venum", "Cosmo", "Dash VIP", "Ice Kid", "Ruff Weld", "Wangan Master", "Super Five", "Endo v2", "Split Six"],
+  "Street": ["Stock", "Retro Steele", "Poverty Spec Steele", "Concave Steele", "Nebula", "Hotting Steele", "Cup Champion", "Stance EG Custom", "Kracka Custom", "Dukes Custom", "Endo v.3 Custom", "V8 Killer", "Fujiwara Custom", "Cosmo MkII", "Aero Star", "Hype Five", "Ruff Weld Mega Deep", "Mercie Concave", "Sugoi Concave", "Synthetic Z Concave", "Endo v.4 Dished", "Hyperfresh", "Truffade Concave", "Organic Type II", "Big Manila", "Deep Flake", "Cosmo MkIII", "Concave Racer", "Deep Flake Reverse", "Wild Wagon", "Concave Mega Mesh"],
+  "SUV": ["Stock", "VIP", "Benefactor", "Cosmo", "Bippu", "Royal Six", "Fagorme", "Deluxe", "Iced Out", "Cognoscenti", "LozSpeed Ten", "Supernova", "Obey RS", "LozSpeed Baller", "Extravaganzo", "Split Six", "Empowered", "Sunrise", "Dash VIP", "Cutter"],
+  "Track": ["Stock", "Rally Throwback", "Grabel Trap", "Stove Top", "Stove Top Mesh", "Retro 3 Piece", "Rally Monoblock", "Forged 5", "Split Star", "Speed Boy", "30s Running", "Tropos", "Exos", "High Five", "Super Luxe", "Pure Business", "Pepper Pot", "Blacktop Blender", "Throwback", "Expressway", "Hidden Six", "Dinka SPL", "Retro Turbofan", "Conical Turbofan", "Ice Storm", "Super Turbine", "Modern Mesh", "Forged Star", "Snowflake", "Giga Mesh", "Mesh Meister"],
+  "Tuner": ["Stock", "Cosmo", "Super Mesh", "Outsider", "Rollas", "Driftmeister", "Slicer", "El Quatre", "Dubbed", "Five Star", "Slideways", "Apex", "Stanced EG", "Countersteer", "Endo v1", "Endo v2 Dish", "Gruppe Z", "Choku-Dori", "Chicane", "Saisoku", "Dished Eight", "Fujiwara", "Zokusha", "Battle VIII", "Rally Master"]
+};
+
+const wheelImages = {
+  "Bennys Bespoke": "/images/wheels/bennys-bespoke.png",
+  "Bennys Originals": "/images/wheels/bennys-originals.png",
+  "Race": "/images/wheels/race.png",
+  "Bike": "/images/wheels/bike.png",
+  "High End": "/images/wheels/high-end.png",
+  "Lowrider": "/images/wheels/lowrider.png",
+  "Muscle": "/images/wheels/muscle.png",
+  "Offroad": "/images/wheels/offroad.png",
+  "Sport": "/images/wheels/sport.png",
+  "Street": "/images/wheels/street.png",
+  "SUV": "/images/wheels/suv.png",
+  "Track": "/images/wheels/track.png",
+  "Tuner": "/images/wheels/tuner.png"
+};
+
+const preferredRimCats = ["Bennys Bespoke", "Bennys Originals", "Race"];
 const tireDesigns = ["None", "White lines", "Classic", "Retro", "Red", "Blue"];
-const headlightAndNeonColors = ["Custom RGB", "Default", "Pure White", "Blue", "Electric Blue", "Mint Green", "Lime Green", "Yellow", "Golden Shower", "Orange", "Red", "Poncho Pink", "Hot Pink", "Purple", "Blacklight"];
+const windowTints = ["Clear", "Green", "Light Smoke", "Dark Smoke", "Limo", "Pure Black"];
+const plateTypes = ["Blue on White 1", "Blue on White 2", "Blue on White 3", "Yellow on Blue", "Yellow on Black", "North Yankton"];
+const headlightAndNeonColors = ["Default", "Pure White", "Blue", "Electric Blue", "Mint Green", "Lime Green", "Yellow", "Golden Shower", "Orange", "Red", "Poncho Pink", "Hot Pink", "Purple", "Blacklight"];
 ---
 
-<MainLayout title="DMO Generator" description="Build custom GTA Online vehicle specs with colors, rims, neon, and more. Free DMO generator for the Official Nugzz Crew community.">
-  <div class="max-w-5xl mx-auto px-4 py-12">
+<MainLayout title="DMO Generator" description="Unselected-only GTA Online DMO generator with vivid/realistic randomizers and wheel previews. Official Nugzz Crew.">
+  <div class="max-w-6xl mx-auto px-4 py-12">
     <div class="mb-10 text-center">
       <h1 class="text-4xl font-header text-gold uppercase tracking-tighter mb-2">DMO Generator</h1>
-      <p class="text-zinc-400 uppercase text-xs tracking-[0.2em]">Build your spec for the Fam Bam</p>
+      <p class="text-zinc-400 uppercase text-xs tracking-[0.2em]">Unselected Colors Only • Benny/Race Preferred • Compact Wheel Preview</p>
     </div>
 
     <input type="color" id="colorPicker" class="sr-only" />
@@ -26,9 +65,18 @@ const headlightAndNeonColors = ["Custom RGB", "Default", "Pure White", "Blue", "
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
       <div class="lg:col-span-7 bg-zinc-900/40 p-6 rounded-3xl border border-zinc-800 space-y-6">
         
+        <div class="flex gap-3">
+          <button id="randomVivid" type="button" class="flex-1 bg-gradient-to-r from-pink-600 to-purple-600 hover:from-pink-500 hover:to-purple-500 text-white font-black uppercase py-3 rounded-xl text-xs tracking-widest transition-all">
+            Random Vivid (Benny/Race)
+          </button>
+          <button id="randomRealistic" type="button" class="flex-1 bg-gradient-to-r from-zinc-600 to-zinc-800 hover:from-zinc-500 hover:to-zinc-700 text-white font-black uppercase py-3 rounded-xl text-xs tracking-widest transition-all">
+            Random Realistic
+          </button>
+        </div>
+
         <div class="space-y-4">
           <div>
-            <label class="block text-[10px] text-zinc-500 uppercase font-black mb-1">Vehicle or Set:</label>
+            <label class="block text-[10px] text-zinc-500 uppercase font-black mb-1">Vehicle:</label>
             <input type="text" id="vehicle" placeholder="e.g. Buffalo STX" class="w-full bg-black border border-zinc-800 rounded-lg p-3 text-white text-sm outline-none focus:border-gold" />
           </div>
 
@@ -38,126 +86,137 @@ const headlightAndNeonColors = ["Custom RGB", "Default", "Pure White", "Blue", "
               <input type="text" id="plate" maxlength="8" placeholder="NUGZZ" class="w-full bg-black border border-zinc-800 rounded-lg p-3 text-white text-sm uppercase font-mono outline-none focus:border-gold" />
             </div>
             <div>
-                <label class="block text-[10px] text-zinc-500 uppercase font-black mb-1">Windows Tint:</label>
-                <select id="windows" class="bg-black border border-zinc-800 rounded-lg p-3 text-white text-sm w-full outline-none focus:border-gold">
-                    <option value="Clear">Clear</option>
-                    <option value="Green">Green</option>
-                </select>
+              <label class="block text-[10px] text-zinc-500 uppercase font-black mb-1">Plate Type:</label>
+              <select id="plateType" class="w-full bg-black border border-zinc-800 rounded-lg p-3 text-white text-sm outline-none focus:border-gold">
+                {plateTypes.map(p => <option value={p}>{p}</option>)}
+              </select>
             </div>
           </div>
 
-          <div id="rgbInputArea" class="bg-gold/10 p-4 rounded-xl border border-gold/50" style="display: none;">
-            <label class="block text-[10px] text-gold uppercase font-black mb-2 tracking-widest flex justify-between">
-                <span>⚠️ SHARED PAINT RGB:</span>
-            </label>
-            <input type="text" id="sharedRgb" placeholder="212, 175, 55" class="w-full bg-black border-2 border-gold rounded-lg p-3 text-white text-sm font-mono outline-none" />
-          </div>
-
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="grid grid-cols-2 gap-4">
             <div>
-                <label class="block text-[10px] text-zinc-500 uppercase font-black mb-1">Headlight Color:</label>
-                <select id="headlights" class="bg-black border border-zinc-800 rounded-lg p-3 text-white text-sm w-full outline-none focus:border-gold">
-                    {headlightAndNeonColors.filter(c => c !== "Custom RGB").map(h => <option value={h}>{h}</option>)}
-                </select>
+              <label class="block text-[10px] text-zinc-500 uppercase font-black mb-1">Window Tint:</label>
+              <select id="windows" class="w-full bg-black border border-zinc-800 rounded-lg p-3 text-white text-sm outline-none focus:border-gold">
+                {windowTints.map(w => <option value={w}>{w}</option>)}
+              </select>
             </div>
-            <div class="space-y-1">
-              <label class="block text-[10px] text-zinc-500 uppercase font-black mb-1">Neon Color:</label>
-              <div class="flex gap-2 items-center">
-                  <select id="neon" class="flex-1 bg-black border border-zinc-800 rounded-lg p-3 text-white text-sm outline-none focus:border-gold">
-                      {headlightAndNeonColors.map(c => <option value={c}>{c}</option>)}
-                  </select>
-                  <div id="neonPrev" class="w-8 h-12 rounded border border-zinc-700 bg-zinc-800 shrink-0 cursor-pointer hover:border-white transition-all"></div>
-              </div>
-            </div>
-          </div>
-
-          <div id="neonRgbArea" class="bg-blue-500/10 p-4 rounded-xl border border-blue-500/50" style="display: none;">
-            <label class="block text-[10px] text-blue-400 uppercase font-black mb-2 tracking-widest">
-                <span>🌈 NEON RGB VALUE:</span>
-            </label>
-            <input type="text" id="neonRgb" placeholder="0, 255, 255" class="w-full bg-black border-2 border-blue-500 rounded-lg p-3 text-white text-sm font-mono outline-none" />
-          </div>
-
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div class="space-y-1">
-                <label class="text-[10px] text-zinc-500 uppercase font-black">Primary Color / RGB:</label>
-                <div class="flex gap-2 items-center">
-                    <select id="primary" class="flex-1 bg-black border border-zinc-800 rounded-lg p-3 text-white text-sm outline-none focus:border-gold">
-                        {primaryUnselected.map(c => <option value={c}>{c}</option>)}
-                    </select>
-                    <div id="primaryPrev" class="w-8 h-12 rounded border border-zinc-700 bg-zinc-800 shrink-0 cursor-pointer hover:border-white transition-all"></div>
-                </div>
-            </div>
-            <div class="space-y-1">
-                <label class="text-[10px] text-zinc-500 uppercase font-black">Secondary Color / RGB:</label>
-                <div class="flex gap-2 items-center">
-                    <select id="secondary" class="flex-1 bg-black border border-zinc-800 rounded-lg p-3 text-white text-sm outline-none focus:border-gold">
-                        {secondaryUnselected.map(c => <option value={c}>{c}</option>)}
-                    </select>
-                    <div id="secondaryPrev" class="w-8 h-12 rounded border border-zinc-700 bg-zinc-800 shrink-0 cursor-pointer hover:border-white transition-all"></div>
-                </div>
+            <div>
+              <label class="block text-[10px] text-zinc-500 uppercase font-black mb-1">Headlight Color:</label>
+              <select id="headlights" class="w-full bg-black border border-zinc-800 rounded-lg p-3 text-white text-sm outline-none focus:border-gold">
+                {headlightAndNeonColors.map(h => <option value={h}>{h}</option>)}
+              </select>
             </div>
           </div>
 
           <div>
             <label class="block text-[10px] text-zinc-500 uppercase font-black mb-1">Paint Texture:</label>
             <select id="texture" class="w-full bg-black border border-zinc-800 rounded-lg p-3 text-white text-sm outline-none focus:border-gold">
-              {textures.map(t => <option value={t}>{t}</option>)}
+              {textureOrder.filter(t => byTexture[t]).map(t => <option value={t}>{t}</option>)}
             </select>
+            <p class="text-[9px] text-zinc-500 mt-1">Only unselected/unobtainable colors. Chrome hides color • Matte/Worn make pearls pop.</p>
           </div>
 
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div class="space-y-1">
-                <label class="text-[10px] text-zinc-500 uppercase font-black">Pearlescent:</label>
-                <div class="flex gap-2 items-center">
-                    <select id="pearl" class="flex-1 bg-black border border-zinc-800 rounded-lg p-3 text-white text-sm outline-none focus:border-gold">
-                        {pearlUnselected.map(c => <option value={c}>{c}</option>)}
-                    </select>
-                    <div id="pearlPrev" class="w-8 h-12 rounded border border-zinc-700 bg-zinc-800 shrink-0"></div>
-                </div>
+              <label class="text-[10px] text-zinc-500 uppercase font-black">Primary (unselected only):</label>
+              <div class="flex gap-2 items-center">
+                <select id="primary" class="flex-1 bg-black border border-zinc-800 rounded-lg p-3 text-white text-sm outline-none focus:border-gold"></select>
+                <div id="primaryPrev" class="w-8 h-12 rounded border border-zinc-700 bg-zinc-800 shrink-0"></div>
+              </div>
             </div>
             <div class="space-y-1">
-                <label class="text-[10px] text-zinc-500 uppercase font-black">Interior Color:</label>
-                <div class="flex gap-2 items-center">
-                    <select id="interior" class="flex-1 bg-black border border-zinc-800 rounded-lg p-3 text-white text-sm outline-none focus:border-gold">
-                        {interiorUnselected.map(c => <option value={c}>{c}</option>)}
-                    </select>
-                    <div id="interiorPrev" class="w-8 h-12 rounded border border-zinc-700 bg-zinc-800 shrink-0"></div>
-                </div>
+              <label class="text-[10px] text-zinc-500 uppercase font-black">Secondary (unselected only):</label>
+              <div class="flex gap-2 items-center">
+                <select id="secondary" class="flex-1 bg-black border border-zinc-800 rounded-lg p-3 text-white text-sm outline-none focus:border-gold"></select>
+                <div id="secondaryPrev" class="w-8 h-12 rounded border border-zinc-700 bg-zinc-800 shrink-0"></div>
+              </div>
             </div>
           </div>
 
+          <div class="flex items-center gap-3 p-3 bg-zinc-800/50 rounded-lg border border-zinc-700">
+            <input type="checkbox" id="crewBoth" class="w-4 h-4 accent-gold cursor-pointer" />
+            <label for="crewBoth" class="text-[10px] text-zinc-300 uppercase font-black cursor-pointer tracking-widest">Crew Color on BOTH Primary & Secondary</label>
+          </div>
+
+          <div id="rgbInputArea" class="bg-gold/10 p-4 rounded-xl border border-gold/50" style="display:none;">
+            <label class="block text-[10px] text-gold uppercase font-black mb-2">Crew / Custom RGB:</label>
+            <input type="text" id="sharedRgb" placeholder="212, 175, 55" class="w-full bg-black border-2 border-gold rounded-lg p-3 text-white text-sm font-mono outline-none" />
+          </div>
+
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="space-y-1">
+              <label class="text-[10px] text-zinc-500 uppercase font-black">Pearlescent (unselected):</label>
+              <div class="flex gap-2 items-center">
+                <select id="pearl" class="flex-1 bg-black border border-zinc-800 rounded-lg p-3 text-white text-sm outline-none focus:border-gold"></select>
+                <div id="pearlPrev" class="w-8 h-12 rounded border border-zinc-700 bg-zinc-800 shrink-0"></div>
+              </div>
+            </div>
+            <div class="space-y-1">
+              <label class="text-[10px] text-zinc-500 uppercase font-black">Interior / Trim (unselected):</label>
+              <div class="flex gap-2 items-center">
+                <select id="interior" class="flex-1 bg-black border border-zinc-800 rounded-lg p-3 text-white text-sm outline-none focus:border-gold"></select>
+                <div id="interiorPrev" class="w-8 h-12 rounded border border-zinc-700 bg-zinc-800 shrink-0"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 items-start">
+            <div>
+              <label class="block text-[10px] text-zinc-500 uppercase font-black mb-1">Wheel Category:</label>
+              <select id="wheelCategory" class="w-full bg-black border border-zinc-800 rounded-lg p-3 text-white text-sm outline-none focus:border-gold">
+                {Object.keys(wheelCategories).map(cat => <option value={cat}>{cat}</option>)}
+              </select>
+            </div>
             <div>
               <label class="block text-[10px] text-zinc-500 uppercase font-black mb-1">Rim Style:</label>
-              <input type="text" id="rimStyle" placeholder="e.g. Bennys Bespoke" class="w-full bg-black border border-zinc-800 rounded-lg p-3 text-white text-sm outline-none focus:border-gold" />
-            </div>
-            <div class="space-y-1">
-                <label class="text-[10px] text-zinc-500 uppercase font-black">Rim Color:</label>
-                <div class="flex gap-2 items-center">
-                    <select id="rimColor" class="flex-1 bg-black border border-zinc-800 rounded-lg p-3 text-white text-sm outline-none focus:border-gold">
-                        {rimUnselected.map(c => <option value={c}>{c}</option>)}
-                    </select>
-                    <div id="rimColorPrev" class="w-8 h-12 rounded border border-zinc-700 bg-zinc-800 shrink-0"></div>
-                </div>
+              <select id="rimStyle" class="w-full bg-black border border-zinc-800 rounded-lg p-3 text-white text-sm outline-none focus:border-gold"></select>
             </div>
           </div>
 
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 items-end">
+          <div class="flex items-center gap-4">
+            <img id="wheelThumb" src="/images/wheels/bennys-bespoke.png" alt="Wheel category" class="w-24 h-16 object-cover rounded border border-zinc-700 cursor-pointer hover:border-gold transition-all" />
+            <button id="expandWheel" type="button" class="text-[10px] text-zinc-400 uppercase tracking-widest hover:text-gold">Click thumb or here to expand full grid</button>
+          </div>
+
+          <div id="wheelExpanded" class="hidden mt-2">
+            <img id="wheelFull" src="/images/wheels/bennys-bespoke.png" alt="Full wheel grid" class="w-full rounded-lg border border-zinc-700 max-h-96 object-contain bg-black" />
+            <button id="collapseWheel" type="button" class="mt-2 text-[10px] text-zinc-500 uppercase tracking-widest hover:text-gold">Collapse</button>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="space-y-1">
+              <label class="text-[10px] text-zinc-500 uppercase font-black">Rim Color (unselected):</label>
+              <div class="flex gap-2 items-center">
+                <select id="rimColor" class="flex-1 bg-black border border-zinc-800 rounded-lg p-3 text-white text-sm outline-none focus:border-gold"></select>
+                <div id="rimColorPrev" class="w-8 h-12 rounded border border-zinc-700 bg-zinc-800 shrink-0"></div>
+              </div>
+            </div>
             <div>
               <label class="block text-[10px] text-zinc-500 uppercase font-black mb-1">Tire Design:</label>
               <select id="tires" class="w-full bg-black border border-zinc-800 rounded-lg p-3 text-white text-sm outline-none focus:border-gold">
                 {tireDesigns.map(d => <option value={d}>{d}</option>)}
               </select>
             </div>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 items-end">
+            <div class="space-y-1">
+              <label class="text-[10px] text-zinc-500 uppercase font-black">Neon Color:</label>
+              <div class="flex gap-2 items-center">
+                <select id="neon" class="flex-1 bg-black border border-zinc-800 rounded-lg p-3 text-white text-sm outline-none focus:border-gold">
+                  {headlightAndNeonColors.map(c => <option value={c}>{c}</option>)}
+                </select>
+                <div id="neonPrev" class="w-8 h-12 rounded border border-zinc-700 bg-zinc-800 shrink-0"></div>
+              </div>
+            </div>
             <div class="flex items-center gap-3 p-3 bg-zinc-800/50 rounded-lg border border-zinc-700 h-[46px]">
-                <input type="checkbox" id="activator" class="w-4 h-4 accent-gold cursor-pointer" />
-                <label for="activator" class="text-[10px] text-zinc-300 uppercase font-black cursor-pointer tracking-widest">Activator</label>
+              <input type="checkbox" id="activator" class="w-4 h-4 accent-gold cursor-pointer" />
+              <label for="activator" class="text-[10px] text-zinc-300 uppercase font-black cursor-pointer tracking-widest">Activator</label>
             </div>
           </div>
         </div>
 
-        <button id="mainGenerateBtn" class="w-full bg-gold hover:bg-white text-black font-black uppercase py-5 rounded-xl tracking-widest transition-all">
+        <button id="mainGenerateBtn" type="button" class="w-full bg-gold hover:bg-white text-black font-black uppercase py-5 rounded-xl tracking-widest transition-all">
           Generate DMO Spec
         </button>
       </div>
@@ -165,8 +224,8 @@ const headlightAndNeonColors = ["Custom RGB", "Default", "Pure White", "Blue", "
       <div class="lg:col-span-5">
         <div class="sticky top-24">
           <div class="bg-black border-2 border-dashed border-zinc-800 rounded-3xl p-6">
-            <textarea id="finalOutput" readonly class="bg-transparent font-mono text-sm h-[520px] w-full resize-none outline-none border-none text-gold" placeholder="Ready for NUGZZ..."></textarea>
-            <button id="copyFinal" class="mt-4 w-full bg-zinc-800 hover:bg-zinc-700 text-white font-bold uppercase py-4 rounded-xl transition-all">
+            <textarea id="finalOutput" readonly class="bg-transparent font-mono text-sm h-[640px] w-full resize-none outline-none border-none text-gold" placeholder="Ready for NUGZZ..."></textarea>
+            <button id="copyFinal" type="button" class="mt-4 w-full bg-zinc-800 hover:bg-zinc-700 text-white font-bold uppercase py-4 rounded-xl transition-all">
               Copy To Clipboard
             </button>
           </div>
@@ -176,107 +235,124 @@ const headlightAndNeonColors = ["Custom RGB", "Default", "Pure White", "Blue", "
   </div>
 </MainLayout>
 
-<script is:inline>
-  const hexCodes = {
-    "Alloy": "#666666", "Anthracite Gray": "#1C1D21", "Baby Blue": "#5082C3", "BeechWood Brown": "#2E2823", "Bison Brown": "#1C1916", "Black": "#0D0C10", "Black Poly": "#0D0C10", "Black Steel": "#212121", "Blaze Red": "#5F0A0A", "Bleached Brown": "#423930", "Blue": "#1A1F2B", "Blue Silver": "#313845", "Bluish Silver": "#4E5660", "Bright Blue/Slate Blue": "#455364", "Bright Green": "#009900", "Bright Orange": "#F27D00", "Bright Purple": "#400E52", "Bright Red": "#820707", "Bronze": "#413023", "Brown": "#261D17", "Brushed Aluminium": "#474E54", "Brushed Black Steel": "#121315", "Brushed Gold": "#4A3B2B", "Brushed Steel": "#272D33", "Cabernet Red": "#1F0206", "Candy Red": "#660000", "Carbon Black": "#050505", "Cast Iron Silver": "#1E1E1E", "Champagne": "#655C50", "Chocolate Brown": "#18100A", "Chrome": "#929292", "Cream": "#B8AE96", "Creek Brown": "#2A211D", "Dark Blue": "#0A0C17", "Dark Brown": "#0E0D0B", "Dark Earth": "#231D19", "Dark Green": "#05130D", "Dark Red": "#1B0202", "Dark Silver": "#1E1E1E", "Dark Steel": "#12151A", "Desert Tan": "#6A5C4A", "Dew Yellow/Yellow Bird": "#B79600", "Diamond Blue": "#4E5660", "Epsilon Blue": "#355990", "Feltzer Brown": "#2A211D", "Fluorescent Blue": "#00ADFF", "Foliage Green": "#242E25", "Forest Green": "#0C1410", "Formula Red": "#540000", "Frost White": "#ECF0F0", "Galaxy Blue": "#001426", "Garnet Red": "#350406", "Gasoline Green": "#051D21", "Gold": "#47351B", "Golden Red": "#450A0A", "Grace Red": "#3E0204", "Graphite": "#15191E", "Gray": "#333333", "Green": "#0E1F18", "Green Bright": "#009900", "Gun Metal": "#283034", "Harbor Blue": "#001C57", "Honey Beige": "#574431", "Hot Pink": "#B01259", "Hunter Green": "#0C1410", "Ice White": "#F0F0F0", "Lava Red": "#210202", "Light Blue": "#1D2D44", "Light Brown": "#3B3026", "Light Gray": "#737373", "Light Orange": "#CF6300", "Lightning Blue": "#0045FF", "Lime Green": "#244105", "MP100": "#637380", "Maple Brown": "#261D17", "Mariner Blue": "#1A1F2B", "Maui Blue Poly": "#1D2D44", "Medium Brown": "#18100A", "Midnight Blue": "#010816", "Midnight Purple": "#070310", "Midnight Purple/V Dark Blue": "#070310", "Midnight Silver": "#0D1116", "Moss Brown": "#0E1F18", "Nautical Blue": "#001426", "Off White": "#B8B3A8", "Olive Army Green": "#24231E", "Olive Drab": "#1A1A11", "Olive Green": "#05130D", "Orange": "#9E4006", "Orange 2": "#F27D00", "Pea Green/Securicor Green": "#274227", "Pfister Pink": "#B01259", "Police Blue": "#000620", "Pure Gold": "#3D2B13", "Pure White": "#FFFFFF", "Race Yellow": "#C29100", "Racing Blue": "#001C57", "Racing Green": "#001A12", "Red": "#690000", "Rolled Steel": "#212121", "Saddle Brown": "#321B13", "Salmon Pink": "#5F3D41", "Sandy Brown": "#423226", "Saxon Blue": "#355990", "Schafter Purple": "#373E52", "Sea Foam Blue": "#5082C3", "Sea Green": "#011A19", "Sea Wash": "#313845", "Shadow Silver": "#121417", "Shawdow Silver": "#121417", "Sienna Brown": "#0E0D0B", "Silver": "#515554", "Silver Grey": "#474E54", "Spinnaker Purple": "#400E52", "Stone Silver": "#1E2329", "Straw Beige": "#B8AE96", "Straw Brown": "#423930", "Sunrise Orange": "#CF6300", "Sunset Red": "#400708", "Surf Blue": "#03394D", "Taxi Yellow": "#7F6500", "Torino Red": "#4E0303", "Ultra Blue": "#0045FF", "White": "#919191", "Wine Red": "#160102", "Woodbeach Brown": "#2E2823", "Yellow": "#B79600"
-  };
+<script is:inline define:vars={{ unselectedColors, wheelCategories, byTexture, preferredRimCats, wheelImages }}>
+  const hexMap = {};
+  unselectedColors.forEach(c => { hexMap[c.name] = c.hex; });
 
-  const picker = document.getElementById('colorPicker');
-  const sharedRgbInp = document.getElementById('sharedRgb');
-  const neonRgbInp = document.getElementById('neonRgb');
-  let activeTarget = 'paint';
-
-  const hexToRgbStr = (hex) => {
-    const r = parseInt(hex.slice(1, 3), 16);
-    const g = parseInt(hex.slice(3, 5), 16);
-    const b = parseInt(hex.slice(5, 7), 16);
-    return `${r}, ${g}, ${b}`;
-  };
-
-  const rgbToHexStr = (rgbStr) => {
-    if (!rgbStr || !rgbStr.includes(',')) return "#000000";
-    const parts = rgbStr.split(',').map(n => parseInt(n.trim()));
-    if (parts.length !== 3 || parts.some(isNaN)) return "#000000";
-    return "#" + parts.map(x => Math.min(255, Math.max(0, x)).toString(16).padStart(2, '0')).join('');
-  };
-
-  function refreshUI() {
-    const ids = ['primary', 'secondary', 'neon', 'pearl', 'interior', 'rimColor'];
-    
-    ids.forEach(id => {
-      const select = document.getElementById(id);
-      const box = document.getElementById(id + 'Prev');
-      if (!select || !box) return;
-
-      if (select.value === "Custom RGB") {
-        const val = (id === 'neon') ? neonRgbInp.value : sharedRgbInp.value;
-        if (val && val.split(',').length === 3) {
-          box.style.background = "";
-          box.style.backgroundColor = `rgb(${val})`;
-        } else {
-          box.style.background = "conic-gradient(from 0deg, red, yellow, green, cyan, blue, magenta, red)";
-        }
-      } else {
-        box.style.background = "";
-        box.style.backgroundColor = hexCodes[select.value] || "#111111";
-      }
-    });
-
-    document.getElementById('rgbInputArea').style.display = (document.getElementById('primary').value === "Custom RGB" || document.getElementById('secondary').value === "Custom RGB") ? "block" : "none";
-    document.getElementById('neonRgbArea').style.display = (document.getElementById('neon').value === "Custom RGB") ? "block" : "none";
+  function getUnselected(texture, flag) {
+    return (byTexture[texture] || []).filter(c => !c[flag]);
   }
 
-  ['primary', 'secondary', 'neon', 'pearl', 'interior', 'rimColor'].forEach(id => {
-    const el = document.getElementById(id);
-    el.addEventListener('change', refreshUI);
-    
-    const pr = document.getElementById(id + 'Prev');
-    if (pr && (id === 'primary' || id === 'secondary' || id === 'neon')) {
-      pr.addEventListener('click', () => {
-        activeTarget = id === 'neon' ? 'neon' : 'paint';
-        picker.click();
-      });
-    }
+  function populateSelect(selectId, texture, flag) {
+    const sel = document.getElementById(selectId);
+    if (!sel) return;
+    const list = getUnselected(texture, flag);
+    sel.innerHTML = '<option value="">-- Unselected Only --</option>' + 
+      list.map(c => `<option value="${c.name}">${c.name}</option>`).join('');
+  }
+
+  function refreshPreviews() {
+    ['primary','secondary','pearl','interior','rimColor','neon'].forEach(id => {
+      const sel = document.getElementById(id);
+      const box = document.getElementById(id + 'Prev');
+      if (!sel || !box) return;
+      const name = sel.value;
+      box.style.backgroundColor = hexMap[name] || '#111';
+    });
+  }
+
+  function refreshAll() {
+    const texture = document.getElementById('texture').value;
+    populateSelect('primary', texture, 'primary');
+    populateSelect('secondary', texture, 'secondary');
+    populateSelect('pearl', texture, 'pearl');
+    populateSelect('interior', texture, 'interior');
+    populateSelect('rimColor', texture, 'rim');
+    refreshPreviews();
+  }
+
+  function populateRims() {
+    const cat = document.getElementById('wheelCategory').value;
+    const sel = document.getElementById('rimStyle');
+    const styles = wheelCategories[cat] || [];
+    sel.innerHTML = styles.map(s => `<option value="${s}">${s}</option>`).join('');
+
+    const imgSrc = wheelImages[cat] || wheelImages["Bennys Bespoke"];
+    document.getElementById('wheelThumb').src = imgSrc;
+    document.getElementById('wheelFull').src = imgSrc;
+  }
+
+  function randomFrom(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
+
+  function randomBuild(vivid) {
+    const texture = vivid 
+      ? randomFrom(['Other','Matte','Metallic','Worn']) 
+      : randomFrom(['Metallic','Utility','Worn','Metals']);
+    document.getElementById('texture').value = texture;
+    refreshAll();
+
+    const primaries = getUnselected(texture, 'primary');
+    const secondaries = getUnselected(texture, 'secondary');
+    const pearls = getUnselected(texture, 'pearl');
+    const interiors = getUnselected(texture, 'interior');
+    const rims = getUnselected(texture, 'rim');
+
+    if (primaries.length) document.getElementById('primary').value = randomFrom(primaries).name;
+    if (secondaries.length) document.getElementById('secondary').value = randomFrom(secondaries).name;
+    if (pearls.length) document.getElementById('pearl').value = randomFrom(pearls).name;
+    if (interiors.length) document.getElementById('interior').value = randomFrom(interiors).name;
+    if (rims.length) document.getElementById('rimColor').value = randomFrom(rims).name;
+
+    const cat = vivid 
+      ? randomFrom(preferredRimCats) 
+      : randomFrom(Object.keys(wheelCategories));
+    document.getElementById('wheelCategory').value = cat;
+    populateRims();
+    const styles = wheelCategories[cat];
+    if (styles.length) document.getElementById('rimStyle').value = randomFrom(styles);
+
+    refreshPreviews();
+  }
+
+  document.getElementById('texture').addEventListener('change', refreshAll);
+  document.getElementById('wheelCategory').addEventListener('change', populateRims);
+  ['primary','secondary','pearl','interior','rimColor','neon'].forEach(id => {
+    document.getElementById(id)?.addEventListener('change', refreshPreviews);
   });
 
-  picker.addEventListener('input', () => {
-    const rgb = hexToRgbStr(picker.value);
-    if (activeTarget === 'neon') {
-      neonRgbInp.value = rgb;
-    } else {
-      sharedRgbInp.value = rgb;
-    }
-    refreshUI();
-  });
+  document.getElementById('randomVivid').addEventListener('click', () => randomBuild(true));
+  document.getElementById('randomRealistic').addEventListener('click', () => randomBuild(false));
 
-  sharedRgbInp.addEventListener('input', refreshUI);
-  neonRgbInp.addEventListener('input', refreshUI);
+  document.getElementById('wheelThumb').addEventListener('click', () => {
+    document.getElementById('wheelExpanded').classList.toggle('hidden');
+  });
+  document.getElementById('expandWheel').addEventListener('click', () => {
+    document.getElementById('wheelExpanded').classList.remove('hidden');
+  });
+  document.getElementById('collapseWheel').addEventListener('click', () => {
+    document.getElementById('wheelExpanded').classList.add('hidden');
+  });
 
   document.getElementById('mainGenerateBtn').addEventListener('click', () => {
-    const vehicle = document.getElementById('vehicle').value || 'Vehicle';
-    const plate = document.getElementById('plate').value || 'NUGZZ';
-    const windows = document.getElementById('windows').value;
-    const headlights = document.getElementById('headlights').value;
-    const neon = document.getElementById('neon').value;
-    const primary = document.getElementById('primary').value;
-    const secondary = document.getElementById('secondary').value;
-    const texture = document.getElementById('texture').value;
-    const pearl = document.getElementById('pearl').value;
-    const interior = document.getElementById('interior').value;
-    const rimStyle = document.getElementById('rimStyle').value || 'Stock';
-    const rimColor = document.getElementById('rimColor').value;
-    const tires = document.getElementById('tires').value;
-    const activator = document.getElementById('activator').checked;
-
-    let output = `=== DMO SPEC ===\nVehicle: ${vehicle}\nPlate: ${plate}\nWindows: ${windows}\nHeadlights: ${headlights}\nNeon: ${neon}\nPrimary: ${primary}\nSecondary: ${secondary}\nTexture: ${texture}\nPearl: ${pearl}\nInterior: ${interior}\nRim Style: ${rimStyle}\nRim Color: ${rimColor}\nTires: ${tires}\nActivator: ${activator ? 'Yes' : 'No'}\n`;
-
-    if (primary === 'Custom RGB' || secondary === 'Custom RGB') {
-      output += `Shared RGB: ${sharedRgbInp.value || 'Not set'}\n`;
-    }
-    if (neon === 'Custom RGB') {
-      output += `Neon RGB: ${neonRgbInp.value || 'Not set'}\n`;
-    }
-
+    const get = id => document.getElementById(id).value || 'N/A';
+    const output = `=== DMO SPEC (UNSELECTED ONLY) ===
+Vehicle: ${get('vehicle')}
+Plate: ${get('plate')} (${get('plateType')})
+Windows: ${get('windows')}
+Headlights: ${get('headlights')}
+Texture: ${get('texture')}
+Primary: ${get('primary')}
+Secondary: ${get('secondary')}
+Pearlescent: ${get('pearl')}
+Interior: ${get('interior')}
+Wheel Category: ${get('wheelCategory')}
+Rim Style: ${get('rimStyle')}
+Rim Color: ${get('rimColor')}
+Tires: ${get('tires')}
+Neon: ${get('neon')}
+Activator: ${document.getElementById('activator').checked ? 'Yes' : 'No'}
+Crew Both: ${document.getElementById('crewBoth').checked ? 'Yes' : 'No'}
+`;
     document.getElementById('finalOutput').value = output;
   });
 
@@ -284,6 +360,9 @@ const headlightAndNeonColors = ["Custom RGB", "Default", "Pure White", "Blue", "
     const box = document.getElementById('finalOutput');
     box.select();
     document.execCommand('copy');
-    alert('Copied to Clipboard!');
+    alert('Copied!');
   });
+
+  refreshAll();
+  populateRims();
 </script>
