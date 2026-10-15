@@ -32,8 +32,15 @@ const navLinks = [
   { href: '/emblem', label: 'Emblem Creator' },
 ];
 
-const isHomePage = Astro.url.pathname === '/' || Astro.url.pathname === '/index.html';
+const currentPath = Astro.url.pathname.replace(/\/$/, '') || '/';
+const isActive = (href: string) => {
+  if (href === '/') return currentPath === '/' || currentPath === '/index.html';
+  return currentPath === href || currentPath.startsWith(`${href}/`);
+};
+
+const isHomePage = currentPath === '/' || currentPath === '/index.html';
 const siteUrl = 'https://officialnugzzcrew.com';
+const desktopLinks = navLinks.slice(1);
 ---
 
 <html lang="en">
@@ -42,6 +49,7 @@ const siteUrl = 'https://officialnugzzcrew.com';
         <title>{title} | Official Nugzz Crew</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
         <meta name="description" content={description} />
+        <meta name="theme-color" content="#000000" />
         <link rel="canonical" href={new URL(Astro.url.pathname, siteUrl)} />
 
         <!-- Open Graph / Social -->
@@ -55,6 +63,7 @@ const siteUrl = 'https://officialnugzzcrew.com';
         <meta name="twitter:card" content="summary" />
         <meta name="twitter:title" content={`${title} | Official Nugzz Crew`} />
         <meta name="twitter:description" content={description} />
+        <meta name="twitter:image" content={`${siteUrl}/Logo.png`} />
 
         <link rel="icon" type="image/x-icon" href="/favicon.ico" />
         <link rel="icon" type="image/png" href="/favicon.png" />
@@ -65,8 +74,12 @@ const siteUrl = 'https://officialnugzzcrew.com';
         <script src="https://unpkg.com/lucide@latest"></script>
     </head>
     <body class="bg-black text-white antialiased">
-        <nav id="site-header" class="sticky top-0 z-50 bg-black/95 backdrop-blur-md border-b border-zinc-800 px-3 py-3 md:px-4">
-            <div class="max-w-7xl mx-auto relative flex flex-col items-center gap-1.5">
+        <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-[60] focus:bg-black focus:text-gold focus:px-4 focus:py-2 focus:rounded-lg focus:outline-gold">
+            Skip to content
+        </a>
+
+        <nav id="site-header" class="sticky top-0 z-50 bg-black/95 backdrop-blur-md border-b border-zinc-800 px-3 py-3 md:px-4 md:pt-3 md:pb-2">
+            <div class="max-w-7xl mx-auto flex flex-col items-center">
                 <div class="relative flex items-center justify-center w-full min-h-[48px]">
                     <button 
                         id="menu-toggle" 
@@ -85,18 +98,23 @@ const siteUrl = 'https://officialnugzzcrew.com';
                             Official Nugzz Crew
                         </span>
                     </a>
+                </div>
 
-                    <!-- Desktop nav -->
-                    <div class="hidden md:flex absolute right-0 items-center gap-1">
-                        {navLinks.slice(1).map((link) => (
-                            <a 
-                                href={link.href}
-                                class="px-3 py-2 rounded-lg text-zinc-300 hover:text-gold hover:bg-zinc-900/60 transition-colors uppercase tracking-wider text-xs font-bold focus-visible:outline-gold"
-                            >
-                                {link.label}
-                            </a>
-                        ))}
-                    </div>
+                <div class="hidden md:flex w-full items-center justify-center flex-wrap gap-1 pt-1">
+                    {desktopLinks.map((link) => (
+                        <a 
+                            href={link.href}
+                            aria-current={isActive(link.href) ? 'page' : undefined}
+                            class:list={[
+                                'px-3 py-1.5 rounded-lg transition-colors uppercase tracking-wider text-xs font-bold focus-visible:outline-gold',
+                                isActive(link.href)
+                                    ? 'text-gold bg-zinc-900/80'
+                                    : 'text-zinc-300 hover:text-gold hover:bg-zinc-900/60'
+                            ]}
+                        >
+                            {link.label}
+                        </a>
+                    ))}
                 </div>
             </div>
         </nav>
@@ -120,7 +138,13 @@ const siteUrl = 'https://officialnugzzcrew.com';
                 {navLinks.map((link) => (
                     <a 
                         href={link.href} 
-                        class="nav-link px-5 py-4 rounded-lg text-zinc-300 hover:text-gold hover:bg-zinc-900/70 transition-colors uppercase tracking-widest text-base font-bold focus-visible:outline-gold"
+                        aria-current={isActive(link.href) ? 'page' : undefined}
+                        class:list={[
+                            'nav-link px-5 py-4 rounded-lg transition-colors uppercase tracking-widest text-base font-bold focus-visible:outline-gold',
+                            isActive(link.href)
+                                ? 'text-gold bg-zinc-900/70'
+                                : 'text-zinc-300 hover:text-gold hover:bg-zinc-900/70'
+                        ]}
                     >
                         {link.label}
                     </a>
@@ -128,7 +152,7 @@ const siteUrl = 'https://officialnugzzcrew.com';
             </nav>
         </aside>
         
-        <main class="relative z-10">
+        <main id="main-content" class="relative z-10">
             <slot /> 
         </main>
 
