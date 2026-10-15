@@ -5,7 +5,7 @@ const defaultZone = "Locating Active Vector...";
 const defaultDetails = "Polling real-time scraping anchors from gtalens server maps...";
 ---
 
-<MainLayout title="GTA Resources & Tracker">
+<MainLayout title="GTA Resources & Tracker" description="Live Gun Van tracker and inventory for GTA Online. See current location, map, and discounted weapons for the Fam Bam.">
   <div class="max-w-5xl mx-auto px-4 py-12">
     
     <div class="mb-10 text-center">
@@ -35,7 +35,8 @@ const defaultDetails = "Polling real-time scraping anchors from gtalens server m
               id="vanMapImage" 
               src="" 
               alt="Gun Van Location Map" 
-              class="w-full h-full object-cover opacity-0 scale-100 transition-transform transition-opacity duration-500 ease-out group-hover:scale-200"
+              class="w-full h-full object-cover opacity-0 scale-100 transition-transform transition-opacity duration-500 ease-out group-hover:scale-200" 
+              loading="lazy"
             />
             
             <div class="absolute inset-x-0 top-1/2 border-t border-zinc-800/40 pointer-events-none"></div>
