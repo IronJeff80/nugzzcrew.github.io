@@ -1,3 +1,4 @@
+<<<<<<< HEAD:src/data/colors-full.json
 [
   {
     "texture": "Chrome",
@@ -1932,3 +1933,6 @@
     "selectedPearl": ""
   }
 ]
+=======
+[]
+>>>>>>> 6388e7962e173e06446bbb988273ca9b2279707a:src/data/colors.json
