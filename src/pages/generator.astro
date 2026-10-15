@@ -60,7 +60,7 @@ const realisticNames = ["Black", "Graphite", "Anthracite Gray", "Black Steel", "
   <div class="max-w-6xl mx-auto px-4 py-12">
     <div class="mb-10 text-center">
       <h1 class="text-4xl font-header text-gold uppercase tracking-tighter mb-2">DMO Generator</h1>
-      <p class="text-zinc-400 uppercase text-xs tracking-[0.2em]">Unselected Only • Crew on Neon/Primary/Secondary • Color squares update live</p>
+      <p class="text-zinc-400 uppercase text-xs tracking-[0.2em]">Unselected Only • Independent Neon Crew RGB • Color squares update live</p>
     </div>
 
     <input type="color" id="colorPicker" class="sr-only" />
@@ -142,7 +142,7 @@ const realisticNames = ["Black", "Graphite", "Anthracite Gray", "Black Steel", "
           </div>
 
           <div id="rgbInputArea" class="bg-gold/10 p-4 rounded-xl border border-gold/50" style="display:none;">
-            <label class="block text-[10px] text-gold uppercase font-black mb-2">Crew RGB (used by Primary/Secondary/Neon when set to Crew):</label>
+            <label class="block text-[10px] text-gold uppercase font-black mb-2">Paint Crew RGB (Primary / Secondary):</label>
             <input type="text" id="sharedRgb" placeholder="212, 175, 55" class="w-full bg-black border-2 border-gold rounded-lg p-3 text-white text-sm font-mono outline-none" />
           </div>
 
@@ -204,7 +204,7 @@ const realisticNames = ["Black", "Graphite", "Anthracite Gray", "Black Steel", "
 
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4 items-end">
             <div class="space-y-1">
-              <label class="text-[10px] text-zinc-500 uppercase font-black">Neon (Crew = uses RGB above):</label>
+              <label class="text-[10px] text-zinc-500 uppercase font-black">Neon:</label>
               <div class="flex gap-2 items-center">
                 <select id="neon" class="flex-1 bg-black border border-zinc-800 rounded-lg p-3 text-white text-sm outline-none focus:border-gold">
                   {neonOptions.map(c => <option value={c}>{c}</option>)}
@@ -216,6 +216,11 @@ const realisticNames = ["Black", "Graphite", "Anthracite Gray", "Black Steel", "
               <input type="checkbox" id="activator" class="w-4 h-4 accent-gold cursor-pointer" />
               <label for="activator" class="text-[10px] text-zinc-300 uppercase font-black cursor-pointer tracking-widest">Activator</label>
             </div>
+          </div>
+
+          <div id="neonRgbArea" class="bg-blue-500/10 p-4 rounded-xl border border-blue-500/50" style="display:none;">
+            <label class="block text-[10px] text-blue-400 uppercase font-black mb-2">Neon Crew RGB (independent):</label>
+            <input type="text" id="neonRgb" placeholder="0, 255, 255" class="w-full bg-black border-2 border-blue-500 rounded-lg p-3 text-white text-sm font-mono outline-none" />
           </div>
         </div>
 
@@ -261,14 +266,18 @@ const realisticNames = ["Black", "Graphite", "Anthracite Gray", "Black Steel", "
       list.map(c => `<option value="${c.name}">${c.name}</option>`).join('');
   }
 
+  function rgbToCss(rgb) {
+    if (!rgb || rgb.split(',').length !== 3) return '#666';
+    return `rgb(${rgb})`;
+  }
+
   function getColorForPreview(id) {
     const sel = document.getElementById(id);
     if (!sel) return '#111';
     const val = sel.value;
-    if (val === 'Crew' || val === 'Custom RGB') {
-      const rgb = document.getElementById('sharedRgb').value;
-      if (rgb && rgb.split(',').length === 3) return `rgb(${rgb})`;
-      return '#666';
+    if (val === 'Crew') {
+      if (id === 'neon') return rgbToCss(document.getElementById('neonRgb').value);
+      return rgbToCss(document.getElementById('sharedRgb').value);
     }
     return hexMap[val] || '#111';
   }
@@ -278,11 +287,14 @@ const realisticNames = ["Black", "Graphite", "Anthracite Gray", "Black Steel", "
       const box = document.getElementById(id + 'Prev');
       if (box) box.style.backgroundColor = getColorForPreview(id);
     });
-    const showRgb = document.getElementById('primary').value === 'Crew' || 
-                    document.getElementById('secondary').value === 'Crew' || 
-                    document.getElementById('neon').value === 'Crew' ||
-                    document.getElementById('crewBoth').checked;
-    document.getElementById('rgbInputArea').style.display = showRgb ? 'block' : 'none';
+
+    const paintCrew = document.getElementById('primary').value === 'Crew' || 
+                      document.getElementById('secondary').value === 'Crew' || 
+                      document.getElementById('crewBoth').checked;
+    document.getElementById('rgbInputArea').style.display = paintCrew ? 'block' : 'none';
+
+    const neonCrew = document.getElementById('neon').value === 'Crew';
+    document.getElementById('neonRgbArea').style.display = neonCrew ? 'block' : 'none';
   }
 
   function refreshAll() {
@@ -330,12 +342,17 @@ const realisticNames = ["Black", "Graphite", "Anthracite Gray", "Black Steel", "
     ensureSelect('interior', texture, 'interior', preferred);
 
     if (vivid && Math.random() < 0.7) {
-      const rgb = `${Math.floor(Math.random()*256)}, ${Math.floor(Math.random()*256)}, ${Math.floor(Math.random()*256)}`;
-      document.getElementById('sharedRgb').value = rgb;
+      const paintRgb = `${Math.floor(Math.random()*256)}, ${Math.floor(Math.random()*256)}, ${Math.floor(Math.random()*256)}`;
+      document.getElementById('sharedRgb').value = paintRgb;
       if (Math.random() < 0.5) document.getElementById('primary').value = 'Crew';
       if (Math.random() < 0.4) document.getElementById('secondary').value = 'Crew';
-      if (Math.random() < 0.5) document.getElementById('neon').value = 'Crew';
       if (Math.random() < 0.4) document.getElementById('crewBoth').checked = true;
+    }
+
+    if (Math.random() < 0.6) {
+      document.getElementById('neon').value = 'Crew';
+      const neonRgb = `${Math.floor(Math.random()*256)}, ${Math.floor(Math.random()*256)}, ${Math.floor(Math.random()*256)}`;
+      document.getElementById('neonRgb').value = neonRgb;
     }
 
     const cat = vivid ? randomFrom(preferredRimCats) : randomFrom(Object.keys(wheelCategories));
@@ -349,7 +366,7 @@ const realisticNames = ["Black", "Graphite", "Anthracite Gray", "Black Steel", "
 
   document.getElementById('texture').addEventListener('change', refreshAll);
   document.getElementById('wheelCategory').addEventListener('change', populateRims);
-  ['primary','secondary','pearl','interior','rimColor','neon','sharedRgb'].forEach(id => {
+  ['primary','secondary','pearl','interior','rimColor','neon','sharedRgb','neonRgb'].forEach(id => {
     document.getElementById(id)?.addEventListener('change', refreshPreviews);
     document.getElementById(id)?.addEventListener('input', refreshPreviews);
   });
@@ -387,7 +404,8 @@ Tires: ${get('tires')}
 Neon: ${get('neon')}
 Activator: ${document.getElementById('activator').checked ? 'Yes' : 'No'}
 Crew Both: ${document.getElementById('crewBoth').checked ? 'Yes' : 'No'}
-Crew RGB: ${document.getElementById('sharedRgb').value || 'N/A'}
+Paint Crew RGB: ${document.getElementById('sharedRgb').value || 'N/A'}
+Neon Crew RGB: ${document.getElementById('neonRgb').value || 'N/A'}
 `;
     document.getElementById('finalOutput').value = output;
   });
