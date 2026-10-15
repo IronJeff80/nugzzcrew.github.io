@@ -50,7 +50,7 @@ const preferredRimCats = ["Bennys Bespoke", "Bennys Originals", "Race"];
 const tireDesigns = ["None", "White lines", "Classic", "Retro", "Red", "Blue"];
 const windowTints = ["Clear", "Green", "Light Smoke", "Dark Smoke", "Limo", "Pure Black"];
 const plateTypes = ["North Yankton"];
-const headlightAndNeonColors = ["Default", "Pure White", "Blue", "Electric Blue", "Mint Green", "Lime Green", "Yellow", "Golden Shower", "Orange", "Red", "Poncho Pink", "Hot Pink", "Purple", "Blacklight"];
+const neonOptions = ["Crew", "Pure White", "Blue", "Electric Blue", "Mint Green", "Lime Green", "Yellow", "Golden Shower", "Orange", "Red", "Poncho Pink", "Hot Pink", "Purple", "Blacklight"];
 
 const vividNames = ["Blaze Red", "Candy Red", "Bright Green", "Lime Green", "Race Yellow", "Sunrise Orange", "Hot Pink", "Fluorescent Blue", "Pfister Pink", "Ultra Blue", "Lightning Blue", "Dew Yellow", "Gasoline Green", "Bright Purple", "Orange", "Yellow", "Green Bright", "Epsilon Blue"];
 const realisticNames = ["Black", "Graphite", "Anthracite Gray", "Black Steel", "Cast Iron Silver", "Shadow Silver", "Midnight Blue", "Dark Blue", "Harbor Blue", "BeechWood Brown", "Bison Brown", "Chocolate Brown", "Saddle Brown", "Olive Drab", "Foliage Green", "Desert Tan", "Gun Metal", "Rolled Steel"];
@@ -60,7 +60,7 @@ const realisticNames = ["Black", "Graphite", "Anthracite Gray", "Black Steel", "
   <div class="max-w-6xl mx-auto px-4 py-12">
     <div class="mb-10 text-center">
       <h1 class="text-4xl font-header text-gold uppercase tracking-tighter mb-2">DMO Generator</h1>
-      <p class="text-zinc-400 uppercase text-xs tracking-[0.2em]">Unselected Only • Always fills Primary/Secondary/Pearl/Rim • Crew Color aware</p>
+      <p class="text-zinc-400 uppercase text-xs tracking-[0.2em]">Unselected Only • Crew on Neon/Primary/Secondary • Color squares update live</p>
     </div>
 
     <input type="color" id="colorPicker" class="sr-only" />
@@ -106,7 +106,7 @@ const realisticNames = ["Black", "Graphite", "Anthracite Gray", "Black Steel", "
             <div>
               <label class="block text-[10px] text-zinc-500 uppercase font-black mb-1">Headlight Color:</label>
               <select id="headlights" class="w-full bg-black border border-zinc-800 rounded-lg p-3 text-white text-sm outline-none focus:border-gold">
-                {headlightAndNeonColors.map(h => <option value={h}>{h}</option>)}
+                {neonOptions.filter(c => c !== 'Crew').map(h => <option value={h}>{h}</option>)}
               </select>
             </div>
           </div>
@@ -116,6 +116,7 @@ const realisticNames = ["Black", "Graphite", "Anthracite Gray", "Black Steel", "
             <select id="texture" class="w-full bg-black border border-zinc-800 rounded-lg p-3 text-white text-sm outline-none focus:border-gold">
               {textureOrder.filter(t => byTexture[t]).map(t => <option value={t}>{t}</option>)}
             </select>
+            <p class="text-[9px] text-zinc-500 mt-1">Other: RGB the texture or pick a color from Other. Same texture on both + 1 RGB is allowed. Otherwise RGB + unselected secondary.</p>
           </div>
 
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -141,7 +142,7 @@ const realisticNames = ["Black", "Graphite", "Anthracite Gray", "Black Steel", "
           </div>
 
           <div id="rgbInputArea" class="bg-gold/10 p-4 rounded-xl border border-gold/50" style="display:none;">
-            <label class="block text-[10px] text-gold uppercase font-black mb-2">Crew RGB:</label>
+            <label class="block text-[10px] text-gold uppercase font-black mb-2">Crew RGB (used by Primary/Secondary/Neon when set to Crew):</label>
             <input type="text" id="sharedRgb" placeholder="212, 175, 55" class="w-full bg-black border-2 border-gold rounded-lg p-3 text-white text-sm font-mono outline-none" />
           </div>
 
@@ -203,10 +204,10 @@ const realisticNames = ["Black", "Graphite", "Anthracite Gray", "Black Steel", "
 
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4 items-end">
             <div class="space-y-1">
-              <label class="text-[10px] text-zinc-500 uppercase font-black">Neon:</label>
+              <label class="text-[10px] text-zinc-500 uppercase font-black">Neon (Crew = uses RGB above):</label>
               <div class="flex gap-2 items-center">
                 <select id="neon" class="flex-1 bg-black border border-zinc-800 rounded-lg p-3 text-white text-sm outline-none focus:border-gold">
-                  {headlightAndNeonColors.map(c => <option value={c}>{c}</option>)}
+                  {neonOptions.map(c => <option value={c}>{c}</option>)}
                 </select>
                 <div id="neonPrev" class="w-8 h-12 rounded border border-zinc-700 bg-zinc-800 shrink-0"></div>
               </div>
@@ -256,17 +257,32 @@ const realisticNames = ["Black", "Graphite", "Anthracite Gray", "Black Steel", "
     const sel = document.getElementById(selectId);
     if (!sel) return;
     const list = getUnselected(texture, flag);
-    sel.innerHTML = '<option value="">-- Select --</option>' + 
+    sel.innerHTML = '<option value="">-- Select --</option><option value="Crew">Crew (RGB)</option>' + 
       list.map(c => `<option value="${c.name}">${c.name}</option>`).join('');
+  }
+
+  function getColorForPreview(id) {
+    const sel = document.getElementById(id);
+    if (!sel) return '#111';
+    const val = sel.value;
+    if (val === 'Crew' || val === 'Custom RGB') {
+      const rgb = document.getElementById('sharedRgb').value;
+      if (rgb && rgb.split(',').length === 3) return `rgb(${rgb})`;
+      return '#666';
+    }
+    return hexMap[val] || '#111';
   }
 
   function refreshPreviews() {
     ['primary','secondary','pearl','interior','rimColor','neon'].forEach(id => {
-      const sel = document.getElementById(id);
       const box = document.getElementById(id + 'Prev');
-      if (!sel || !box) return;
-      box.style.backgroundColor = hexMap[sel.value] || '#111';
+      if (box) box.style.backgroundColor = getColorForPreview(id);
     });
+    const showRgb = document.getElementById('primary').value === 'Crew' || 
+                    document.getElementById('secondary').value === 'Crew' || 
+                    document.getElementById('neon').value === 'Crew' ||
+                    document.getElementById('crewBoth').checked;
+    document.getElementById('rgbInputArea').style.display = showRgb ? 'block' : 'none';
   }
 
   function refreshAll() {
@@ -313,11 +329,13 @@ const realisticNames = ["Black", "Graphite", "Anthracite Gray", "Black Steel", "
     ensureSelect('rimColor', texture, 'rim', preferred);
     ensureSelect('interior', texture, 'interior', preferred);
 
-    if (vivid && Math.random() < 0.65) {
+    if (vivid && Math.random() < 0.7) {
       const rgb = `${Math.floor(Math.random()*256)}, ${Math.floor(Math.random()*256)}, ${Math.floor(Math.random()*256)}`;
       document.getElementById('sharedRgb').value = rgb;
-      document.getElementById('rgbInputArea').style.display = 'block';
-      if (Math.random() < 0.5) document.getElementById('crewBoth').checked = true;
+      if (Math.random() < 0.5) document.getElementById('primary').value = 'Crew';
+      if (Math.random() < 0.4) document.getElementById('secondary').value = 'Crew';
+      if (Math.random() < 0.5) document.getElementById('neon').value = 'Crew';
+      if (Math.random() < 0.4) document.getElementById('crewBoth').checked = true;
     }
 
     const cat = vivid ? randomFrom(preferredRimCats) : randomFrom(Object.keys(wheelCategories));
@@ -331,9 +349,11 @@ const realisticNames = ["Black", "Graphite", "Anthracite Gray", "Black Steel", "
 
   document.getElementById('texture').addEventListener('change', refreshAll);
   document.getElementById('wheelCategory').addEventListener('change', populateRims);
-  ['primary','secondary','pearl','interior','rimColor','neon'].forEach(id => {
+  ['primary','secondary','pearl','interior','rimColor','neon','sharedRgb'].forEach(id => {
     document.getElementById(id)?.addEventListener('change', refreshPreviews);
+    document.getElementById(id)?.addEventListener('input', refreshPreviews);
   });
+  document.getElementById('crewBoth')?.addEventListener('change', refreshPreviews);
 
   document.getElementById('randomVivid').addEventListener('click', () => randomBuild(true));
   document.getElementById('randomRealistic').addEventListener('click', () => randomBuild(false));
