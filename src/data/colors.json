@@ -1,7 +1,1 @@
-[
-  {"texture": "Metallic", "hex": "#080808", "name": "Black", "primary": false, "secondary": true, "pearl": true, "rim": true, "interior": true, "dashboard": false, "selectedPearl": "Metallic Black"},
-  {"texture": "Metallic", "hex": "#611009", "name": "Blaze Red", "primary": false, "secondary": true, "pearl": true, "rim": true, "interior": true, "dashboard": true, "selectedPearl": "Metallic Black"},
-  {"texture": "Matte", "hex": "#050505", "name": "Black", "primary": false, "secondary": true, "pearl": false, "rim": false, "interior": false, "dashboard": false, "selectedPearl": "Metallic Black"},
-  {"texture": "Other", "hex": "#FFFFFF", "name": "Pure White", "primary": false, "secondary": false, "pearl": false, "rim": false, "interior": false, "dashboard": false, "selectedPearl": ""},
-  {"texture": "Worn", "hex": "#050505", "name": "Black", "primary": false, "secondary": true, "pearl": false, "rim": false, "interior": false, "dashboard": false, "selectedPearl": "Metallic Black"}
-]
+PLACEHOLDER
