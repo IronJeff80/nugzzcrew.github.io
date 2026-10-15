@@ -59,7 +59,7 @@ const realisticNames = ["Black", "Graphite", "Anthracite Gray", "Black Steel", "
   <div class="max-w-6xl mx-auto px-4 py-12">
     <div class="mb-10 text-center">
       <h1 class="text-4xl font-header text-gold uppercase tracking-tighter mb-2">DMO Generator</h1>
-      <p class="text-zinc-400 uppercase text-xs tracking-[0.2em]">Texture does not lock colors • RGB or HEX • Rim/Pearl unselected only</p>
+      <p class="text-zinc-400 uppercase text-xs tracking-[0.2em]">Named colors stay on their texture • Custom RGB/HEX on any texture • Secondary always filled</p>
     </div>
 
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
@@ -107,7 +107,7 @@ const realisticNames = ["Black", "Graphite", "Anthracite Gray", "Black Steel", "
               </select>
             </div>
           </div>
-          <p class="text-[9px] text-zinc-500 -mt-2">Texture does not lock Primary/Secondary. You can use colors from the chosen texture, or custom RGB/HEX on this texture or a different one, or mix with any unselected color.</p>
+          <p class="text-[9px] text-zinc-500 -mt-2">Named colors only exist on their own texture. To get e.g. Matte Hot Pink you must select Matte + Custom RGB/HEX.</p>
 
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div class="space-y-1">
@@ -132,9 +132,8 @@ const realisticNames = ["Black", "Graphite", "Anthracite Gray", "Black Steel", "
           </div>
 
           <div id="rgbInputArea" class="bg-gold/10 p-4 rounded-xl border border-gold/50" style="display:none;">
-            <label class="block text-[10px] text-gold uppercase font-black mb-2">Custom Paint Color (RGB or HEX):</label>
+            <label class="block text-[10px] text-gold uppercase font-black mb-2">Custom Paint Color (RGB or HEX) on selected texture:</label>
             <input type="text" id="sharedRgb" placeholder="212, 175, 55  or  #d4af37" class="w-full bg-black border-2 border-gold rounded-lg p-3 text-white text-sm font-mono outline-none" />
-            <p class="text-[9px] text-zinc-400 mt-1">Accepts "r, g, b" or "#hex". Applied to the selected texture.</p>
           </div>
 
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -274,7 +273,7 @@ const realisticNames = ["Black", "Graphite", "Anthracite Gray", "Black Steel", "
     const unique = [...new Set(allUnselected.map(c => c.name))];
     ['primary', 'secondary'].forEach(id => {
       const sel = document.getElementById(id);
-      sel.innerHTML = '<option value="">-- Select --</option><option value="Custom">Custom RGB / HEX</option>' +
+      sel.innerHTML = '<option value="">-- Select --</option><option value="Custom">Custom RGB / HEX (on selected texture)</option>' +
         unique.map(name => `<option value="${name}">${name}</option>`).join('');
     });
   }
@@ -341,14 +340,42 @@ const realisticNames = ["Black", "Graphite", "Anthracite Gray", "Black Steel", "
     refreshAll();
 
     const preferred = vivid ? vividNames : realisticNames;
+    const textureColors = (byTexture[texture] || []).map(c => c.name);
 
-    const primPick = pickFrom(allUnselected, preferred);
-    if (primPick && Math.random() > 0.4) document.getElementById('primary').value = primPick.name;
-    else document.getElementById('primary').value = 'Custom';
+    // Primary: prefer named color under this texture, else Custom
+    const primCandidates = allUnselected.filter(c => textureColors.includes(c.name) || !vivid);
+    const primPick = pickFrom(primCandidates, preferred);
+    if (primPick && textureColors.includes(primPick.name)) {
+      document.getElementById('primary').value = primPick.name;
+    } else {
+      document.getElementById('primary').value = 'Custom';
+    }
 
-    const secPick = pickFrom(allUnselected, preferred);
-    if (secPick && Math.random() > 0.5) document.getElementById('secondary').value = secPick.name;
-    else if (document.getElementById('primary').value === 'Custom') document.getElementById('secondary').value = 'Custom';
+    // Secondary: ALWAYS fill. Prefer different named or Custom
+    const secCandidates = allUnselected.filter(c => textureColors.includes(c.name) || !vivid);
+    const secPick = pickFrom(secCandidates, preferred);
+    if (secPick && textureColors.includes(secPick.name) && Math.random() > 0.3) {
+      document.getElementById('secondary').value = secPick.name;
+    } else {
+      document.getElementById('secondary').value = 'Custom';
+    }
+
+    // If either is Custom, generate a color (vivid bias for vivid builds)
+    if (document.getElementById('primary').value === 'Custom' || document.getElementById('secondary').value === 'Custom') {
+      let r, g, b;
+      if (vivid) {
+        r = Math.floor(150 + Math.random()*105);
+        g = Math.floor(Math.random()*200);
+        b = Math.floor(Math.random()*200);
+      } else {
+        r = Math.floor(Math.random()*80);
+        g = Math.floor(Math.random()*80);
+        b = Math.floor(Math.random()*80);
+      }
+      document.getElementById('sharedRgb').value = Math.random() > 0.5 
+        ? `${r}, ${g}, ${b}` 
+        : `#${r.toString(16).padStart(2,'0')}${g.toString(16).padStart(2,'0')}${b.toString(16).padStart(2,'0')}`;
+    }
 
     const pearlPick = pickFrom(getUnselectedForFlag('pearl'), vivid ? preferred : ['Black', 'Graphite']);
     if (pearlPick) document.getElementById('pearl').value = pearlPick.name;
@@ -359,14 +386,7 @@ const realisticNames = ["Black", "Graphite", "Anthracite Gray", "Black Steel", "
     const intPick = pickFrom(getUnselectedForFlag('interior'), preferred);
     if (intPick) document.getElementById('interior').value = intPick.name;
 
-    if (document.getElementById('primary').value === 'Custom' || document.getElementById('secondary').value === 'Custom') {
-      const r = Math.floor(Math.random()*256);
-      const g = Math.floor(Math.random()*256);
-      const b = Math.floor(Math.random()*256);
-      document.getElementById('sharedRgb').value = Math.random() > 0.5 ? `${r}, ${g}, ${b}` : `#${r.toString(16).padStart(2,'0')}${g.toString(16).padStart(2,'0')}${b.toString(16).padStart(2,'0')}`;
-    }
-
-    if (Math.random() < 0.55) {
+    if (Math.random() < 0.6) {
       document.getElementById('neon').value = 'Crew';
       const r = Math.floor(Math.random()*256);
       const g = Math.floor(Math.random()*256);
