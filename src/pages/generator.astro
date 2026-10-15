@@ -249,11 +249,9 @@ const realisticNames = [
 
 <script is:inline define:vars={{ allUnselected, wheelCategories, byTexture, preferredRimCats, randomizableRimCats, wheelImages, vividNames, realisticNames }}>
   const hexMap = {};
-  const colorLookup = {};
   allUnselected.forEach(c => {
     const key = c.texture + '|' + c.name;
     hexMap[key] = c.hex;
-    colorLookup[key] = c;
   });
 
   function parseColor(input) {
@@ -467,9 +465,13 @@ const realisticNames = [
     document.getElementById('wheelExpanded').classList.add('hidden');
   });
 
-  function formatColor(val) {
+  function formatColor(val, isPaint) {
     if (!val) return 'N/A';
-    if (val === 'Custom') return 'Custom RGB/HEX';
+    if (val === 'Custom') {
+      const rgb = document.getElementById('sharedRgb').value.trim() || 'N/A';
+      const tex = document.getElementById('texture').value || 'Other';
+      return `${tex} - Custom RGB/HEX (${rgb})`;
+    }
     if (val.includes('|')) {
       const [tex, name] = val.split('|');
       return `${tex} - ${name}`;
@@ -477,31 +479,34 @@ const realisticNames = [
     return val;
   }
 
+  function formatNeon(val) {
+    if (val === 'Crew') {
+      const rgb = document.getElementById('neonRgb').value.trim() || 'N/A';
+      return `Crew (${rgb})`;
+    }
+    return val || 'N/A';
+  }
+
   document.getElementById('mainGenerateBtn').addEventListener('click', () => {
     const get = id => document.getElementById(id).value || 'N/A';
     const plateRaw = document.getElementById('plate').value.trim();
     const plateOut = plateRaw === '' ? 'Blankton' : plateRaw;
-    const paintColor = document.getElementById('sharedRgb').value || 'N/A';
-    const neonColor = document.getElementById('neonRgb').value || 'N/A';
     const output = `=== DMO SPEC ===
 Vehicle: ${get('vehicle')}
 Plate: ${plateOut}
 Windows: ${get('windows')}
 Headlights: ${get('headlights')}
-Texture: ${get('texture')}
-Primary: ${formatColor(get('primary'))}
-Secondary: ${formatColor(get('secondary'))}
+Primary: ${formatColor(get('primary'), true)}
+Secondary: ${formatColor(get('secondary'), true)}
 Pearlescent: ${formatColor(get('pearl'))}
 Interior: ${formatColor(get('interior'))}
 Wheel Category: ${get('wheelCategory')}
 Rim Style: ${get('rimStyle')}
 Rim Color: ${formatColor(get('rimColor'))}
 Tires: ${get('tires')}
-Neon: ${get('neon')}
+Neon: ${formatNeon(get('neon'))}
 Activator: ${document.getElementById('activator').checked ? 'Yes' : 'No'}
 Same Custom on Both: ${document.getElementById('crewBoth').checked ? 'Yes' : 'No'}
-Paint Custom (RGB/HEX): ${paintColor}
-Neon Custom (RGB/HEX): ${neonColor}
 `;
     document.getElementById('finalOutput').value = output;
   });
