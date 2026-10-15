@@ -90,7 +90,7 @@ const realisticNames = [
 
           <div class="grid grid-cols-2 gap-4">
             <div>
-              <label class="block text-[10px] text-zinc-500 uppercase font-black mb-1">Plate Text (always Yankton):</label>
+              <label class="block text-[10px] text-zinc-500 uppercase font-black mb-1">Plate Text (8 chars, blank = Blankton):</label>
               <input type="text" id="plate" maxlength="8" placeholder="NUGZZ" class="w-full bg-black border border-zinc-800 rounded-lg p-3 text-white text-sm uppercase font-mono outline-none focus:border-gold" />
             </div>
             <div>
@@ -453,11 +453,13 @@ const realisticNames = [
 
   document.getElementById('mainGenerateBtn').addEventListener('click', () => {
     const get = id => document.getElementById(id).value || 'N/A';
+    const plateRaw = document.getElementById('plate').value.trim();
+    const plateOut = plateRaw === '' ? 'Blankton' : plateRaw;
     const paintColor = document.getElementById('sharedRgb').value || 'N/A';
     const neonColor = document.getElementById('neonRgb').value || 'N/A';
     const output = `=== DMO SPEC ===
 Vehicle: ${get('vehicle')}
-Plate: ${get('plate')} (North Yankton)
+Plate: ${plateOut}
 Windows: ${get('windows')}
 Headlights: ${get('headlights')}
 Texture: ${get('texture')}
