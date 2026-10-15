@@ -19,13 +19,32 @@
 
 @layer base {
   body {
-    /* Sets the background to black and default text to white */
     @apply bg-black text-white;
   }
   
   h1, h2, h3 {
-    /* Automatically applies HighSpeed and Gold to your headers */
     font-family: 'HighSpeed', sans-serif;
     @apply text-gold uppercase tracking-wider;
+  }
+
+  /* Better keyboard focus visibility */
+  :focus-visible {
+    @apply outline-2 outline-offset-2 outline-gold;
+  }
+
+  a:focus-visible,
+  button:focus-visible {
+    @apply outline-2 outline-offset-2 outline-gold rounded;
+  }
+
+  /* Reduce motion for users who prefer it */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
   }
 }
