@@ -60,7 +60,7 @@ const realisticNames = ["Black", "Graphite", "Anthracite Gray", "Black Steel", "
   <div class="max-w-6xl mx-auto px-4 py-12">
     <div class="mb-10 text-center">
       <h1 class="text-4xl font-header text-gold uppercase tracking-tighter mb-2">DMO Generator</h1>
-      <p class="text-zinc-400 uppercase text-xs tracking-[0.2em]">Named colors stay on their texture • Custom RGB/HEX on any texture • Secondary always filled • Bike rims manual only</p>
+      <p class="text-zinc-400 uppercase text-xs tracking-[0.2em]">Primary: all unselected • Secondary: only the 59 that drop unselected • Custom RGB otherwise</p>
     </div>
 
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
@@ -108,18 +108,18 @@ const realisticNames = ["Black", "Graphite", "Anthracite Gray", "Black Steel", "
               </select>
             </div>
           </div>
-          <p class="text-[9px] text-zinc-500 -mt-2">Named colors only exist on their own texture. To get e.g. Matte Hot Pink you must select Matte + Custom RGB/HEX.</p>
+          <p class="text-[9px] text-zinc-500 -mt-2">Primary can use any unselected named color. Secondary only shows the colors that actually drop unselected as secondary. Everything else must use Custom RGB/HEX.</p>
 
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div class="space-y-1">
-              <label class="text-[10px] text-zinc-500 uppercase font-black">Primary:</label>
+              <label class="text-[10px] text-zinc-500 uppercase font-black">Primary (all unselected):</label>
               <div class="flex gap-2 items-stretch">
                 <select id="primary" class="min-w-0 flex-1 bg-black border border-zinc-800 rounded-lg p-3 text-white text-sm outline-none focus:border-gold"></select>
                 <div id="primaryPrev" class="w-10 h-12 rounded border border-zinc-700 bg-zinc-800 flex-shrink-0"></div>
               </div>
             </div>
             <div class="space-y-1">
-              <label class="text-[10px] text-zinc-500 uppercase font-black">Secondary:</label>
+              <label class="text-[10px] text-zinc-500 uppercase font-black">Secondary (limited unselected only):</label>
               <div class="flex gap-2 items-stretch">
                 <select id="secondary" class="min-w-0 flex-1 bg-black border border-zinc-800 rounded-lg p-3 text-white text-sm outline-none focus:border-gold"></select>
                 <div id="secondaryPrev" class="w-10 h-12 rounded border border-zinc-700 bg-zinc-800 flex-shrink-0"></div>
@@ -270,13 +270,19 @@ const realisticNames = ["Black", "Graphite", "Anthracite Gray", "Black Steel", "
     return pool[Math.floor(Math.random() * pool.length)];
   }
 
-  function populatePrimarySecondary() {
+  function populatePrimary() {
+    const sel = document.getElementById('primary');
     const unique = [...new Set(allUnselected.map(c => c.name))];
-    ['primary', 'secondary'].forEach(id => {
-      const sel = document.getElementById(id);
-      sel.innerHTML = '<option value="">-- Select --</option><option value="Custom">Custom RGB / HEX (on selected texture)</option>' +
-        unique.map(name => `<option value="${name}">${name}</option>`).join('');
-    });
+    sel.innerHTML = '<option value="">-- Select --</option><option value="Custom">Custom RGB / HEX</option>' +
+      unique.map(name => `<option value="${name}">${name}</option>`).join('');
+  }
+
+  function populateSecondary() {
+    const sel = document.getElementById('secondary');
+    const list = getUnselectedForFlag('secondary');
+    const unique = [...new Set(list.map(c => c.name))];
+    sel.innerHTML = '<option value="">-- Select --</option><option value="Custom">Custom RGB / HEX</option>' +
+      unique.map(name => `<option value="${name}">${name}</option>`).join('');
   }
 
   function populateUnselectedOnly(selectId, flag) {
@@ -314,7 +320,8 @@ const realisticNames = ["Black", "Graphite", "Anthracite Gray", "Black Steel", "
   }
 
   function refreshAll() {
-    populatePrimarySecondary();
+    populatePrimary();
+    populateSecondary();
     populateUnselectedOnly('pearl', 'pearl');
     populateUnselectedOnly('interior', 'interior');
     populateUnselectedOnly('rimColor', 'rim');
@@ -341,19 +348,19 @@ const realisticNames = ["Black", "Graphite", "Anthracite Gray", "Black Steel", "
     refreshAll();
 
     const preferred = vivid ? vividNames : realisticNames;
-    const textureColors = (byTexture[texture] || []).map(c => c.name);
 
-    const primCandidates = allUnselected.filter(c => textureColors.includes(c.name) || !vivid);
-    const primPick = pickFrom(primCandidates, preferred);
-    if (primPick && textureColors.includes(primPick.name)) {
+    // Primary: any unselected
+    const primPick = pickFrom(allUnselected, preferred);
+    if (primPick && Math.random() > 0.25) {
       document.getElementById('primary').value = primPick.name;
     } else {
       document.getElementById('primary').value = 'Custom';
     }
 
-    const secCandidates = allUnselected.filter(c => textureColors.includes(c.name) || !vivid);
-    const secPick = pickFrom(secCandidates, preferred);
-    if (secPick && textureColors.includes(secPick.name) && Math.random() > 0.3) {
+    // Secondary: ONLY the ones that drop unselected as secondary
+    const secList = getUnselectedForFlag('secondary');
+    const secPick = pickFrom(secList, preferred);
+    if (secPick && Math.random() > 0.35) {
       document.getElementById('secondary').value = secPick.name;
     } else {
       document.getElementById('secondary').value = 'Custom';
