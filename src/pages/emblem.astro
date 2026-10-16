@@ -203,38 +203,10 @@ import MainLayout from '../layouts/MainLayout.astro';
           <i data-lucide="chevron-down" class="w-3 h-3 group-open:rotate-180 transition-transform"></i>
           Show raw code
         </summary>
-        <div class="pt-3 flex-grow flex flex-col min-h-0">
-          <textarea id="outputCode" readonly class="w-full flex-grow min-h-[180px] bg-black border border-zinc-800 rounded-xl p-3 text-zinc-300 font-mono text-[9px] focus:outline-none focus:border-gold/50 resize-none" placeholder="// Generate an emblem to see the console code here"></textarea>
+        <div class="pt-3 flex-grow flex flex-col min-h-0 h-full">
+          <textarea id="outputCode" readonly class="w-full h-full min-h-[300px] bg-black border border-zinc-800 rounded-xl p-3 text-zinc-300 font-mono text-[9px] focus:outline-none focus:border-gold/50 resize-none" placeholder="// Generate an emblem to see the console code here"></textarea>
         </div>
       </details>
-    </div>
-
-    <!-- Mini Previews -->
-    <div class="bg-zinc-900/60 backdrop-blur-md border border-zinc-700/50 rounded-2xl p-5 shadow-lg">
-      <h2 class="text-[10px] text-zinc-500 font-black uppercase tracking-widest mb-6">Preview Sizes</h2>
-      
-      <div class="flex items-end justify-center gap-8 h-32 relative pb-6">
-        <div class="flex flex-col items-center gap-2">
-          <div class="w-24 h-24 border border-zinc-700 rounded-xl flex items-center justify-center overflow-hidden bg-black relative mini-preview-container transition-all duration-300">
-            <canvas class="mini-preview hidden w-full h-full"></canvas>
-          </div>
-          <span class="text-[9px] text-zinc-500 font-mono absolute bottom-0">256</span>
-        </div>
-
-        <div class="flex flex-col items-center gap-2">
-          <div class="w-16 h-16 border border-zinc-700 rounded-lg flex items-center justify-center overflow-hidden bg-black relative mini-preview-container transition-all duration-300">
-            <canvas class="mini-preview hidden w-full h-full"></canvas>
-          </div>
-          <span class="text-[9px] text-zinc-500 font-mono absolute bottom-0">128</span>
-        </div>
-
-        <div class="flex flex-col items-center gap-2">
-          <div class="w-10 h-10 border border-zinc-700 rounded-md flex items-center justify-center overflow-hidden bg-black relative mini-preview-container transition-all duration-300">
-            <canvas class="mini-preview hidden w-full h-full"></canvas>
-          </div>
-          <span class="text-[9px] text-zinc-500 font-mono absolute bottom-0">64</span>
-        </div>
-      </div>
     </div>
 
   </div>
@@ -303,7 +275,6 @@ import MainLayout from '../layouts/MainLayout.astro';
     const mainPreview = document.getElementById('mainPreview');
     const previewPlaceholder = document.getElementById('previewPlaceholder');
     const processing = document.getElementById('processing');
-    const miniPreviews = document.querySelectorAll('.mini-preview');
     const outputStats = document.getElementById('outputStats');
     const readyStatus = document.getElementById('readyStatus');
     const copyBtn = document.getElementById('copyBtn');
@@ -337,21 +308,6 @@ import MainLayout from '../layouts/MainLayout.astro';
       });
     }
 
-    function updatePreviewShapes(isCircular) {
-      document.querySelectorAll('.mini-preview-container').forEach(el => {
-        if (isCircular) {
-          el.classList.add('rounded-full');
-          el.classList.remove('rounded-xl', 'rounded-lg', 'rounded-md');
-        } else {
-          el.classList.remove('rounded-full');
-          // Reset based on size
-          if (el.classList.contains('w-24')) el.classList.add('rounded-xl');
-          if (el.classList.contains('w-16')) el.classList.add('rounded-lg');
-          if (el.classList.contains('w-10')) el.classList.add('rounded-md');
-        }
-      });
-    }
-
     // Segmented control clicks
     document.querySelectorAll('[data-setting]').forEach(group => {
       group.querySelectorAll('button').forEach(btn => {
@@ -362,7 +318,7 @@ import MainLayout from '../layouts/MainLayout.astro';
       });
     });
 
-    [autoOptimize, pixelization, cropEdges].forEach(el => {
+    [autoOptimize, pixelization, cropEdges, circularCrop].forEach(el => {
       if (el) el.addEventListener('change', () => { 
         if (currentImageData && document.getElementById('imageInput').files[0]) {
             loadImageToData(document.getElementById('imageInput').files[0], (data) => {
@@ -373,18 +329,6 @@ import MainLayout from '../layouts/MainLayout.astro';
       });
     });
 
-    if (circularCrop) {
-      circularCrop.addEventListener('change', (e) => {
-        updatePreviewShapes(e.target.checked);
-        if (currentImageData && document.getElementById('imageInput').files[0]) {
-            loadImageToData(document.getElementById('imageInput').files[0], (data) => {
-                currentImageData = data;
-                generateEmblem(); 
-            });
-        }
-      });
-    }
-
     if (resetBtn) {
       resetBtn.addEventListener('click', () => {
         setActive(document.querySelector('[data-setting="resolution"]'), 'auto');
@@ -394,7 +338,6 @@ import MainLayout from '../layouts/MainLayout.astro';
         pixelization.checked = false;
         cropEdges.checked = true;
         circularCrop.checked = false;
-        updatePreviewShapes(false);
         
         if (currentImageData && document.getElementById('imageInput').files[0]) {
             loadImageToData(document.getElementById('imageInput').files[0], (data) => {
@@ -557,15 +500,6 @@ import MainLayout from '../layouts/MainLayout.astro';
           ctx.putImageData(id, 0, 0);
           mainPreview.classList.remove('hidden', 'scale-95');
           previewPlaceholder.classList.add('hidden');
-
-          miniPreviews.forEach((c, i) => {
-            const size = [256, 128, 64][i];
-            c.width = size;
-            c.height = size;
-            const mctx = c.getContext('2d');
-            mctx.drawImage(mainPreview, 0, 0, size, size);
-            c.classList.remove('hidden');
-          });
         }
 
         const size = result.enc || 0;
@@ -684,3 +618,4 @@ request.send(JSON.stringify({
   window.addEventListener('load', initEmblemDashboard);
   document.addEventListener('astro:page-load', initEmblemDashboard);
 </script>
+```<FollowUp label="Want to move the 'How to Apply' instructions into the right sidebar to save space?" query="Can we move the 'How to Apply' section into a collapsible dropdown inside the Output module to make the page layout even cleaner?"/>
