@@ -14,10 +14,10 @@ import MainLayout from '../layouts/MainLayout.astro';
   </p>
 </section>
 
-<div class="flex flex-col lg:flex-row gap-6">
+<div class="flex flex-col lg:flex-row gap-6 items-stretch">
   
   <!-- Left Column: Settings -->
-  <div class="w-full lg:w-80 flex-shrink-0 space-y-6">
+  <div class="w-full lg:w-80 flex-shrink-0 flex flex-col gap-6">
     
     <!-- Source Module -->
     <div class="bg-zinc-900/60 backdrop-blur-md border border-zinc-700/50 rounded-2xl p-5 shadow-lg">
@@ -32,9 +32,9 @@ import MainLayout from '../layouts/MainLayout.astro';
         <input type="file" id="imageInput" accept="image/*" class="opacity-0 absolute inset-0 w-full h-full cursor-pointer z-20" />
         
         <div class="flex items-center gap-3 relative z-10 pointer-events-none">
-          <div class="w-10 h-10 rounded-full bg-zinc-800 border border-zinc-700 flex items-center justify-center shrink-0" id="sourceThumbContainer">
+          <div class="w-10 h-10 rounded-xl bg-zinc-800 border border-zinc-700 flex items-center justify-center shrink-0 overflow-hidden" id="sourceThumbContainer">
             <i data-lucide="image" class="w-4 h-4 text-zinc-400" id="sourceIcon"></i>
-            <img id="sourceThumb" src="" class="hidden w-full h-full object-cover rounded-full" />
+            <img id="sourceThumb" src="" class="hidden w-full h-full object-cover" />
           </div>
           <div class="flex flex-col overflow-hidden">
             <span class="text-white font-mono text-xs font-bold truncate" id="uploadText">Select Image...</span>
@@ -45,13 +45,13 @@ import MainLayout from '../layouts/MainLayout.astro';
     </div>
 
     <!-- Settings Module -->
-    <div class="bg-zinc-900/60 backdrop-blur-md border border-zinc-700/50 rounded-2xl p-5 shadow-lg space-y-5">
-      <div class="flex justify-between items-center">
+    <div class="bg-zinc-900/60 backdrop-blur-md border border-zinc-700/50 rounded-2xl p-5 shadow-lg flex-grow flex flex-col">
+      <div class="flex justify-between items-center mb-5">
         <h2 class="text-[10px] text-zinc-500 font-black uppercase tracking-widest">Settings</h2>
       </div>
 
       <!-- Basic Style Toggles (Always Visible) -->
-      <div class="space-y-3">
+      <div class="space-y-3 mb-4">
         <label class="flex items-center justify-between cursor-pointer">
           <span class="text-white text-xs font-bold flex items-center gap-1.5">
             Circular Shape <i data-lucide="info" class="w-3 h-3 text-zinc-500"></i>
@@ -84,7 +84,7 @@ import MainLayout from '../layouts/MainLayout.astro';
       </div>
 
       <!-- Advanced Settings Dropdown -->
-      <details class="group border-t border-zinc-800 pt-3">
+      <details class="group border-t border-zinc-800 pt-3 flex-grow">
         <summary class="text-[10px] text-zinc-400 font-bold uppercase tracking-widest cursor-pointer flex items-center justify-between hover:text-gold transition-colors list-none">
           Advanced Settings
           <i data-lucide="chevron-down" class="w-3 h-3 group-open:rotate-180 transition-transform"></i>
@@ -142,7 +142,7 @@ import MainLayout from '../layouts/MainLayout.astro';
         </div>
       </details>
 
-      <button id="resetBtn" class="w-full bg-zinc-800 hover:bg-zinc-700 text-white text-[10px] font-black uppercase tracking-widest py-3 rounded-xl transition-colors mt-2">
+      <button id="resetBtn" class="w-full bg-zinc-800 hover:bg-zinc-700 text-white text-[10px] font-black uppercase tracking-widest py-3 rounded-xl transition-colors mt-auto pt-2">
         Reset to defaults
       </button>
     </div>
@@ -215,21 +215,21 @@ import MainLayout from '../layouts/MainLayout.astro';
       
       <div class="flex items-end justify-center gap-8 h-32 relative pb-6">
         <div class="flex flex-col items-center gap-2">
-          <div class="w-24 h-24 border border-zinc-700 rounded-full flex items-center justify-center overflow-hidden bg-black relative">
+          <div class="w-24 h-24 border border-zinc-700 rounded-xl flex items-center justify-center overflow-hidden bg-black relative mini-preview-container transition-all duration-300">
             <canvas class="mini-preview hidden w-full h-full"></canvas>
           </div>
           <span class="text-[9px] text-zinc-500 font-mono absolute bottom-0">256</span>
         </div>
 
         <div class="flex flex-col items-center gap-2">
-          <div class="w-16 h-16 border border-zinc-700 rounded-full flex items-center justify-center overflow-hidden bg-black relative">
+          <div class="w-16 h-16 border border-zinc-700 rounded-lg flex items-center justify-center overflow-hidden bg-black relative mini-preview-container transition-all duration-300">
             <canvas class="mini-preview hidden w-full h-full"></canvas>
           </div>
           <span class="text-[9px] text-zinc-500 font-mono absolute bottom-0">128</span>
         </div>
 
         <div class="flex flex-col items-center gap-2">
-          <div class="w-10 h-10 border border-zinc-700 rounded-full flex items-center justify-center overflow-hidden bg-black relative">
+          <div class="w-10 h-10 border border-zinc-700 rounded-md flex items-center justify-center overflow-hidden bg-black relative mini-preview-container transition-all duration-300">
             <canvas class="mini-preview hidden w-full h-full"></canvas>
           </div>
           <span class="text-[9px] text-zinc-500 font-mono absolute bottom-0">64</span>
@@ -337,6 +337,21 @@ import MainLayout from '../layouts/MainLayout.astro';
       });
     }
 
+    function updatePreviewShapes(isCircular) {
+      document.querySelectorAll('.mini-preview-container').forEach(el => {
+        if (isCircular) {
+          el.classList.add('rounded-full');
+          el.classList.remove('rounded-xl', 'rounded-lg', 'rounded-md');
+        } else {
+          el.classList.remove('rounded-full');
+          // Reset based on size
+          if (el.classList.contains('w-24')) el.classList.add('rounded-xl');
+          if (el.classList.contains('w-16')) el.classList.add('rounded-lg');
+          if (el.classList.contains('w-10')) el.classList.add('rounded-md');
+        }
+      });
+    }
+
     // Segmented control clicks
     document.querySelectorAll('[data-setting]').forEach(group => {
       group.querySelectorAll('button').forEach(btn => {
@@ -347,10 +362,9 @@ import MainLayout from '../layouts/MainLayout.astro';
       });
     });
 
-    [autoOptimize, pixelization, cropEdges, circularCrop].forEach(el => {
+    [autoOptimize, pixelization, cropEdges].forEach(el => {
       if (el) el.addEventListener('change', () => { 
         if (currentImageData && document.getElementById('imageInput').files[0]) {
-            // Need to reload image to canvas to apply circular crop or aspect ratio changes correctly
             loadImageToData(document.getElementById('imageInput').files[0], (data) => {
                 currentImageData = data;
                 generateEmblem(); 
@@ -358,6 +372,18 @@ import MainLayout from '../layouts/MainLayout.astro';
         }
       });
     });
+
+    if (circularCrop) {
+      circularCrop.addEventListener('change', (e) => {
+        updatePreviewShapes(e.target.checked);
+        if (currentImageData && document.getElementById('imageInput').files[0]) {
+            loadImageToData(document.getElementById('imageInput').files[0], (data) => {
+                currentImageData = data;
+                generateEmblem(); 
+            });
+        }
+      });
+    }
 
     if (resetBtn) {
       resetBtn.addEventListener('click', () => {
@@ -368,6 +394,8 @@ import MainLayout from '../layouts/MainLayout.astro';
         pixelization.checked = false;
         cropEdges.checked = true;
         circularCrop.checked = false;
+        updatePreviewShapes(false);
+        
         if (currentImageData && document.getElementById('imageInput').files[0]) {
             loadImageToData(document.getElementById('imageInput').files[0], (data) => {
                 currentImageData = data;
