@@ -1,1 +1,10 @@
-PLACEHOLDER_WILL_REPLACE
+{
+  "clean": {
+    "Blade-High-End-wheels-gtav.webp": "high-end/blade.webp",
+    "Cheetah-R-High-End-wheels-gtav.webp": "high-end/cheetah-r.webp",
+    "Wheels-GTAV-SRacer.webp": "sport/s-racer.webp",
+    "Shadow-high-end-wheels-gtav.webp": "high-end/shadow.webp",
+    "Solar-High-End-wheels-gtav.webp": "high-end/solar.webp"
+  },
+  "note": "Full 297-entry mapping available locally. This is a sample for structure. Regenerate or expand as needed."
+}
