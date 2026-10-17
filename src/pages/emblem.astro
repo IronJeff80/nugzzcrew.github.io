@@ -21,7 +21,7 @@ import MainLayout from '../layouts/MainLayout.astro';
     
     <!-- Source Module -->
     <div class="bg-zinc-900/60 backdrop-blur-md border border-zinc-700/50 rounded-2xl p-5 shadow-lg">
-      <h2 class="text-[10px] text-zinc-500 font-black uppercase tracking-widest mb-4">Source</h2>
+      <h2 class="text-[10px] text-gold font-black uppercase tracking-widest mb-4">Source</h2>
       
       <div class="relative border border-dashed border-zinc-600 rounded-xl p-3 hover:border-gold/50 transition-colors bg-black/40 group overflow-hidden">
         <input type="file" id="imageInput" accept="image/*" class="opacity-0 absolute inset-0 w-full h-full cursor-pointer z-20" />
@@ -42,7 +42,7 @@ import MainLayout from '../layouts/MainLayout.astro';
     <!-- Settings Module -->
     <div class="bg-zinc-900/60 backdrop-blur-md border border-zinc-700/50 rounded-2xl p-5 shadow-lg flex-grow flex flex-col">
       <div class="flex justify-between items-center mb-5">
-        <h2 class="text-[10px] text-zinc-500 font-black uppercase tracking-widest">Settings</h2>
+        <h2 class="text-[10px] text-gold font-black uppercase tracking-widest">Settings</h2>
       </div>
 
       <!-- Basic Style Toggles (Always Visible) -->
@@ -171,7 +171,7 @@ import MainLayout from '../layouts/MainLayout.astro';
     
     <!-- Output Module -->
     <div class="bg-zinc-900/60 backdrop-blur-md border border-zinc-700/50 rounded-2xl p-5 shadow-lg flex flex-col flex-grow">
-      <h2 class="text-[10px] text-zinc-500 font-black uppercase tracking-widest mb-4">Output</h2>
+      <h2 class="text-[10px] text-gold font-black uppercase tracking-widest mb-4">Output</h2>
       
       <div class="mb-4 hidden" id="outputStats">
         <div class="flex justify-between text-[10px] font-mono font-bold">
@@ -210,48 +210,55 @@ import MainLayout from '../layouts/MainLayout.astro';
 
   <!-- How to Apply on Social Club -->
   <div class="mt-8 w-full">
-    <div class="bg-zinc-900/60 backdrop-blur-md border border-zinc-700/50 rounded-2xl p-5 shadow-lg">
-      <h2 class="text-[10px] text-zinc-500 font-black uppercase tracking-widest mb-4">How to Apply on Social Club</h2>
+    <div class="bg-zinc-900/60 backdrop-blur-md border border-zinc-700/50 rounded-2xl p-6 shadow-lg">
+      <div class="flex flex-col lg:flex-row gap-8 items-center">
+        
+        <!-- Left: Instructions -->
+        <div class="w-full lg:w-1/2 order-2 lg:order-1">
+          <h2 class="text-[10px] text-gold font-black uppercase tracking-widest mb-5">How to Apply on Social Club</h2>
+          <ol class="space-y-3 text-zinc-300 text-[13px] leading-relaxed w-full">
+            <li class="flex gap-3">
+              <span class="text-gold font-mono text-xs font-bold shrink-0 mt-0.5">1.</span>
+              <span>Navigate to the <a href="https://socialclub.rockstargames.com" target="_blank" rel="noopener" class="text-gold hover:underline">Rockstar Social Club</a>, log in, and go to your Crew Emblems page. Click <strong class="text-white">Create a New Emblem</strong>.</span>
+            </li>
+            <li class="flex gap-3">
+              <span class="text-gold font-mono text-xs font-bold shrink-0 mt-0.5">2.</span>
+              <span>Open Developer Tools: press <kbd class="px-1.5 py-0.5 bg-zinc-800 border border-zinc-700 rounded text-[10px] font-mono">F12</kbd> (or <kbd class="px-1.5 py-0.5 bg-zinc-800 border border-zinc-700 rounded text-[10px] font-mono">Ctrl+Shift+J</kbd>).</span>
+            </li>
+            <li class="flex gap-3">
+              <span class="text-gold font-mono text-xs font-bold shrink-0 mt-0.5">3.</span>
+              <span>Click the <strong class="text-white">Console</strong> tab. Look for the blinking cursor at the bottom.</span>
+            </li>
+            <li class="flex gap-3">
+              <span class="text-gold font-mono text-xs font-bold shrink-0 mt-0.5">4.</span>
+              <span>If you see a paste warning, type <code class="px-1.5 py-0.5 bg-zinc-800 border border-zinc-700 rounded text-[10px] font-mono">allow pasting</code> and press Enter.</span>
+            </li>
+            <li class="flex gap-3">
+              <span class="text-gold font-mono text-xs font-bold shrink-0 mt-0.5">5.</span>
+              <span>Right-click at the cursor → <strong class="text-white">Paste</strong> (or <kbd class="px-1.5 py-0.5 bg-zinc-800 border border-zinc-700 rounded text-[10px] font-mono">Ctrl+V</kbd>), then press <kbd class="px-1.5 py-0.5 bg-zinc-800 border border-zinc-700 rounded text-[10px] font-mono">Enter</kbd>.</span>
+            </li>
+            <li class="flex gap-3">
+              <span class="text-gold font-mono text-xs font-bold shrink-0 mt-0.5">6.</span>
+              <span>Close Developer Tools (<kbd class="px-1.5 py-0.5 bg-zinc-800 border border-zinc-700 rounded text-[10px] font-mono">F12</kbd>), click <strong class="text-white">Save</strong>, then <strong class="text-white">Publish</strong>.</span>
+            </li>
+          </ol>
+        </div>
 
-      <!-- Tutorial Video -->
-      <div class="mb-6 aspect-video w-full max-w-3xl mx-auto rounded-xl overflow-hidden border border-zinc-800 bg-black">
-        <iframe
-          class="w-full h-full"
-          src="https://www.youtube.com/embed/BI_bY-7ZICs"
-          title="Emblem Editor Tutorial"
-          frameborder="0"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-          allowfullscreen
-        ></iframe>
+        <!-- Right: Video -->
+        <div class="w-full lg:w-1/2 order-1 lg:order-2">
+          <div class="aspect-video w-full rounded-xl overflow-hidden border border-zinc-800 bg-black">
+            <iframe
+              class="w-full h-full"
+              src="https://www.youtube.com/embed/BI_bY-7ZICs"
+              title="Emblem Editor Tutorial"
+              frameborder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowfullscreen
+            ></iframe>
+          </div>
+        </div>
+
       </div>
-
-      <!-- Constrained and centered list to match video width -->
-      <ol class="space-y-2.5 text-zinc-300 text-[13px] leading-snug w-full max-w-3xl mx-auto">
-        <li class="flex gap-3">
-          <span class="text-gold font-mono text-xs font-bold shrink-0 mt-0.5">1.</span>
-          <span>Navigate to the <a href="https://socialclub.rockstargames.com" target="_blank" rel="noopener" class="text-gold hover:underline">Rockstar Social Club</a>, log in, and go to your Crew Emblems page. Click <strong class="text-white">Create a New Emblem</strong>.</span>
-        </li>
-        <li class="flex gap-3">
-          <span class="text-gold font-mono text-xs font-bold shrink-0 mt-0.5">2.</span>
-          <span>Open Developer Tools: press <kbd class="px-1.5 py-0.5 bg-zinc-800 border border-zinc-700 rounded text-[10px] font-mono">F12</kbd> (or <kbd class="px-1.5 py-0.5 bg-zinc-800 border border-zinc-700 rounded text-[10px] font-mono">Ctrl+Shift+J</kbd>).</span>
-        </li>
-        <li class="flex gap-3">
-          <span class="text-gold font-mono text-xs font-bold shrink-0 mt-0.5">3.</span>
-          <span>Click the <strong class="text-white">Console</strong> tab. Look for the blinking cursor at the bottom.</span>
-        </li>
-        <li class="flex gap-3">
-          <span class="text-gold font-mono text-xs font-bold shrink-0 mt-0.5">4.</span>
-          <span>If you see a paste warning, type <code class="px-1.5 py-0.5 bg-zinc-800 border border-zinc-700 rounded text-[10px] font-mono">allow pasting</code> and press Enter.</span>
-        </li>
-        <li class="flex gap-3">
-          <span class="text-gold font-mono text-xs font-bold shrink-0 mt-0.5">5.</span>
-          <span>Right-click at the cursor → <strong class="text-white">Paste</strong> (or <kbd class="px-1.5 py-0.5 bg-zinc-800 border border-zinc-700 rounded text-[10px] font-mono">Ctrl+V</kbd>), then press <kbd class="px-1.5 py-0.5 bg-zinc-800 border border-zinc-700 rounded text-[10px] font-mono">Enter</kbd>.</span>
-        </li>
-        <li class="flex gap-3">
-          <span class="text-gold font-mono text-xs font-bold shrink-0 mt-0.5">6.</span>
-          <span>Close Developer Tools (<kbd class="px-1.5 py-0.5 bg-zinc-800 border border-zinc-700 rounded text-[10px] font-mono">F12</kbd>), click <strong class="text-white">Save</strong>, then <strong class="text-white">Publish</strong>.</span>
-        </li>
-      </ol>
     </div>
   </div>
 
