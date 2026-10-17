@@ -3,6 +3,9 @@ import MainLayout from '../layouts/MainLayout.astro';
 import gtaData from '../data/gta-weekly.json';
 
 const eventTitle = gtaData.eventTitle || gtaData.eventtitle || "GTA Weekly Showcase";
+const titleWords = eventTitle.split(' ');
+const firstWord = titleWords[0];
+const restTitle = titleWords.slice(1).join(' ');
 const eventDates = gtaData.eventDates || gtaData.weekEnding || gtaData.weekending;
 const gtaPlus = gtaData.gtaPlus || gtaData.gtaplus;
 const halloween = gtaData.halloweenSeason || gtaData.halloweenseason;
@@ -14,9 +17,9 @@ const halloween = gtaData.halloweenSeason || gtaData.halloweenseason;
     <section>
       <div class="flex flex-col md:flex-row justify-between gap-8 items-start">
         <div>
-          <h1 class="text-[clamp(40px,6vw,80px)] font-black italic uppercase leading-[0.8] text-white tracking-tighter drop-shadow-lg">
-            {eventTitle}
-          </h1>
+<h1 class="text-[clamp(40px,6vw,80px)] font-black italic uppercase leading-[0.8] tracking-tighter drop-shadow-lg">
+  <span class="text-white">{firstWord}</span>{restTitle && <> <span class="text-gold">{restTitle}</span></>}
+</h1>
           <p class="text-zinc-400 font-bold uppercase tracking-widest mt-4">
             Event available through {eventDates}
           </p>

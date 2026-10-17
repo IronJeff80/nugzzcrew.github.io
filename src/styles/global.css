@@ -24,7 +24,7 @@
   
   h1, h2, h3 {
     font-family: 'HighSpeed', sans-serif;
-    @apply text-gold uppercase tracking-wider;
+    @apply text-white uppercase tracking-wider;
   }
 
   /* Better keyboard focus visibility */
