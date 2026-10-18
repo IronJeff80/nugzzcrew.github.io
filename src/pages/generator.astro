@@ -2,10 +2,7 @@
 import MainLayout from "../layouts/MainLayout.astro";
 import colors from "../data/colors.json";
 
-// For Secondary filtering
 const unselectedSecondary = colors.filter((c) => !c.secondary);
-
-// For Pearl, Interior, Rim filtering
 const allUnselected = colors.filter(
   (c) => !c.primary || !c.secondary || !c.pearl || !c.rim || !c.interior,
 );
@@ -102,22 +99,6 @@ const wheelCategories = {
   ]
 };
 
-const wheelImages = {
-  "Bennys Bespoke": "/images/wheels/bennys-bespoke.png",
-  "Bennys Originals": "/images/wheels/bennys-originals.png",
-  Race: "/images/wheels/race.png",
-  Bike: "/images/wheels/bike.png",
-  "High End": "/images/wheels/high-end.png",
-  Lowrider: "/images/wheels/lowrider.png",
-  Muscle: "/images/wheels/muscle.png",
-  Offroad: "/images/wheels/offroad.png",
-  Sport: "/images/wheels/sport.png",
-  Street: "/images/wheels/street.png",
-  SUV: "/images/wheels/suv.png",
-  Track: "/images/wheels/track.png",
-  Tuner: "/images/wheels/tuner.png",
-};
-
 const lightColors = [
   { name: "White", rgb: "222, 222, 255" },
   { name: "Pure White", rgb: "255, 255, 255" },
@@ -148,7 +129,8 @@ const plateData = [
 
 const windowTints = ["Clear", "Green"];
 const neonOptions = ["None", "Pure White", "Blue", "Electric Blue", "Mint Green", "Lime Green", "Yellow", "Golden Shower", "Orange", "Red", "Pony Pink", "Hot Pink", "Purple", "Black Light", "Custom RGB"];
-const tireDesigns = ["White lines", "Classic", "Retro", "Red", "Blue"];
+const tireDesignsRace = ["Atomic", "Atomic Logo", "Chepalle Green", "Chepalle Yellow", "Fukaru Red", "Fukaru White"];
+const tireDesignsBenny = ["White Lines", "Classic White Wall", "Retro White Wall", "Redlines", "Bluelines"];
 const tireSmokeOptions = ["Match Headlights", "Match Neon", "Patriot", "Custom RGB"];
 ---
 
@@ -389,12 +371,18 @@ const tireSmokeOptions = ["Match Headlights", "Match Neon", "Patriot", "Custom R
         </div>
 
         <div class="flex items-center gap-4">
-          <img id="wheelThumb" src="/images/wheels/bennys-bespoke.png" alt="Wheel preview" class="w-24 h-16 object-cover rounded border border-zinc-700 cursor-pointer hover:border-gold transition-all bg-black" />
+          <div class="relative w-24 h-16 rounded border border-zinc-700 overflow-hidden bg-black flex-shrink-0">
+            <img id="wheelThumb" src="/images/wheels/bennys-bespoke.png" alt="Wheel preview" class="absolute inset-0 w-full h-full object-cover" />
+            <img id="tireThumb" src="" alt="Tire design overlay" class="absolute inset-0 w-full h-full object-cover hidden pointer-events-none" />
+          </div>
           <button id="expandWheel" type="button" class="text-[10px] text-zinc-400 uppercase tracking-widest hover:text-gold">Click to expand full grid</button>
         </div>
 
         <div id="wheelExpanded" class="hidden mt-2">
-          <img id="wheelFull" src="/images/wheels/bennys-bespoke.png" alt="Full wheel grid" class="w-full rounded-lg border border-zinc-700 max-h-96 object-contain bg-black" />
+          <div class="relative w-full h-96 rounded-lg border border-zinc-700 overflow-hidden bg-black flex items-center justify-center">
+            <img id="wheelFull" src="/images/wheels/bennys-bespoke.png" alt="Full wheel grid" class="absolute inset-0 w-full h-full object-contain" />
+            <img id="tireFull" src="" alt="Full tire design overlay" class="absolute inset-0 w-full h-full object-contain hidden pointer-events-none" />
+          </div>
           <button id="collapseWheel" type="button" class="mt-2 text-[10px] text-zinc-500 uppercase tracking-widest hover:text-gold">Collapse</button>
         </div>
 
@@ -408,9 +396,8 @@ const tireSmokeOptions = ["Match Headlights", "Match Neon", "Patriot", "Custom R
           </div>
           <div>
             <label class="block text-[10px] text-gold uppercase font-black mb-1">Tire Design:</label>
-            <select id="tires" class="w-full bg-black border border-zinc-800 rounded-lg p-3 text-white text-sm outline-none focus:border-gold">
-              <option value="None" selected>None</option>
-              {tireDesigns.map((d) => <option value={d}>{d}</option>)}
+            <select id="tires" class="w-full bg-black border border-zinc-800 rounded-lg p-3 text-white text-sm outline-none focus:border-gold" disabled>
+              <option value="None" selected>-- Select Wheel Category First --</option>
             </select>
           </div>
         </div>
@@ -432,8 +419,7 @@ const tireSmokeOptions = ["Match Headlights", "Match Neon", "Patriot", "Custom R
   </div>
 </MainLayout>
 
-<script is:inline define:vars={{ colors, unselectedSecondary, allUnselected, wheelCategories, lightColors }}>
-  // Map ALL colors for previews
+<script is:inline define:vars={{ colors, unselectedSecondary, allUnselected, wheelCategories, lightColors, tireDesignsRace, tireDesignsBenny }}>
   const globalHexMap = {};
   colors.forEach((c) => {
     const key = c.texture + "|" + c.name;
@@ -445,7 +431,6 @@ const tireSmokeOptions = ["Match Headlights", "Match Neon", "Patriot", "Custom R
     lightColorMap[h.name] = h.rgb;
   });
 
-  // HSL Converter for filtering Random logic
   function hexToHSL(hexStr) {
     if(!hexStr) return {h:0, s:0, l:0};
     let hex = hexStr.replace('#', '');
@@ -479,7 +464,6 @@ const tireSmokeOptions = ["Match Headlights", "Match Neon", "Patriot", "Custom R
     return d > 180 ? 360 - d : d;
   }
 
-  // UI Wizard Logic
   let currentStep = 1;
   function showStep(step) {
     document.querySelectorAll('.step-section').forEach(el => el.classList.add('hidden'));
@@ -537,7 +521,6 @@ const tireSmokeOptions = ["Match Headlights", "Match Neon", "Patriot", "Custom R
     if (btnPrev) btnPrev.addEventListener('click', () => showStep(step - 1));
   });
 
-  // Plate Preview & Input Restriction Logic
   const plateInput = document.getElementById('plate');
   const blanktonToggle = document.getElementById('blanktonToggle');
   const plateStyleSelect = document.getElementById('plateStyle');
@@ -568,7 +551,6 @@ const tireSmokeOptions = ["Match Headlights", "Match Neon", "Patriot", "Custom R
     updatePlatePreview();
   });
 
-  // Data Loading & Handlers
   function parseColor(input) {
     if (!input) return null;
     input = input.trim();
@@ -588,7 +570,6 @@ const tireSmokeOptions = ["Match Headlights", "Match Neon", "Patriot", "Custom R
 
   function makeOption(c) { return `<option value="${c.texture}|${c.name}">${c.texture} - ${c.name}</option>`; }
   
-  // Primary gets ALL colors, Secondary gets restricted colors
   function populatePrimary() { document.getElementById("primary").innerHTML = '<option value="">-- Select --</option><option value="Custom">Custom RGB / HEX</option>' + colors.map(makeOption).join(""); }
   function populateSecondary() { document.getElementById("secondary").innerHTML = '<option value="">-- Select --</option><option value="Custom">Custom RGB / HEX</option>' + unselectedSecondary.map(makeOption).join(""); }
   function populateUnselectedOnly(selectId, flag) { document.getElementById(selectId).innerHTML = '<option value="">-- Select --</option>' + allUnselected.filter((c) => !c[flag]).map(makeOption).join(""); }
@@ -604,23 +585,68 @@ const tireSmokeOptions = ["Match Headlights", "Match Neon", "Patriot", "Custom R
     const categorySlug = slugify(cat || "Bennys Bespoke");
     const catImg = `/images/wheels/${categorySlug}.png`;
 
-    if (!style || style === "Stock" || !cat) {
-      thumb.src = catImg;
-      full.src = catImg;
-      return;
+    let rimImg = catImg;
+    if (style && style !== "Stock" && cat) {
+      rimImg = `/images/wheels/rims/${categorySlug}/${slugify(style)}.webp`;
     }
-
-    const rimImg = `/images/wheels/rims/${categorySlug}/${slugify(style)}.webp`;
     
     thumb.src = rimImg;
     full.src = rimImg;
+    updateTireOverlay();
+  }
+
+  function updateTireOverlay() {
+    const tireVal = document.getElementById("tires").value;
+    const tireThumb = document.getElementById("tireThumb");
+    const tireFull = document.getElementById("tireFull");
+
+    if (!tireVal || tireVal === "None") {
+      tireThumb.classList.add("hidden");
+      tireFull.classList.add("hidden");
+      tireThumb.src = "";
+      tireFull.src = "";
+      return;
+    }
+
+    const tireSlug = slugify(tireVal);
+    const tireImgPath = `/images/wheels/rims/tiredesign/${tireSlug}.png`;
+
+    tireThumb.src = tireImgPath;
+    tireThumb.classList.remove("hidden");
+
+    tireFull.src = tireImgPath;
+    tireFull.classList.remove("hidden");
+  }
+
+  function populateTiresForCategory(cat) {
+    const tireSelect = document.getElementById("tires");
+    tireSelect.disabled = false;
+    
+    let optionsHtml = '<option value="None">None</option>';
+    if (cat === "Race") {
+      optionsHtml += tireDesignsRace.map(d => `<option value="${d}">${d}</option>`).join("");
+    } else if (cat === "Bennys Bespoke" || cat === "Bennys Originals") {
+      optionsHtml += tireDesignsBenny.map(d => `<option value="${d}">${d}</option>`).join("");
+    } else {
+      // Other categories default to None or standard
+      optionsHtml = '<option value="None" selected>None</option>';
+      tireSelect.disabled = true;
+    }
+    tireSelect.innerHTML = optionsHtml;
+    updateTireOverlay();
   }
 
   function populateRims() {
     const cat = document.getElementById("wheelCategory").value;
     const sel = document.getElementById("rimStyle");
-    if(!cat) { sel.innerHTML = '<option value="">-- Select Category First --</option>'; return; }
+    if(!cat) { 
+      sel.innerHTML = '<option value="">-- Select Category First --</option>'; 
+      document.getElementById("tires").innerHTML = '<option value="None" selected>-- Select Wheel Category First --</option>';
+      document.getElementById("tires").disabled = true;
+      return; 
+    }
     sel.innerHTML = '<option value="">-- Select --</option>' + (wheelCategories[cat] || []).map((s) => `<option value="${s}">${s}</option>`).join("");
+    populateTiresForCategory(cat);
     updateRimThumb();
     const wrap = document.getElementById("activatorWrapper");
     wrap.classList.add("hidden"); document.getElementById("activator").checked = false;
@@ -680,7 +706,6 @@ const tireSmokeOptions = ["Match Headlights", "Match Neon", "Patriot", "Custom R
     }
   }
 
-  // Event Listeners
   ["primary", "secondary", "pearl", "interior", "rimColor", "headlights"].forEach(id => {
     document.getElementById(id).addEventListener("change", refreshPreviews);
   });
@@ -691,7 +716,9 @@ const tireSmokeOptions = ["Match Headlights", "Match Neon", "Patriot", "Custom R
     if (document.getElementById("wheelCategory").value === "Bennys Originals" && e.target.value === "Waves") wrap.classList.remove("hidden");
     else { wrap.classList.add("hidden"); document.getElementById("activator").checked = false; }
   });
+
   document.getElementById("wheelCategory").addEventListener("change", populateRims);
+  document.getElementById("tires").addEventListener("change", updateTireOverlay);
 
   const checkPaintCustom = () => {
     const pCustom = document.getElementById("primary").value === "Custom";
@@ -722,7 +749,6 @@ const tireSmokeOptions = ["Match Headlights", "Match Neon", "Patriot", "Custom R
   document.getElementById("expandWheel").addEventListener("click", () => document.getElementById("wheelExpanded").classList.remove("hidden"));
   document.getElementById("collapseWheel").addEventListener("click", () => document.getElementById("wheelExpanded").classList.add("hidden"));
 
-  // --- SMART RANDOMIZATION BUILDERS ---
   function getOpts(id) {
     return Array.from(document.getElementById(id).options)
       .map(o=>o.value)
@@ -736,7 +762,7 @@ const tireSmokeOptions = ["Match Headlights", "Match Neon", "Patriot", "Custom R
   document.getElementById("btn-rand-vivid").addEventListener("click", () => {
     const prims = getOpts("primary").filter(v => {
       let hsl = getHslFromVal(v);
-      return hsl.s > 0.4 && hsl.l > 0.15 && hsl.l < 0.85; // Bright/High saturation
+      return hsl.s > 0.4 && hsl.l > 0.15 && hsl.l < 0.85;
     });
     const pVal = pickRandom(prims) || getOpts("primary")[0];
     document.getElementById("primary").value = pVal;
@@ -746,11 +772,10 @@ const tireSmokeOptions = ["Match Headlights", "Match Neon", "Patriot", "Custom R
       let hsl = getHslFromVal(v);
       if(hsl.s < 0.4) return false;
       let diff = hueDistance(pHsl.h, hsl.h);
-      return diff > 120 || diff < 45; // Contrast or Analogous
+      return diff > 120 || diff < 45;
     });
     document.getElementById("secondary").value = pickRandom(secs) || pVal;
     
-    // Hide custom RGB interfaces if randomizer picked standard colors
     checkPaintCustom();
     
     const pearls = getOpts("pearl").filter(v => getHslFromVal(v).s > 0.35);
@@ -762,8 +787,6 @@ const tireSmokeOptions = ["Match Headlights", "Match Neon", "Patriot", "Custom R
     document.getElementById("headlights").value = pickRandom(getOpts("headlights").filter(h => h !== "White" && h !== "Pure White"));
     document.getElementById("neon").value = pickRandom(getOpts("neon"));
     document.getElementById("tireSmoke").value = pickRandom(["Match Headlights", "Match Neon", "Patriot"]);
-    
-    // Randomly assign a window tint
     document.getElementById("windows").value = pickRandom(getOpts("windows")) || "";
 
     refreshPreviews();
@@ -772,18 +795,17 @@ const tireSmokeOptions = ["Match Headlights", "Match Neon", "Patriot", "Custom R
   document.getElementById("btn-rand-real").addEventListener("click", () => {
     const realPrims = getOpts("primary").filter(v => {
       let hsl = getHslFromVal(v);
-      return hsl.s < 0.35 || hsl.l < 0.2 || hsl.l > 0.85; // Grays, blacks, whites, muted colors
+      return hsl.s < 0.35 || hsl.l < 0.2 || hsl.l > 0.85;
     });
     const pVal = pickRandom(realPrims) || getOpts("primary")[0];
     document.getElementById("primary").value = pVal;
     
-    // Attempt to match the secondary for realistic builds, ensuring it's available
     const availableSecs = getOpts("secondary");
     document.getElementById("secondary").value = availableSecs.includes(pVal) ? pVal : (pickRandom(availableSecs) || pVal);
     
     checkPaintCustom();
     
-    const realPearls = getOpts("pearl").filter(v => getHslFromVal(v).s < 0.2); // Only faint/white/silver pearls
+    const realPearls = getOpts("pearl").filter(v => getHslFromVal(v).s < 0.2);
     document.getElementById("pearl").value = pickRandom(realPearls) || getOpts("pearl")[0];
     
     const realInts = getOpts("interior").filter(v => {
@@ -791,19 +813,17 @@ const tireSmokeOptions = ["Match Headlights", "Match Neon", "Patriot", "Custom R
       return hsl.s < 0.3 || hsl.l < 0.2 || hsl.l > 0.8;
     });
     document.getElementById("interior").value = pickRandom(realInts) || "";
-    document.getElementById("rimColor").value = pickRandom(realInts) || ""; // Keep rims muted too
+    document.getElementById("rimColor").value = pickRandom(realInts) || "";
 
     document.getElementById("headlights").value = Math.random() > 0.5 ? "White" : "Pure White";
     document.getElementById("neon").value = "None";
     document.getElementById("tireSmoke").value = "Match Headlights"; 
-    
     document.getElementById("windows").value = pickRandom(getOpts("windows")) || "";
 
     refreshPreviews();
   });
 
   document.getElementById("btn-random-wheels").addEventListener("click", () => {
-    // Keep vivid logic on the wheels if they want
     const wheelCats = getOpts("wheelCategory");
     document.getElementById("wheelCategory").value = pickRandom(wheelCats);
     document.getElementById("wheelCategory").dispatchEvent(new Event("change"));
@@ -813,7 +833,6 @@ const tireSmokeOptions = ["Match Headlights", "Match Neon", "Patriot", "Custom R
     document.getElementById("rimStyle").dispatchEvent(new Event("change"));
   });
 
-  // Generation
   document.getElementById("generate").addEventListener("click", () => {
     if (!validateStep(4)) return;
 
@@ -895,7 +914,6 @@ Tire Design: ${get("tires")}${activatorOutput}`;
     });
   });
 
-  // Initialization
   populatePrimary(); populateSecondary();
   populateUnselectedOnly("pearl", "pearl"); populateUnselectedOnly("interior", "interior"); populateUnselectedOnly("rimColor", "rim");
   updatePlatePreview(); 
