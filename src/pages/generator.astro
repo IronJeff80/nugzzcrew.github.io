@@ -207,8 +207,10 @@ const tireSmokeOptions = ["Match Headlights", "Match Neon", "Patriot Black (0,0,
             <label class="block text-[10px] text-zinc-400 uppercase font-black mb-2 w-full text-center">Live Preview:</label>
             <div class="relative w-[280px] h-[140px] rounded overflow-hidden shadow-2xl border border-zinc-700 bg-black">
               <img id="platePreviewImg" src={`/images/plates/${plateData[0].file}`} alt="Plate Background" class="absolute inset-0 w-full h-full object-cover" />
-              <!-- Added pt-[15%] to shift the text down relative to the plate header graphic -->
-              <div id="platePreviewText" class="absolute inset-0 flex items-center justify-center pt-[15%] text-4xl font-black uppercase tracking-widest whitespace-pre drop-shadow-md" style={`font-family: 'Courier New', Courier, monospace; color: ${plateData[0].color};`}></div>
+              <!-- Added scaleY(1.6) and inline-block to vertically stretch the text -->
+              <div class="absolute inset-0 flex items-center justify-center pt-[15%] drop-shadow-md">
+                <span id="platePreviewText" class="text-4xl font-black uppercase tracking-widest whitespace-pre inline-block" style={`font-family: 'Courier New', Courier, monospace; transform: scaleY(1.6); color: ${plateData[0].color};`}></span>
+              </div>
             </div>
           </div>
         </div>
@@ -533,7 +535,6 @@ const tireSmokeOptions = ["Match Headlights", "Match Neon", "Patriot Black (0,0,
     const thumb = document.getElementById("wheelThumb");
     const full = document.getElementById("wheelFull");
     
-    // Default mapped category image
     const categorySlug = slugify(cat || "Bennys Bespoke");
     const catImg = `/images/wheels/${categorySlug}.png`;
 
@@ -543,10 +544,8 @@ const tireSmokeOptions = ["Match Headlights", "Match Neon", "Patriot Black (0,0,
       return;
     }
 
-    // Expected path format based on user provided directory structures
     const rimImg = `/images/wheels/rims/${categorySlug}/${slugify(style)}.webp`;
     
-    // Removed the aggressive onerror override so you can actually see what path is failing in the Network Tab
     thumb.src = rimImg;
     full.src = rimImg;
   }
