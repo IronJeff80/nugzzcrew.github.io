@@ -129,8 +129,24 @@ const plateData = [
 
 const windowTints = ["Clear", "Green"];
 const neonOptions = ["None", "Pure White", "Blue", "Electric Blue", "Mint Green", "Lime Green", "Yellow", "Golden Shower", "Orange", "Red", "Pony Pink", "Hot Pink", "Purple", "Black Light", "Custom RGB"];
-const tireDesignsRace = ["Atomic", "Atomic Logo", "Chepalle Green", "Chepalle Yellow", "Fukaru Red", "Fukaru White"];
-const tireDesignsBenny = ["White Lines", "Classic White Wall", "Retro White Wall", "Redlines", "Bluelines"];
+
+const tireDesignsRace = [
+  { name: "Atomic", file: "atomic.png" },
+  { name: "Atomic Logo", file: "atomic logo.png" },
+  { name: "Chepalle Green", file: "chepalle green.png" },
+  { name: "Chepalle Yellow", file: "chepalle yellow.png" },
+  { name: "Fukaru Red", file: "fukaru red.png" },
+  { name: "Fukaru White", file: "fukaru white.png" }
+];
+
+const tireDesignsBenny = [
+  { name: "White Lines", file: "white lines.png" },
+  { name: "Classic White Wall", file: "classic White Wall.png" },
+  { name: "Retro White Wall", file: "retro white wall.png" },
+  { name: "Redlines", file: "redlines.png" },
+  { name: "Bluelines", file: "bluelines.png" }
+];
+
 const tireSmokeOptions = ["Match Headlights", "Match Neon", "Patriot", "Custom RGB"];
 ---
 
@@ -596,11 +612,14 @@ const tireSmokeOptions = ["Match Headlights", "Match Neon", "Patriot", "Custom R
   }
 
   function updateTireOverlay() {
-    const tireVal = document.getElementById("tires").value;
+    const tireSelect = document.getElementById("tires");
+    const selectedOption = tireSelect.options[tireSelect.selectedIndex];
     const tireThumb = document.getElementById("tireThumb");
     const tireFull = document.getElementById("tireFull");
 
-    if (!tireVal || tireVal === "None") {
+    const file = selectedOption ? selectedOption.getAttribute("data-file") : null;
+
+    if (!file || file === "none") {
       tireThumb.classList.add("hidden");
       tireFull.classList.add("hidden");
       tireThumb.src = "";
@@ -608,8 +627,7 @@ const tireSmokeOptions = ["Match Headlights", "Match Neon", "Patriot", "Custom R
       return;
     }
 
-    const tireSlug = slugify(tireVal);
-    const tireImgPath = `/images/wheels/rims/tiredesign/${tireSlug}.png`;
+    const tireImgPath = `/images/wheels/rims/tiredesign/${file}`;
 
     tireThumb.src = tireImgPath;
     tireThumb.classList.remove("hidden");
@@ -622,14 +640,13 @@ const tireSmokeOptions = ["Match Headlights", "Match Neon", "Patriot", "Custom R
     const tireSelect = document.getElementById("tires");
     tireSelect.disabled = false;
     
-    let optionsHtml = '<option value="None">None</option>';
+    let optionsHtml = '<option value="None" data-file="none">None</option>';
     if (cat === "Race") {
-      optionsHtml += tireDesignsRace.map(d => `<option value="${d}">${d}</option>`).join("");
+      optionsHtml += tireDesignsRace.map(d => `<option value="${d.name}" data-file="${d.file}">${d.name}</option>`).join("");
     } else if (cat === "Bennys Bespoke" || cat === "Bennys Originals") {
-      optionsHtml += tireDesignsBenny.map(d => `<option value="${d}">${d}</option>`).join("");
+      optionsHtml += tireDesignsBenny.map(d => `<option value="${d.name}" data-file="${d.file}">${d.name}</option>`).join("");
     } else {
-      // Other categories default to None or standard
-      optionsHtml = '<option value="None" selected>None</option>';
+      optionsHtml = '<option value="None" data-file="none" selected>None</option>';
       tireSelect.disabled = true;
     }
     tireSelect.innerHTML = optionsHtml;
@@ -641,7 +658,7 @@ const tireSmokeOptions = ["Match Headlights", "Match Neon", "Patriot", "Custom R
     const sel = document.getElementById("rimStyle");
     if(!cat) { 
       sel.innerHTML = '<option value="">-- Select Category First --</option>'; 
-      document.getElementById("tires").innerHTML = '<option value="None" selected>-- Select Wheel Category First --</option>';
+      document.getElementById("tires").innerHTML = '<option value="None" data-file="none" selected>-- Select Wheel Category First --</option>';
       document.getElementById("tires").disabled = true;
       return; 
     }
