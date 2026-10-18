@@ -6,24 +6,6 @@ const allUnselected = colors.filter(
   (c) => !c.primary || !c.secondary || !c.pearl || !c.rim || !c.interior,
 );
 
-const byTexture = {};
-allUnselected.forEach((c) => {
-  if (!byTexture[c.texture]) byTexture[c.texture] = [];
-  byTexture[c.texture].push(c);
-});
-
-const textureOrder = [
-  "Chrome",
-  "Hidden",
-  "Other",
-  "Metallic",
-  "Rim",
-  "Utility",
-  "Metals",
-  "Matte",
-  "Worn",
-];
-
 const wheelCategories = {
   "Bennys Bespoke": [
     "Stock", "Chrome OG Hunnets", "Gold OG Hunnets", "Chrome Wires", "Gold Wires", 
@@ -162,7 +144,7 @@ const plateData = [
 
 const windowTints = ["Clear", "Green"];
 const neonOptions = ["None", "Pure White", "Blue", "Electric Blue", "Mint Green", "Lime Green", "Yellow", "Golden Shower", "Orange", "Red", "Pony Pink", "Hot Pink", "Purple", "Black Light", "Custom RGB"];
-const tireDesigns = ["None", "White lines", "Classic", "Retro", "Red", "Blue"];
+const tireDesigns = ["White lines", "Classic", "Retro", "Red", "Blue"];
 const tireSmokeOptions = ["Match Headlights", "Match Neon", "Patriot Black (0,0,0)", "Custom RGB"];
 ---
 
@@ -225,7 +207,8 @@ const tireSmokeOptions = ["Match Headlights", "Match Neon", "Patriot Black (0,0,
             <label class="block text-[10px] text-zinc-400 uppercase font-black mb-2 w-full text-center">Live Preview:</label>
             <div class="relative w-[280px] h-[140px] rounded overflow-hidden shadow-2xl border border-zinc-700 bg-black">
               <img id="platePreviewImg" src={`/images/plates/${plateData[0].file}`} alt="Plate Background" class="absolute inset-0 w-full h-full object-cover" />
-              <div id="platePreviewText" class="absolute inset-0 flex items-center justify-center text-4xl font-black uppercase tracking-widest whitespace-pre drop-shadow-md" style={`font-family: 'Courier New', Courier, monospace; color: ${plateData[0].color};`}></div>
+              <!-- Added pt-[15%] to shift the text down relative to the plate header graphic -->
+              <div id="platePreviewText" class="absolute inset-0 flex items-center justify-center pt-[15%] text-4xl font-black uppercase tracking-widest whitespace-pre drop-shadow-md" style={`font-family: 'Courier New', Courier, monospace; color: ${plateData[0].color};`}></div>
             </div>
           </div>
         </div>
@@ -244,7 +227,10 @@ const tireSmokeOptions = ["Match Headlights", "Match Neon", "Patriot Black (0,0,
           <div>
             <label class="block text-[10px] text-zinc-400 uppercase font-black mb-1">Texture Filter:</label>
             <select id="texture" class="w-full bg-black border border-zinc-800 rounded-lg p-3 text-white text-sm outline-none focus:border-gold">
-              {textureOrder.filter((t) => byTexture[t]).map((t) => <option value={t}>{t}</option>)}
+              <option value="">-- Select --</option>
+              <option value="Super Glossy">Super Glossy</option>
+              <option value="Glossy">Glossy</option>
+              <option value="Matte/Worn">Matte/Worn</option>
             </select>
           </div>
           <div>
@@ -290,7 +276,7 @@ const tireSmokeOptions = ["Match Headlights", "Match Neon", "Patriot Black (0,0,
             </div>
           </div>
           <div class="space-y-1">
-            <label class="text-[10px] text-gold uppercase font-black">Interior:</label>
+            <label class="text-[10px] text-gold uppercase font-black">Interior (Optional):</label>
             <div class="flex gap-2 items-stretch">
               <select id="interior" class="min-w-0 flex-1 bg-black border border-zinc-800 rounded-lg p-3 text-white text-sm outline-none focus:border-gold"></select>
               <div id="interiorPrev" class="w-10 h-12 rounded border border-zinc-700 bg-zinc-800 flex-shrink-0"></div>
@@ -406,7 +392,7 @@ const tireSmokeOptions = ["Match Headlights", "Match Neon", "Patriot Black (0,0,
           <div>
             <label class="block text-[10px] text-gold uppercase font-black mb-1">Tire Design:</label>
             <select id="tires" class="w-full bg-black border border-zinc-800 rounded-lg p-3 text-white text-sm outline-none focus:border-gold">
-              <option value="">-- Select --</option>
+              <option value="None" selected>None</option>
               {tireDesigns.map((d) => <option value={d}>{d}</option>)}
             </select>
           </div>
@@ -429,7 +415,7 @@ const tireSmokeOptions = ["Match Headlights", "Match Neon", "Patriot Black (0,0,
   </div>
 </MainLayout>
 
-<script is:inline define:vars={{ allUnselected, wheelCategories, byTexture, lightColors }}>
+<script is:inline define:vars={{ allUnselected, wheelCategories, lightColors }}>
   const hexMap = {};
   allUnselected.forEach((c) => {
     const key = c.texture + "|" + c.name;
@@ -464,7 +450,7 @@ const tireSmokeOptions = ["Match Headlights", "Match Neon", "Patriot Black (0,0,
       if (document.getElementById("plate").value.length !== 8) { alert("Plate text must be EXACTLY 8 characters."); return false; }
     }
     if (step === 3) {
-      const required = ["windows", "primary", "secondary", "pearl", "interior", "headlights", "neon", "tireSmoke"];
+      const required = ["windows", "primary", "secondary", "pearl", "headlights", "neon", "tireSmoke"]; // Removed interior
       for (let id of required) {
         if (!document.getElementById(id).value) { alert(`Please select an option for ${id}.`); return false; }
       }
@@ -483,7 +469,6 @@ const tireSmokeOptions = ["Match Headlights", "Match Neon", "Patriot Black (0,0,
 
   [1, 2, 3, 4].forEach(step => {
     document.getElementById(`nav-step-${step}`).addEventListener('click', () => {
-      // Allow moving backwards freely, but validate going forwards
       if (step > currentStep && !validateStep(currentStep)) return;
       showStep(step);
     });
@@ -547,18 +532,23 @@ const tireSmokeOptions = ["Match Headlights", "Match Neon", "Patriot Black (0,0,
     const style = document.getElementById("rimStyle").value;
     const thumb = document.getElementById("wheelThumb");
     const full = document.getElementById("wheelFull");
-    const catImg = wheelImages[cat] || wheelImages["Bennys Bespoke"];
+    
+    // Default mapped category image
+    const categorySlug = slugify(cat || "Bennys Bespoke");
+    const catImg = `/images/wheels/${categorySlug}.png`;
 
     if (!style || style === "Stock" || !cat) {
       thumb.src = catImg;
       full.src = catImg;
       return;
     }
-    const rimImg = `/images/wheels/rims/${slugify(cat)}/${slugify(style)}.webp`;
+
+    // Expected path format based on user provided directory structures
+    const rimImg = `/images/wheels/rims/${categorySlug}/${slugify(style)}.webp`;
+    
+    // Removed the aggressive onerror override so you can actually see what path is failing in the Network Tab
     thumb.src = rimImg;
     full.src = rimImg;
-    thumb.onerror = () => { thumb.src = catImg; };
-    full.onerror = () => { full.src = catImg; };
   }
 
   function populateRims() {
