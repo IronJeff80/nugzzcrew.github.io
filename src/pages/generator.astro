@@ -2,6 +2,10 @@
 import MainLayout from "../layouts/MainLayout.astro";
 import colors from "../data/colors.json";
 
+// For Secondary filtering
+const unselectedSecondary = colors.filter((c) => !c.secondary);
+
+// For Pearl, Interior, Rim filtering
 const allUnselected = colors.filter(
   (c) => !c.primary || !c.secondary || !c.pearl || !c.rim || !c.interior,
 );
@@ -230,16 +234,7 @@ const tireSmokeOptions = ["Match Headlights", "Match Neon", "Patriot", "Custom R
           </div>
         </div>
         
-        <div class="grid grid-cols-2 gap-4">
-          <div>
-            <label class="block text-[10px] text-gold uppercase font-black mb-1">Texture Filter:</label>
-            <select id="texture" class="w-full bg-black border border-zinc-800 rounded-lg p-3 text-white text-sm outline-none focus:border-gold">
-              <option value="">-- Select --</option>
-              <option value="Super Glossy">Super Glossy</option>
-              <option value="Glossy">Glossy</option>
-              <option value="Matte/Worn">Matte/Worn</option>
-            </select>
-          </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
             <label class="block text-[10px] text-gold uppercase font-black mb-1">Window Tint:</label>
             <select id="windows" class="w-full bg-black border border-zinc-800 rounded-lg p-3 text-white text-sm outline-none focus:border-gold">
@@ -256,6 +251,12 @@ const tireSmokeOptions = ["Match Headlights", "Match Neon", "Patriot", "Custom R
               <select id="primary" class="min-w-0 flex-1 bg-black border border-zinc-800 rounded-lg p-3 text-white text-sm outline-none focus:border-gold"></select>
               <div id="primaryPrev" class="w-10 h-12 rounded border border-zinc-700 bg-zinc-800 flex-shrink-0"></div>
             </div>
+            <select id="primaryTexture" class="hidden w-full bg-black border border-zinc-800 rounded-lg p-3 text-white text-sm outline-none focus:border-gold mt-2">
+              <option value="">-- Select Base Texture --</option>
+              <option value="Super Glossy">Super Glossy</option>
+              <option value="Glossy">Glossy</option>
+              <option value="Matte/Worn">Matte/Worn</option>
+            </select>
           </div>
           <div class="space-y-1">
             <label class="block text-[10px] text-gold uppercase font-black mb-1">Secondary:</label>
@@ -263,18 +264,24 @@ const tireSmokeOptions = ["Match Headlights", "Match Neon", "Patriot", "Custom R
               <select id="secondary" class="min-w-0 flex-1 bg-black border border-zinc-800 rounded-lg p-3 text-white text-sm outline-none focus:border-gold"></select>
               <div id="secondaryPrev" class="w-10 h-12 rounded border border-zinc-700 bg-zinc-800 flex-shrink-0"></div>
             </div>
+            <select id="secondaryTexture" class="hidden w-full bg-black border border-zinc-800 rounded-lg p-3 text-white text-sm outline-none focus:border-gold mt-2">
+              <option value="">-- Select Base Texture --</option>
+              <option value="Super Glossy">Super Glossy</option>
+              <option value="Glossy">Glossy</option>
+              <option value="Matte/Worn">Matte/Worn</option>
+            </select>
           </div>
         </div>
 
-        <div id="rgbInputArea" class="bg-gold/10 p-4 rounded-xl border border-gold/50" style="display:none;">
-          <label class="block text-[10px] text-gold uppercase font-black mb-2">Custom RGB applied to BOTH Primary & Secondary:</label>
+        <div id="rgbInputArea" class="bg-gold/10 p-4 rounded-xl border border-gold/50 hidden mt-2">
+          <label class="block text-[10px] text-gold uppercase font-black mb-2">Crew / Custom RGB or HEX (Applies to any slot set to 'Custom'):</label>
           <div class="flex gap-2 items-stretch">
-            <input type="text" id="sharedRgb" placeholder="255, 255, 255" class="min-w-0 flex-1 bg-black border-2 border-gold rounded-lg p-3 text-white text-sm font-mono outline-none" />
+            <input type="text" id="sharedRgb" placeholder="255, 255, 255 or #FFFFFF" class="min-w-0 flex-1 bg-black border-2 border-gold rounded-lg p-3 text-white text-sm font-mono outline-none" />
             <div id="sharedRgbPrev" class="w-12 h-12 rounded border border-gold/60 bg-zinc-800 flex-shrink-0"></div>
           </div>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
           <div class="space-y-1">
             <label class="block text-[10px] text-gold uppercase font-black mb-1">Pearlescent:</label>
             <div class="flex gap-2 items-stretch">
@@ -316,15 +323,15 @@ const tireSmokeOptions = ["Match Headlights", "Match Neon", "Patriot", "Custom R
           </div>
         </div>
 
-        <div id="neonRgbArea" class="bg-gold/10 p-4 rounded-xl border border-gold/50" style="display:none;">
-          <label class="block text-[10px] text-gold uppercase font-black mb-2">Neon Custom RGB:</label>
+        <div id="neonRgbArea" class="bg-gold/10 p-4 rounded-xl border border-gold/50 hidden mt-2">
+          <label class="block text-[10px] text-gold uppercase font-black mb-2">Neon Custom RGB or HEX:</label>
           <div class="flex gap-2 items-stretch">
-            <input type="text" id="neonRgb" placeholder="0, 255, 255" class="min-w-0 flex-1 bg-black border-2 border-gold rounded-lg p-3 text-white text-sm font-mono outline-none" />
+            <input type="text" id="neonRgb" placeholder="0, 255, 255 or #00FFFF" class="min-w-0 flex-1 bg-black border-2 border-gold rounded-lg p-3 text-white text-sm font-mono outline-none" />
             <div id="neonRgbPrev" class="w-12 h-12 rounded border border-gold/60 bg-zinc-800 flex-shrink-0"></div>
           </div>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
           <div class="space-y-1">
             <label class="block text-[10px] text-gold uppercase font-black mb-1">Tire Smoke:</label>
             <div class="flex gap-2 items-stretch">
@@ -334,7 +341,7 @@ const tireSmokeOptions = ["Match Headlights", "Match Neon", "Patriot", "Custom R
               </select>
               <div id="tireSmokePrev" class="w-10 h-12 rounded border border-zinc-700 bg-zinc-800 flex-shrink-0"></div>
             </div>
-            <input type="text" id="tireSmokeCustom" placeholder="Custom RGB (e.g. 255, 0, 0)" class="w-full mt-2 bg-black border border-zinc-800 rounded-lg p-3 text-white text-sm outline-none focus:border-gold hidden" />
+            <input type="text" id="tireSmokeCustom" placeholder="Custom RGB or HEX (e.g. 255, 0, 0 or #FF0000)" class="w-full mt-2 bg-black border border-zinc-800 rounded-lg p-3 text-white text-sm outline-none focus:border-gold hidden" />
           </div>
           
           <div class="space-y-1">
@@ -343,7 +350,7 @@ const tireSmokeOptions = ["Match Headlights", "Match Neon", "Patriot", "Custom R
           </div>
         </div>
 
-        <div class="flex gap-3 pt-6 border-t border-zinc-800">
+        <div class="flex gap-3 pt-6 border-t border-zinc-800 mt-4">
            <button id="btn-prev-3" class="flex-1 bg-zinc-800 hover:bg-zinc-700 text-white font-black uppercase py-3 rounded-xl text-xs tracking-widest transition-all">Back</button>
            <button id="btn-next-3" class="flex-1 bg-zinc-800 hover:bg-gold hover:text-black text-white font-black uppercase py-3 rounded-xl text-xs tracking-widest transition-all">Next: Wheels</button>
         </div>
@@ -351,7 +358,10 @@ const tireSmokeOptions = ["Match Headlights", "Match Neon", "Patriot", "Custom R
 
       <!-- STEP 4: WHEELS -->
       <div id="step-4" class="step-section space-y-6 hidden">
-        <h2 class="text-gold font-black uppercase text-lg mb-4">Wheels</h2>
+        <div class="flex justify-between items-center mb-4">
+          <h2 class="text-gold font-black uppercase text-lg">Wheels</h2>
+          <button id="btn-random-wheels" type="button" class="bg-zinc-800 hover:bg-gold hover:text-black text-white font-black uppercase py-2 px-4 rounded-lg text-[10px] tracking-widest transition-all">Randomize</button>
+        </div>
         
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 items-start">
           <div>
@@ -422,11 +432,12 @@ const tireSmokeOptions = ["Match Headlights", "Match Neon", "Patriot", "Custom R
   </div>
 </MainLayout>
 
-<script is:inline define:vars={{ allUnselected, wheelCategories, lightColors }}>
-  const hexMap = {};
-  allUnselected.forEach((c) => {
+<script is:inline define:vars={{ colors, unselectedSecondary, allUnselected, wheelCategories, lightColors }}>
+  // Map ALL colors for previews
+  const globalHexMap = {};
+  colors.forEach((c) => {
     const key = c.texture + "|" + c.name;
-    hexMap[key] = c.hex;
+    globalHexMap[key] = c.hex;
   });
 
   const lightColorMap = {};
@@ -460,7 +471,7 @@ const tireSmokeOptions = ["Match Headlights", "Match Neon", "Patriot", "Custom R
 
   function getHslFromVal(val) {
     if(!val || val.startsWith("Custom")) return {h:0, s:0, l:0};
-    return hexToHSL(hexMap[val]);
+    return hexToHSL(globalHexMap[val]);
   }
 
   function hueDistance(h1, h2) {
@@ -495,7 +506,14 @@ const tireSmokeOptions = ["Match Headlights", "Match Neon", "Patriot", "Custom R
       for (let id of required) {
         if (!document.getElementById(id).value) { alert(`Please select an option for ${id}.`); return false; }
       }
-      if (document.getElementById("primary").value === "Custom" && !document.getElementById("sharedRgb").value) { alert("Please enter a Custom RGB for the paint."); return false; }
+      
+      const pCustom = document.getElementById("primary").value === "Custom";
+      const sCustom = document.getElementById("secondary").value === "Custom";
+      
+      if (pCustom && !document.getElementById("primaryTexture").value) { alert("Please select a Base Texture for the Custom Primary RGB."); return false; }
+      if (sCustom && !document.getElementById("secondaryTexture").value) { alert("Please select a Base Texture for the Custom Secondary RGB."); return false; }
+      if ((pCustom || sCustom) && !document.getElementById("sharedRgb").value) { alert("Please enter the Crew/Custom RGB value."); return false; }
+      
       if (document.getElementById("neon").value === "Custom RGB" && !document.getElementById("neonRgb").value) { alert("Please enter a Custom RGB for Neon."); return false; }
       if (document.getElementById("tireSmoke").value === "Custom RGB" && !document.getElementById("tireSmokeCustom").value) { alert("Please enter a Custom RGB for Tire Smoke."); return false; }
     }
@@ -569,8 +587,10 @@ const tireSmokeOptions = ["Match Headlights", "Match Neon", "Patriot", "Custom R
   }
 
   function makeOption(c) { return `<option value="${c.texture}|${c.name}">${c.texture} - ${c.name}</option>`; }
-  function populatePrimary() { document.getElementById("primary").innerHTML = '<option value="">-- Select --</option><option value="Custom">Custom RGB / HEX</option>' + allUnselected.map(makeOption).join(""); }
-  function populateSecondary() { document.getElementById("secondary").innerHTML = '<option value="">-- Select --</option><option value="Custom">Custom RGB / HEX</option>' + allUnselected.filter((c) => !c.secondary).map(makeOption).join(""); }
+  
+  // Primary gets ALL colors, Secondary gets restricted colors
+  function populatePrimary() { document.getElementById("primary").innerHTML = '<option value="">-- Select --</option><option value="Custom">Custom RGB / HEX</option>' + colors.map(makeOption).join(""); }
+  function populateSecondary() { document.getElementById("secondary").innerHTML = '<option value="">-- Select --</option><option value="Custom">Custom RGB / HEX</option>' + unselectedSecondary.map(makeOption).join(""); }
   function populateUnselectedOnly(selectId, flag) { document.getElementById(selectId).innerHTML = '<option value="">-- Select --</option>' + allUnselected.filter((c) => !c[flag]).map(makeOption).join(""); }
 
   function slugify(s) { return s.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, ""); }
@@ -617,7 +637,7 @@ const tireSmokeOptions = ["Match Headlights", "Match Neon", "Patriot", "Custom R
       const rgbStr = lightColorMap[val];
       return rgbStr ? `rgb(${rgbStr})` : "#111";
     }
-    return hexMap[val] || "#111";
+    return globalHexMap[val] || "#111";
   }
 
   function refreshPreviews() {
@@ -674,19 +694,26 @@ const tireSmokeOptions = ["Match Headlights", "Match Neon", "Patriot", "Custom R
   document.getElementById("wheelCategory").addEventListener("change", populateRims);
 
   const checkPaintCustom = () => {
-    document.getElementById("rgbInputArea").style.display = (document.getElementById("primary").value === "Custom" || document.getElementById("secondary").value === "Custom") ? "block" : "none";
+    const pCustom = document.getElementById("primary").value === "Custom";
+    const sCustom = document.getElementById("secondary").value === "Custom";
+    
+    document.getElementById("primaryTexture").classList.toggle("hidden", !pCustom);
+    document.getElementById("secondaryTexture").classList.toggle("hidden", !sCustom);
+    document.getElementById("rgbInputArea").classList.toggle("hidden", !(pCustom || sCustom));
+
     refreshPreviews();
   };
+  
   document.getElementById("primary").addEventListener("change", checkPaintCustom);
   document.getElementById("secondary").addEventListener("change", checkPaintCustom);
 
   document.getElementById("neon").addEventListener("change", () => {
-    document.getElementById("neonRgbArea").style.display = (document.getElementById("neon").value === "Custom RGB") ? "block" : "none";
+    document.getElementById("neonRgbArea").classList.toggle("hidden", document.getElementById("neon").value !== "Custom RGB");
     refreshPreviews();
   });
 
   document.getElementById("tireSmoke").addEventListener("change", (e) => {
-    document.getElementById("tireSmokeCustom").style.display = (e.target.value === "Custom RGB") ? "block" : "none";
+    document.getElementById("tireSmokeCustom").classList.toggle("hidden", e.target.value !== "Custom RGB");
     refreshPreviews();
   });
 
@@ -707,8 +734,6 @@ const tireSmokeOptions = ["Match Headlights", "Match Neon", "Patriot", "Custom R
   }
 
   document.getElementById("btn-rand-vivid").addEventListener("click", () => {
-    document.getElementById("texture").value = Math.random() > 0.5 ? "Super Glossy" : "Glossy";
-    
     const prims = getOpts("primary").filter(v => {
       let hsl = getHslFromVal(v);
       return hsl.s > 0.4 && hsl.l > 0.15 && hsl.l < 0.85; // Bright/High saturation
@@ -725,6 +750,9 @@ const tireSmokeOptions = ["Match Headlights", "Match Neon", "Patriot", "Custom R
     });
     document.getElementById("secondary").value = pickRandom(secs) || pVal;
     
+    // Hide custom RGB interfaces if randomizer picked standard colors
+    checkPaintCustom();
+    
     const pearls = getOpts("pearl").filter(v => getHslFromVal(v).s > 0.35);
     document.getElementById("pearl").value = pickRandom(pearls) || getOpts("pearl")[0];
     
@@ -734,28 +762,26 @@ const tireSmokeOptions = ["Match Headlights", "Match Neon", "Patriot", "Custom R
     document.getElementById("headlights").value = pickRandom(getOpts("headlights").filter(h => h !== "White" && h !== "Pure White"));
     document.getElementById("neon").value = pickRandom(getOpts("neon"));
     document.getElementById("tireSmoke").value = pickRandom(["Match Headlights", "Match Neon", "Patriot"]);
-
-    const vividWheelCats = ["Bennys Bespoke", "Bennys Originals", "Race"];
-    document.getElementById("wheelCategory").value = pickRandom(vividWheelCats);
-    document.getElementById("wheelCategory").dispatchEvent(new Event("change"));
     
-    const rims = getOpts("rimStyle").filter(r => r !== "Stock");
-    document.getElementById("rimStyle").value = pickRandom(rims) || "Stock";
-    document.getElementById("rimStyle").dispatchEvent(new Event("change"));
+    // Randomly assign a window tint
+    document.getElementById("windows").value = pickRandom(getOpts("windows")) || "";
 
     refreshPreviews();
   });
 
   document.getElementById("btn-rand-real").addEventListener("click", () => {
-    document.getElementById("texture").value = Math.random() > 0.5 ? "Glossy" : "Matte/Worn";
-    
     const realPrims = getOpts("primary").filter(v => {
       let hsl = getHslFromVal(v);
       return hsl.s < 0.35 || hsl.l < 0.2 || hsl.l > 0.85; // Grays, blacks, whites, muted colors
     });
     const pVal = pickRandom(realPrims) || getOpts("primary")[0];
     document.getElementById("primary").value = pVal;
-    document.getElementById("secondary").value = pVal; // Common for street builds to match
+    
+    // Attempt to match the secondary for realistic builds, ensuring it's available
+    const availableSecs = getOpts("secondary");
+    document.getElementById("secondary").value = availableSecs.includes(pVal) ? pVal : (pickRandom(availableSecs) || pVal);
+    
+    checkPaintCustom();
     
     const realPearls = getOpts("pearl").filter(v => getHslFromVal(v).s < 0.2); // Only faint/white/silver pearls
     document.getElementById("pearl").value = pickRandom(realPearls) || getOpts("pearl")[0];
@@ -765,22 +791,26 @@ const tireSmokeOptions = ["Match Headlights", "Match Neon", "Patriot", "Custom R
       return hsl.s < 0.3 || hsl.l < 0.2 || hsl.l > 0.8;
     });
     document.getElementById("interior").value = pickRandom(realInts) || "";
-    
     document.getElementById("rimColor").value = pickRandom(realInts) || ""; // Keep rims muted too
 
     document.getElementById("headlights").value = Math.random() > 0.5 ? "White" : "Pure White";
     document.getElementById("neon").value = "None";
-    document.getElementById("tireSmoke").value = "Match Headlights"; // Force normal smoke
+    document.getElementById("tireSmoke").value = "Match Headlights"; 
+    
+    document.getElementById("windows").value = pickRandom(getOpts("windows")) || "";
 
-    const realWheelCats = ["Sport", "Street", "SUV", "Tuner", "Muscle", "High End", "Offroad"];
-    document.getElementById("wheelCategory").value = pickRandom(realWheelCats);
+    refreshPreviews();
+  });
+
+  document.getElementById("btn-random-wheels").addEventListener("click", () => {
+    // Keep vivid logic on the wheels if they want
+    const wheelCats = getOpts("wheelCategory");
+    document.getElementById("wheelCategory").value = pickRandom(wheelCats);
     document.getElementById("wheelCategory").dispatchEvent(new Event("change"));
     
     const rims = getOpts("rimStyle").filter(r => r !== "Stock");
     document.getElementById("rimStyle").value = pickRandom(rims) || "Stock";
     document.getElementById("rimStyle").dispatchEvent(new Event("change"));
-
-    refreshPreviews();
   });
 
   // Generation
@@ -790,13 +820,19 @@ const tireSmokeOptions = ["Match Headlights", "Match Neon", "Patriot", "Custom R
     const get = (id) => document.getElementById(id).value || "";
     const outPlate = get("plate").replace(/_/g, " "); 
 
-    const formatColor = (val) => {
+    const formatPaint = (val, isCustom, tex) => {
+      if (isCustom) return `Custom RGB (${get("sharedRgb")}) over ${tex} Base`;
       if (!val) return "N/A";
-      if (val === "Custom") return `Custom RGB/HEX (${get("sharedRgb")})`;
       const parts = val.split("|");
       return parts.length === 2 ? `${parts[0]} - ${parts[1]}` : val;
     };
     
+    const formatColor = (val) => {
+      if (!val) return "N/A";
+      const parts = val.split("|");
+      return parts.length === 2 ? `${parts[0]} - ${parts[1]}` : val;
+    };
+
     const formatNeon = (val) => val === "Custom RGB" ? `Custom RGB (${get("neonRgb")})` : (val || "N/A");
 
     const smokeSelect = get("tireSmoke");
@@ -818,6 +854,9 @@ const tireSmokeOptions = ["Match Headlights", "Match Neon", "Patriot", "Custom R
     const isActivator = document.getElementById("activator").checked;
     const activatorOutput = isActivator ? `\nActivator Applied: Yes` : "";
 
+    const pVal = get("primary");
+    const sVal = get("secondary");
+
     const out = `=== DMO SPECIFICATION ===
 
 [VEHICLE & PLATE]
@@ -828,9 +867,8 @@ Window Tint: ${get("windows")}
 Livery: ${get("livery") || "None"}
 
 [COLORS & PAINTS]
-Texture Base: ${get("texture") || "Default"}
-Primary: ${formatColor(get("primary"))}
-Secondary: ${formatColor(get("secondary"))}
+Primary: ${formatPaint(pVal, pVal === "Custom", get("primaryTexture"))}
+Secondary: ${formatPaint(sVal, sVal === "Custom", get("secondaryTexture"))}
 Pearlescent: ${formatColor(get("pearl"))}
 Interior: ${formatColor(get("interior"))}
 Rim Color: ${formatColor(get("rimColor"))}
