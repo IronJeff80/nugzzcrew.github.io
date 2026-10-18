@@ -727,24 +727,20 @@ const realisticNames = [
 
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4 items-start">
             <div>
-              <label
-                class="block text-[10px] text-gold uppercase font-black mb-1"
+              <label class="block text-[10px] text-gold uppercase font-black mb-1"
                 >Wheel Category:</label
               >
               <select
                 id="wheelCategory"
                 class="w-full bg-black border border-zinc-800 rounded-lg p-3 text-white text-sm outline-none focus:border-gold"
               >
-                {
-                  Object.keys(wheelCategories).map((cat) => (
-                    <option value={cat}>{cat}</option>
-                  ))
-                }
+                {Object.keys(wheelCategories).map((cat) => (
+                  <option value={cat}>{cat}</option>
+                ))}
               </select>
             </div>
             <div>
-              <label
-                class="block text-[10px] text-gold uppercase font-black mb-1"
+              <label class="block text-[10px] text-gold uppercase font-black mb-1"
                 >Rim Style:</label
               >
               <select
@@ -765,8 +761,9 @@ const realisticNames = [
               id="expandWheel"
               type="button"
               class="text-[10px] text-zinc-400 uppercase tracking-widest hover:text-gold"
-              >Click to expand full grid</button
             >
+              Click to expand full grid
+            </button>
           </div>
 
           <div id="wheelExpanded" class="hidden mt-2">
@@ -780,8 +777,9 @@ const realisticNames = [
               id="collapseWheel"
               type="button"
               class="mt-2 text-[10px] text-zinc-500 uppercase tracking-widest hover:text-gold"
-              >Collapse</button
             >
+              Collapse
+            </button>
           </div>
 
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -802,8 +800,7 @@ const realisticNames = [
               </div>
             </div>
             <div>
-              <label
-                class="block text-[10px] text-gold uppercase font-black mb-1"
+              <label class="block text-[10px] text-gold uppercase font-black mb-1"
                 >Tire Design:</label
               >
               <select
@@ -887,15 +884,13 @@ const realisticNames = [
         <div
           class="bg-zinc-900/40 p-6 rounded-3xl border border-zinc-800 sticky top-6"
         >
-          <h2
-            class="text-sm font-black uppercase tracking-widest text-gold mb-4"
-          >
+          <h2 class="text-sm font-black uppercase tracking-widest text-gold mb-4">
             Output
           </h2>
           <pre
             id="output"
-            class="text-xs text-zinc-300 font-mono whitespace-pre-wrap break-all bg-black/50 p-4 rounded-xl border border-zinc-800 min-h-[300px]">
-          </pre>
+            class="text-xs text-zinc-300 font-mono whitespace-pre-wrap break-all bg-black/50 p-4 rounded-xl border border-zinc-800 min-h-[300px]"
+          ></pre>
           <button
             id="copy"
             type="button"
@@ -920,6 +915,10 @@ const realisticNames = [
     wheelImages,
     vividNames,
     realisticNames,
+    textureOrder,
+    windowTints,
+    neonOptions,
+    tireDesigns,
   }}
 >
   const hexMap = {};
@@ -1044,9 +1043,7 @@ const realisticNames = [
     const cat = document.getElementById("wheelCategory").value;
     const sel = document.getElementById("rimStyle");
     const styles = wheelCategories[cat] || [];
-    sel.innerHTML = styles
-      .map((s) => `<option value="${s}">${s}</option>`)
-      .join("");
+    sel.innerHTML = styles.map((s) => `<option value="${s}">${s}</option>`).join("");
     updateRimThumb();
   }
 
@@ -1072,9 +1069,7 @@ const realisticNames = [
     }
   }
 
-  document
-    .getElementById("rimStyle")
-    .addEventListener("change", updateRimThumb);
+  document.getElementById("rimStyle").addEventListener("change", updateRimThumb);
 
   function randomFrom(arr) {
     return arr[Math.floor(Math.random() * arr.length)];
