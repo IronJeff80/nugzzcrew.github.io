@@ -173,7 +173,7 @@ const tireSmokeOptions = ["Match Headlights", "Match Neon", "Patriot", "Custom R
       <div id="step-1" class="step-section space-y-6">
         <h2 class="text-gold font-black uppercase text-lg mb-4">Vehicle Details</h2>
         <div>
-          <label class="block text-[10px] text-zinc-400 uppercase font-black mb-1">Vehicle Name or Set (Required):</label>
+          <label class="block text-[10px] text-gold uppercase font-black mb-1">Vehicle Name or Set (Required):</label>
           <input type="text" id="vehicle" placeholder="e.g. Buffalo STX or Nightclub Set" class="w-full bg-black border border-zinc-800 rounded-lg p-3 text-white text-sm outline-none focus:border-gold"/>
         </div>
         <div class="flex gap-3 pt-6 border-t border-zinc-800">
@@ -187,13 +187,13 @@ const tireSmokeOptions = ["Match Headlights", "Match Neon", "Patriot", "Custom R
         <div class="flex flex-col md:flex-row gap-6">
           <div class="flex-1 space-y-4">
             <div>
-              <label class="block text-[10px] text-zinc-400 uppercase font-black mb-1">Plate Style:</label>
+              <label class="block text-[10px] text-gold uppercase font-black mb-1">Plate Style:</label>
               <select id="plateStyle" class="w-full bg-black border border-zinc-800 rounded-lg p-3 text-white text-sm outline-none focus:border-gold">
                 {plateData.map(p => <option value={p.name} data-file={p.file} data-color={p.color}>{p.name}</option>)}
               </select>
             </div>
             <div>
-              <label class="block text-[10px] text-zinc-400 uppercase font-black mb-1">Plate Text (Exact 8 Chars. Alphanumeric only):</label>
+              <label class="block text-[10px] text-gold uppercase font-black mb-1">Plate Text (Exact 8 Chars. Alphanumeric only):</label>
               <input type="text" id="plate" maxlength="8" placeholder="8 CHARS" class="w-full bg-black border border-zinc-800 rounded-lg p-3 text-white text-sm uppercase font-mono outline-none focus:border-gold tracking-[0.3em]" />
               <p class="text-[9px] text-zinc-500 mt-2">Spaces will automatically turn into underscores <span class="text-white">_</span> to help you count characters. Special characters are disabled.</p>
             </div>
@@ -204,7 +204,7 @@ const tireSmokeOptions = ["Match Headlights", "Match Neon", "Patriot", "Custom R
           </div>
 
           <div class="flex-1 flex flex-col items-center justify-center">
-            <label class="block text-[10px] text-zinc-400 uppercase font-black mb-2 w-full text-center">Live Preview:</label>
+            <label class="block text-[10px] text-gold uppercase font-black mb-2 w-full text-center">Live Preview:</label>
             <div class="relative w-[280px] h-[140px] rounded overflow-hidden shadow-2xl border border-zinc-700 bg-black">
               <img id="platePreviewImg" src={`/images/plates/${plateData[0].file}`} alt="Plate Background" class="absolute inset-0 w-full h-full object-cover" />
               <div class="absolute inset-0 flex items-center justify-center pt-[15%] drop-shadow-md">
@@ -222,11 +222,17 @@ const tireSmokeOptions = ["Match Headlights", "Match Neon", "Patriot", "Custom R
 
       <!-- STEP 3: COLORS & EXTRAS -->
       <div id="step-3" class="step-section space-y-4 hidden">
-        <h2 class="text-gold font-black uppercase text-lg mb-4">Paints, Lights & Extras</h2>
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-4 gap-4">
+          <h2 class="text-gold font-black uppercase text-lg">Paints, Lights & Extras</h2>
+          <div class="flex gap-2 w-full md:w-auto">
+            <button id="btn-rand-vivid" type="button" class="flex-1 md:flex-none bg-blue-600/20 hover:bg-blue-500 hover:text-white border border-blue-500/50 text-blue-400 font-black uppercase py-2 px-3 rounded-lg text-[10px] tracking-widest transition-all shadow-[0_0_10px_rgba(37,99,235,0.2)]">Random: Vivid</button>
+            <button id="btn-rand-real" type="button" class="flex-1 md:flex-none bg-zinc-800 hover:bg-zinc-600 border border-zinc-600 text-white font-black uppercase py-2 px-3 rounded-lg text-[10px] tracking-widest transition-all">Random: Realistic</button>
+          </div>
+        </div>
         
         <div class="grid grid-cols-2 gap-4">
           <div>
-            <label class="block text-[10px] text-zinc-400 uppercase font-black mb-1">Texture Filter:</label>
+            <label class="block text-[10px] text-gold uppercase font-black mb-1">Texture Filter:</label>
             <select id="texture" class="w-full bg-black border border-zinc-800 rounded-lg p-3 text-white text-sm outline-none focus:border-gold">
               <option value="">-- Select --</option>
               <option value="Super Glossy">Super Glossy</option>
@@ -235,7 +241,7 @@ const tireSmokeOptions = ["Match Headlights", "Match Neon", "Patriot", "Custom R
             </select>
           </div>
           <div>
-            <label class="block text-[10px] text-zinc-400 uppercase font-black mb-1">Window Tint:</label>
+            <label class="block text-[10px] text-gold uppercase font-black mb-1">Window Tint:</label>
             <select id="windows" class="w-full bg-black border border-zinc-800 rounded-lg p-3 text-white text-sm outline-none focus:border-gold">
               <option value="">-- Select --</option>
               {windowTints.map((w) => <option value={w}>{w}</option>)}
@@ -245,14 +251,14 @@ const tireSmokeOptions = ["Match Headlights", "Match Neon", "Patriot", "Custom R
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div class="space-y-1">
-            <label class="text-[10px] text-gold uppercase font-black">Primary:</label>
+            <label class="block text-[10px] text-gold uppercase font-black mb-1">Primary:</label>
             <div class="flex gap-2 items-stretch">
               <select id="primary" class="min-w-0 flex-1 bg-black border border-zinc-800 rounded-lg p-3 text-white text-sm outline-none focus:border-gold"></select>
               <div id="primaryPrev" class="w-10 h-12 rounded border border-zinc-700 bg-zinc-800 flex-shrink-0"></div>
             </div>
           </div>
           <div class="space-y-1">
-            <label class="text-[10px] text-gold uppercase font-black">Secondary:</label>
+            <label class="block text-[10px] text-gold uppercase font-black mb-1">Secondary:</label>
             <div class="flex gap-2 items-stretch">
               <select id="secondary" class="min-w-0 flex-1 bg-black border border-zinc-800 rounded-lg p-3 text-white text-sm outline-none focus:border-gold"></select>
               <div id="secondaryPrev" class="w-10 h-12 rounded border border-zinc-700 bg-zinc-800 flex-shrink-0"></div>
@@ -270,14 +276,14 @@ const tireSmokeOptions = ["Match Headlights", "Match Neon", "Patriot", "Custom R
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div class="space-y-1">
-            <label class="text-[10px] text-gold uppercase font-black">Pearlescent:</label>
+            <label class="block text-[10px] text-gold uppercase font-black mb-1">Pearlescent:</label>
             <div class="flex gap-2 items-stretch">
               <select id="pearl" class="min-w-0 flex-1 bg-black border border-zinc-800 rounded-lg p-3 text-white text-sm outline-none focus:border-gold"></select>
               <div id="pearlPrev" class="w-10 h-12 rounded border border-zinc-700 bg-zinc-800 flex-shrink-0"></div>
             </div>
           </div>
           <div class="space-y-1">
-            <label class="text-[10px] text-gold uppercase font-black">Interior (Optional):</label>
+            <label class="block text-[10px] text-gold uppercase font-black mb-1">Interior (Optional):</label>
             <div class="flex gap-2 items-stretch">
               <select id="interior" class="min-w-0 flex-1 bg-black border border-zinc-800 rounded-lg p-3 text-white text-sm outline-none focus:border-gold"></select>
               <div id="interiorPrev" class="w-10 h-12 rounded border border-zinc-700 bg-zinc-800 flex-shrink-0"></div>
@@ -289,7 +295,7 @@ const tireSmokeOptions = ["Match Headlights", "Match Neon", "Patriot", "Custom R
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 items-start">
           <div class="space-y-1">
-            <label class="text-[10px] text-gold uppercase font-black">Headlights:</label>
+            <label class="block text-[10px] text-gold uppercase font-black mb-1">Headlights:</label>
             <div class="flex gap-2 items-stretch">
               <select id="headlights" class="w-full bg-black border border-zinc-800 rounded-lg p-3 text-white text-sm outline-none focus:border-gold">
                 <option value="">-- Select --</option>
@@ -299,7 +305,7 @@ const tireSmokeOptions = ["Match Headlights", "Match Neon", "Patriot", "Custom R
             </div>
           </div>
           <div class="space-y-1">
-            <label class="text-[10px] text-gold uppercase font-black">Neon Setup:</label>
+            <label class="block text-[10px] text-gold uppercase font-black mb-1">Neon Setup:</label>
             <div class="flex gap-2 items-stretch">
               <select id="neon" class="w-full bg-black border border-zinc-800 rounded-lg p-3 text-white text-sm outline-none focus:border-gold">
                 <option value="">-- Select --</option>
@@ -320,7 +326,7 @@ const tireSmokeOptions = ["Match Headlights", "Match Neon", "Patriot", "Custom R
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div class="space-y-1">
-            <label class="text-[10px] text-gold uppercase font-black">Tire Smoke:</label>
+            <label class="block text-[10px] text-gold uppercase font-black mb-1">Tire Smoke:</label>
             <div class="flex gap-2 items-stretch">
               <select id="tireSmoke" class="w-full bg-black border border-zinc-800 rounded-lg p-3 text-white text-sm outline-none focus:border-gold">
                 <option value="">-- Select --</option>
@@ -332,7 +338,7 @@ const tireSmokeOptions = ["Match Headlights", "Match Neon", "Patriot", "Custom R
           </div>
           
           <div class="space-y-1">
-            <label class="block text-[10px] text-zinc-400 uppercase font-black mb-1">Livery:</label>
+            <label class="block text-[10px] text-gold uppercase font-black mb-1">Livery:</label>
             <input type="text" id="livery" placeholder="Type Livery Name" class="w-full bg-black border border-zinc-800 rounded-lg p-3 text-white text-sm outline-none focus:border-gold" />
           </div>
         </div>
@@ -384,7 +390,7 @@ const tireSmokeOptions = ["Match Headlights", "Match Neon", "Patriot", "Custom R
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div class="space-y-1">
-            <label class="text-[10px] text-gold uppercase font-black">Rim Color:</label>
+            <label class="block text-[10px] text-gold uppercase font-black mb-1">Rim Color:</label>
             <div class="flex gap-2 items-stretch">
               <select id="rimColor" class="min-w-0 flex-1 bg-black border border-zinc-800 rounded-lg p-3 text-white text-sm outline-none focus:border-gold"></select>
               <div id="rimColorPrev" class="w-10 h-12 rounded border border-zinc-700 bg-zinc-800 flex-shrink-0"></div>
@@ -427,6 +433,40 @@ const tireSmokeOptions = ["Match Headlights", "Match Neon", "Patriot", "Custom R
   lightColors.forEach((h) => {
     lightColorMap[h.name] = h.rgb;
   });
+
+  // HSL Converter for filtering Random logic
+  function hexToHSL(hexStr) {
+    if(!hexStr) return {h:0, s:0, l:0};
+    let hex = hexStr.replace('#', '');
+    if(hex.length === 3) hex = hex.split('').map(x => x+x).join('');
+    let r = parseInt(hex.substring(0,2), 16)/255;
+    let g = parseInt(hex.substring(2,4), 16)/255;
+    let b = parseInt(hex.substring(4,6), 16)/255;
+    let max = Math.max(r, g, b), min = Math.min(r, g, b);
+    let h, s, l = (max + min) / 2;
+    if(max === min) { h = s = 0; }
+    else {
+      let d = max - min;
+      s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+      switch(max){
+        case r: h = (g - b) / d + (g < b ? 6 : 0); break;
+        case g: h = (b - r) / d + 2; break;
+        case b: h = (r - g) / d + 4; break;
+      }
+      h /= 6;
+    }
+    return { h: h*360, s, l };
+  }
+
+  function getHslFromVal(val) {
+    if(!val || val.startsWith("Custom")) return {h:0, s:0, l:0};
+    return hexToHSL(hexMap[val]);
+  }
+
+  function hueDistance(h1, h2) {
+    let d = Math.abs(h1 - h2);
+    return d > 180 ? 360 - d : d;
+  }
 
   // UI Wizard Logic
   let currentStep = 1;
@@ -595,7 +635,6 @@ const tireSmokeOptions = ["Match Headlights", "Match Neon", "Patriot", "Custom R
     const smokeBox = document.getElementById("tireSmokePrev");
     const smokeVal = document.getElementById("tireSmoke").value;
     
-    // Clear background styles before applying new ones to avoid conflicts
     smokeBox.style.background = "";
     smokeBox.style.backgroundColor = "#111";
 
@@ -656,12 +695,99 @@ const tireSmokeOptions = ["Match Headlights", "Match Neon", "Patriot", "Custom R
   document.getElementById("expandWheel").addEventListener("click", () => document.getElementById("wheelExpanded").classList.remove("hidden"));
   document.getElementById("collapseWheel").addEventListener("click", () => document.getElementById("wheelExpanded").classList.add("hidden"));
 
+  // --- SMART RANDOMIZATION BUILDERS ---
+  function getOpts(id) {
+    return Array.from(document.getElementById(id).options)
+      .map(o=>o.value)
+      .filter(v => v && !v.startsWith("Custom") && v !== "None");
+  }
+  
+  function pickRandom(arr) {
+    return arr[Math.floor(Math.random() * arr.length)];
+  }
+
+  document.getElementById("btn-rand-vivid").addEventListener("click", () => {
+    document.getElementById("texture").value = Math.random() > 0.5 ? "Super Glossy" : "Glossy";
+    
+    const prims = getOpts("primary").filter(v => {
+      let hsl = getHslFromVal(v);
+      return hsl.s > 0.4 && hsl.l > 0.15 && hsl.l < 0.85; // Bright/High saturation
+    });
+    const pVal = pickRandom(prims) || getOpts("primary")[0];
+    document.getElementById("primary").value = pVal;
+    
+    const pHsl = getHslFromVal(pVal);
+    const secs = getOpts("secondary").filter(v => {
+      let hsl = getHslFromVal(v);
+      if(hsl.s < 0.4) return false;
+      let diff = hueDistance(pHsl.h, hsl.h);
+      return diff > 120 || diff < 45; // Contrast or Analogous
+    });
+    document.getElementById("secondary").value = pickRandom(secs) || pVal;
+    
+    const pearls = getOpts("pearl").filter(v => getHslFromVal(v).s > 0.35);
+    document.getElementById("pearl").value = pickRandom(pearls) || getOpts("pearl")[0];
+    
+    document.getElementById("interior").value = pickRandom(getOpts("interior")) || "";
+    document.getElementById("rimColor").value = pickRandom(getOpts("rimColor")) || "";
+
+    document.getElementById("headlights").value = pickRandom(getOpts("headlights").filter(h => h !== "White" && h !== "Pure White"));
+    document.getElementById("neon").value = pickRandom(getOpts("neon"));
+    document.getElementById("tireSmoke").value = pickRandom(["Match Headlights", "Match Neon", "Patriot"]);
+
+    const vividWheelCats = ["Bennys Bespoke", "Bennys Originals", "Race"];
+    document.getElementById("wheelCategory").value = pickRandom(vividWheelCats);
+    document.getElementById("wheelCategory").dispatchEvent(new Event("change"));
+    
+    const rims = getOpts("rimStyle").filter(r => r !== "Stock");
+    document.getElementById("rimStyle").value = pickRandom(rims) || "Stock";
+    document.getElementById("rimStyle").dispatchEvent(new Event("change"));
+
+    refreshPreviews();
+  });
+
+  document.getElementById("btn-rand-real").addEventListener("click", () => {
+    document.getElementById("texture").value = Math.random() > 0.5 ? "Glossy" : "Matte/Worn";
+    
+    const realPrims = getOpts("primary").filter(v => {
+      let hsl = getHslFromVal(v);
+      return hsl.s < 0.35 || hsl.l < 0.2 || hsl.l > 0.85; // Grays, blacks, whites, muted colors
+    });
+    const pVal = pickRandom(realPrims) || getOpts("primary")[0];
+    document.getElementById("primary").value = pVal;
+    document.getElementById("secondary").value = pVal; // Common for street builds to match
+    
+    const realPearls = getOpts("pearl").filter(v => getHslFromVal(v).s < 0.2); // Only faint/white/silver pearls
+    document.getElementById("pearl").value = pickRandom(realPearls) || getOpts("pearl")[0];
+    
+    const realInts = getOpts("interior").filter(v => {
+      let hsl = getHslFromVal(v);
+      return hsl.s < 0.3 || hsl.l < 0.2 || hsl.l > 0.8;
+    });
+    document.getElementById("interior").value = pickRandom(realInts) || "";
+    
+    document.getElementById("rimColor").value = pickRandom(realInts) || ""; // Keep rims muted too
+
+    document.getElementById("headlights").value = Math.random() > 0.5 ? "White" : "Pure White";
+    document.getElementById("neon").value = "None";
+    document.getElementById("tireSmoke").value = "Match Headlights"; // Force normal smoke
+
+    const realWheelCats = ["Sport", "Street", "SUV", "Tuner", "Muscle", "High End", "Offroad"];
+    document.getElementById("wheelCategory").value = pickRandom(realWheelCats);
+    document.getElementById("wheelCategory").dispatchEvent(new Event("change"));
+    
+    const rims = getOpts("rimStyle").filter(r => r !== "Stock");
+    document.getElementById("rimStyle").value = pickRandom(rims) || "Stock";
+    document.getElementById("rimStyle").dispatchEvent(new Event("change"));
+
+    refreshPreviews();
+  });
+
   // Generation
   document.getElementById("generate").addEventListener("click", () => {
     if (!validateStep(4)) return;
 
     const get = (id) => document.getElementById(id).value || "";
-    // Revert user underscores back into actual blank spaces for the output spec
     const outPlate = get("plate").replace(/_/g, " "); 
 
     const formatColor = (val) => {
