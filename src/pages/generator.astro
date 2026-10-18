@@ -132,8 +132,9 @@ const wheelImages = {
   Tuner: "/images/wheels/tuner.png",
 };
 
-const headlightColors = [
+const lightColors = [
   { name: "White", rgb: "222, 222, 255" },
+  { name: "Pure White", rgb: "255, 255, 255" },
   { name: "Blue", rgb: "2, 21, 255" },
   { name: "Electric Blue", rgb: "3, 83, 255" },
   { name: "Mint Green", rgb: "0, 255, 140" },
@@ -159,306 +160,288 @@ const plateData = [
   { name: "Sprunk", file: "Sprunk.png", color: "#FFFFFF" }
 ];
 
-const horns = ["Stock", "Truck Horn", "Cop Horn", "Clown Horn", "Musical Horn 1", "Musical Horn 2", "Musical Horn 3", "Musical Horn 4", "Musical Horn 5", "Sadtrombone", "Classical Horn 1", "Classical Horn 2", "Classical Horn 3", "Classical Horn 4", "Classical Horn 5", "Classical Horn 6", "Classical Horn 7", "Classical Horn 8"];
-
-const windowTints = ["Clear", "Light Smoke", "Dark Smoke", "Limo", "Green"];
-const neonOptions = ["None", "Crew", "Pure White", "Blue", "Electric Blue", "Mint Green", "Lime Green", "Yellow", "Golden Shower", "Orange", "Red", "Pony Pink", "Hot Pink", "Purple", "Blacklight"];
+const windowTints = ["Clear", "Green"];
+const neonOptions = ["None", "Pure White", "Blue", "Electric Blue", "Mint Green", "Lime Green", "Yellow", "Golden Shower", "Orange", "Red", "Pony Pink", "Hot Pink", "Purple", "Black Light", "Custom RGB"];
 const tireDesigns = ["None", "White lines", "Classic", "Retro", "Red", "Blue"];
-const tireSmokeOptions = ["Match Headlights", "Patriot Black (0,0,0)", "Custom RGB"];
-
-const preferredRimCats = ["Bennys Bespoke", "Bennys Originals", "Race"];
-const randomizableRimCats = Object.keys(wheelCategories).filter((c) => c !== "Bike");
+const tireSmokeOptions = ["Match Headlights", "Match Neon", "Patriot Black (0,0,0)", "Custom RGB"];
 ---
 
-<MainLayout
-  title="DMO Generator"
-  description="GTA Online DMO generator. Official Nugzz Crew."
->
-  <div class="max-w-6xl mx-auto px-4 py-12">
+<MainLayout title="DMO Generator" description="GTA Online DMO generator. Official Nugzz Crew.">
+  <div class="max-w-3xl mx-auto px-4 py-12">
     <div class="mb-10 text-center">
       <h1 class="text-4xl font-header uppercase tracking-tighter mb-2">
         <span class="text-white">DMO</span>
         <span class="text-gold">Generator</span>
       </h1>
-      <p class="text-zinc-400 uppercase text-xs tracking-[0.2em]">
-        Step-by-Step Spec Builder
-      </p>
+      <p class="text-zinc-400 uppercase text-xs tracking-[0.2em]">Step-by-Step Spec Builder</p>
     </div>
 
     <!-- Step Progress Bar -->
-    <div class="flex justify-between mb-8 max-w-3xl mx-auto border-b border-zinc-800 pb-4">
+    <div class="flex justify-between mb-8 border-b border-zinc-800 pb-4">
       <button id="nav-step-1" class="step-nav text-gold font-black uppercase text-xs tracking-widest cursor-pointer">1. Vehicle</button>
       <button id="nav-step-2" class="step-nav text-zinc-500 font-black uppercase text-xs tracking-widest cursor-pointer hover:text-zinc-300">2. Plate</button>
       <button id="nav-step-3" class="step-nav text-zinc-500 font-black uppercase text-xs tracking-widest cursor-pointer hover:text-zinc-300">3. Colors</button>
-      <button id="nav-step-4" class="step-nav text-zinc-500 font-black uppercase text-xs tracking-widest cursor-pointer hover:text-zinc-300">4. Wheels & Finalize</button>
+      <button id="nav-step-4" class="step-nav text-zinc-500 font-black uppercase text-xs tracking-widest cursor-pointer hover:text-zinc-300">4. Wheels</button>
     </div>
 
-    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
-      <div class="lg:col-span-7 bg-zinc-900/40 p-6 rounded-3xl border border-zinc-800 space-y-6 min-h-[600px] flex flex-col justify-between">
+    <!-- Main Content Container -->
+    <div class="bg-zinc-900/40 p-6 rounded-3xl border border-zinc-800 space-y-6 min-h-[500px] flex flex-col justify-between">
+      
+      <!-- STEP 1: VEHICLE -->
+      <div id="step-1" class="step-section space-y-6">
+        <h2 class="text-gold font-black uppercase text-lg mb-4">Vehicle Details</h2>
+        <div>
+          <label class="block text-[10px] text-zinc-400 uppercase font-black mb-1">Vehicle Name (Required):</label>
+          <input type="text" id="vehicle" placeholder="e.g. Buffalo STX" class="w-full bg-black border border-zinc-800 rounded-lg p-3 text-white text-sm outline-none focus:border-gold"/>
+        </div>
+        <div class="flex gap-3 pt-6 border-t border-zinc-800">
+          <button id="btn-next-1" class="w-full bg-zinc-800 hover:bg-gold hover:text-black text-white font-black uppercase py-3 rounded-xl text-xs tracking-widest transition-all">Next: Plates</button>
+        </div>
+      </div>
+
+      <!-- STEP 2: PLATE -->
+      <div id="step-2" class="step-section space-y-6 hidden">
+        <h2 class="text-gold font-black uppercase text-lg mb-4">License Plate</h2>
+        <div class="flex flex-col md:flex-row gap-6">
+          <div class="flex-1 space-y-4">
+            <div>
+              <label class="block text-[10px] text-zinc-400 uppercase font-black mb-1">Plate Style:</label>
+              <select id="plateStyle" class="w-full bg-black border border-zinc-800 rounded-lg p-3 text-white text-sm outline-none focus:border-gold">
+                {plateData.map(p => <option value={p.name} data-file={p.file} data-color={p.color}>{p.name}</option>)}
+              </select>
+            </div>
+            <div>
+              <label class="block text-[10px] text-zinc-400 uppercase font-black mb-1">Plate Text (Exact 8 Chars):</label>
+              <input type="text" id="plate" maxlength="8" placeholder="8 CHARS" class="w-full bg-black border border-zinc-800 rounded-lg p-3 text-white text-sm uppercase font-mono outline-none focus:border-gold tracking-[0.3em]" />
+              <p class="text-[9px] text-zinc-500 mt-2">Use underscores <span class="text-white">_</span> to center text visually.</p>
+            </div>
+            <div class="flex items-center gap-3 p-3 bg-zinc-800/50 rounded-lg border border-zinc-700">
+              <input type="checkbox" id="blanktonToggle" class="w-4 h-4 accent-gold cursor-pointer" />
+              <label for="blanktonToggle" class="text-[10px] text-zinc-300 uppercase font-black cursor-pointer tracking-widest">Apply BLANKTON</label>
+            </div>
+          </div>
+
+          <div class="flex-1 flex flex-col items-center justify-center">
+            <label class="block text-[10px] text-zinc-400 uppercase font-black mb-2 w-full text-center">Live Preview:</label>
+            <div class="relative w-[280px] h-[140px] rounded overflow-hidden shadow-2xl border border-zinc-700 bg-black">
+              <img id="platePreviewImg" src={`/images/plates/${plateData[0].file}`} alt="Plate Background" class="absolute inset-0 w-full h-full object-cover" />
+              <div id="platePreviewText" class="absolute inset-0 flex items-center justify-center text-4xl font-black uppercase tracking-widest whitespace-pre drop-shadow-md" style={`font-family: 'Courier New', Courier, monospace; color: ${plateData[0].color};`}></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="flex gap-3 pt-6 border-t border-zinc-800">
+          <button id="btn-prev-2" class="flex-1 bg-zinc-800 hover:bg-zinc-700 text-white font-black uppercase py-3 rounded-xl text-xs tracking-widest transition-all">Back</button>
+          <button id="btn-next-2" class="flex-1 bg-zinc-800 hover:bg-gold hover:text-black text-white font-black uppercase py-3 rounded-xl text-xs tracking-widest transition-all">Next: Colors</button>
+        </div>
+      </div>
+
+      <!-- STEP 3: COLORS & EXTRAS -->
+      <div id="step-3" class="step-section space-y-4 hidden">
+        <h2 class="text-gold font-black uppercase text-lg mb-4">Paints, Lights & Extras</h2>
         
-        <!-- STEP 1: VEHICLE -->
-        <div id="step-1" class="step-section space-y-6">
-          <h2 class="text-gold font-black uppercase text-lg mb-4">Vehicle Details</h2>
+        <div class="grid grid-cols-2 gap-4">
           <div>
-            <label class="block text-[10px] text-zinc-400 uppercase font-black mb-1">Vehicle Name (Required):</label>
-            <input type="text" id="vehicle" placeholder="e.g. Buffalo STX" class="w-full bg-black border border-zinc-800 rounded-lg p-3 text-white text-sm outline-none focus:border-gold"/>
+            <label class="block text-[10px] text-zinc-400 uppercase font-black mb-1">Texture Filter:</label>
+            <select id="texture" class="w-full bg-black border border-zinc-800 rounded-lg p-3 text-white text-sm outline-none focus:border-gold">
+              {textureOrder.filter((t) => byTexture[t]).map((t) => <option value={t}>{t}</option>)}
+            </select>
           </div>
-          <div class="flex gap-3 pt-6 border-t border-zinc-800">
-            <button id="btn-next-1" class="w-full bg-zinc-800 hover:bg-gold hover:text-black text-white font-black uppercase py-3 rounded-xl text-xs tracking-widest transition-all">Next: Plates</button>
-          </div>
-        </div>
-
-        <!-- STEP 2: PLATE -->
-        <div id="step-2" class="step-section space-y-6 hidden">
-          <h2 class="text-gold font-black uppercase text-lg mb-4">License Plate</h2>
-          
-          <div class="flex flex-col md:flex-row gap-6">
-            <div class="flex-1 space-y-4">
-              <div>
-                <label class="block text-[10px] text-zinc-400 uppercase font-black mb-1">Plate Style:</label>
-                <select id="plateStyle" class="w-full bg-black border border-zinc-800 rounded-lg p-3 text-white text-sm outline-none focus:border-gold">
-                  {plateData.map(p => <option value={p.name} data-file={p.file} data-color={p.color}>{p.name}</option>)}
-                </select>
-              </div>
-              <div>
-                <label class="block text-[10px] text-zinc-400 uppercase font-black mb-1">Plate Text (Exact 8 Chars):</label>
-                <input type="text" id="plate" maxlength="8" placeholder="8 CHARS" class="w-full bg-black border border-zinc-800 rounded-lg p-3 text-white text-sm uppercase font-mono outline-none focus:border-gold tracking-[0.3em]" />
-                <p class="text-[9px] text-zinc-500 mt-2">Use underscores <span class="text-white">_</span> to center text visually.</p>
-              </div>
-              <div class="flex items-center gap-3 p-3 bg-zinc-800/50 rounded-lg border border-zinc-700">
-                <input type="checkbox" id="blanktonToggle" class="w-4 h-4 accent-gold cursor-pointer" />
-                <label for="blanktonToggle" class="text-[10px] text-zinc-300 uppercase font-black cursor-pointer tracking-widest">Apply BLANKTON</label>
-              </div>
-            </div>
-
-            <!-- Plate Visual Preview -->
-            <div class="flex-1 flex flex-col items-center justify-center">
-              <label class="block text-[10px] text-zinc-400 uppercase font-black mb-2 w-full text-center">Live Preview:</label>
-              <div class="relative w-[280px] h-[140px] rounded overflow-hidden shadow-2xl border border-zinc-700 bg-black">
-                <img id="platePreviewImg" src={`/images/plates/${plateData[0].file}`} alt="Plate Background" class="absolute inset-0 w-full h-full object-cover" />
-                <div id="platePreviewText" class="absolute inset-0 flex items-center justify-center text-4xl font-black uppercase tracking-widest whitespace-pre drop-shadow-md" style={`font-family: 'Courier New', Courier, monospace; color: ${plateData[0].color};`}>
-                  
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="flex gap-3 pt-6 border-t border-zinc-800">
-            <button id="btn-prev-2" class="flex-1 bg-zinc-800 hover:bg-zinc-700 text-white font-black uppercase py-3 rounded-xl text-xs tracking-widest transition-all">Back</button>
-            <button id="btn-next-2" class="flex-1 bg-zinc-800 hover:bg-gold hover:text-black text-white font-black uppercase py-3 rounded-xl text-xs tracking-widest transition-all">Next: Colors</button>
+          <div>
+            <label class="block text-[10px] text-zinc-400 uppercase font-black mb-1">Window Tint:</label>
+            <select id="windows" class="w-full bg-black border border-zinc-800 rounded-lg p-3 text-white text-sm outline-none focus:border-gold">
+              <option value="">-- Select --</option>
+              {windowTints.map((w) => <option value={w}>{w}</option>)}
+            </select>
           </div>
         </div>
 
-        <!-- STEP 3: COLORS & EXTRAS -->
-        <div id="step-3" class="step-section space-y-4 hidden">
-          <h2 class="text-gold font-black uppercase text-lg mb-4">Paints, Lights & Extras</h2>
-          
-          <div class="grid grid-cols-2 gap-4">
-            <div>
-              <label class="block text-[10px] text-zinc-400 uppercase font-black mb-1">Texture Filter:</label>
-              <select id="texture" class="w-full bg-black border border-zinc-800 rounded-lg p-3 text-white text-sm outline-none focus:border-gold">
-                {textureOrder.filter((t) => byTexture[t]).map((t) => <option value={t}>{t}</option>)}
-              </select>
-            </div>
-            <div>
-              <label class="block text-[10px] text-zinc-400 uppercase font-black mb-1">Window Tint:</label>
-              <select id="windows" class="w-full bg-black border border-zinc-800 rounded-lg p-3 text-white text-sm outline-none focus:border-gold">
-                {windowTints.map((w) => <option value={w}>{w}</option>)}
-              </select>
-            </div>
-          </div>
-
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div class="space-y-1">
-              <label class="text-[10px] text-gold uppercase font-black">Primary:</label>
-              <div class="flex gap-2 items-stretch">
-                <select id="primary" class="min-w-0 flex-1 bg-black border border-zinc-800 rounded-lg p-3 text-white text-sm outline-none focus:border-gold"></select>
-                <div id="primaryPrev" class="w-10 h-12 rounded border border-zinc-700 bg-zinc-800 flex-shrink-0"></div>
-              </div>
-            </div>
-            <div class="space-y-1">
-              <label class="text-[10px] text-gold uppercase font-black">Secondary:</label>
-              <div class="flex gap-2 items-stretch">
-                <select id="secondary" class="min-w-0 flex-1 bg-black border border-zinc-800 rounded-lg p-3 text-white text-sm outline-none focus:border-gold"></select>
-                <div id="secondaryPrev" class="w-10 h-12 rounded border border-zinc-700 bg-zinc-800 flex-shrink-0"></div>
-              </div>
-            </div>
-          </div>
-
-          <div id="rgbInputArea" class="bg-gold/10 p-4 rounded-xl border border-gold/50" style="display:none;">
-            <label class="block text-[10px] text-gold uppercase font-black mb-2">Custom RGB applied to BOTH Primary & Secondary:</label>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="space-y-1">
+            <label class="text-[10px] text-gold uppercase font-black">Primary:</label>
             <div class="flex gap-2 items-stretch">
-              <input type="text" id="sharedRgb" placeholder="255, 255, 255" class="min-w-0 flex-1 bg-black border-2 border-gold rounded-lg p-3 text-white text-sm font-mono outline-none" />
-              <div id="sharedRgbPrev" class="w-12 h-12 rounded border border-gold/60 bg-zinc-800 flex-shrink-0"></div>
+              <select id="primary" class="min-w-0 flex-1 bg-black border border-zinc-800 rounded-lg p-3 text-white text-sm outline-none focus:border-gold"></select>
+              <div id="primaryPrev" class="w-10 h-12 rounded border border-zinc-700 bg-zinc-800 flex-shrink-0"></div>
             </div>
           </div>
-
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div class="space-y-1">
-              <label class="text-[10px] text-gold uppercase font-black">Pearlescent:</label>
-              <div class="flex gap-2 items-stretch">
-                <select id="pearl" class="min-w-0 flex-1 bg-black border border-zinc-800 rounded-lg p-3 text-white text-sm outline-none focus:border-gold"></select>
-                <div id="pearlPrev" class="w-10 h-12 rounded border border-zinc-700 bg-zinc-800 flex-shrink-0"></div>
-              </div>
-            </div>
-            <div class="space-y-1">
-              <label class="text-[10px] text-gold uppercase font-black">Interior:</label>
-              <div class="flex gap-2 items-stretch">
-                <select id="interior" class="min-w-0 flex-1 bg-black border border-zinc-800 rounded-lg p-3 text-white text-sm outline-none focus:border-gold"></select>
-                <div id="interiorPrev" class="w-10 h-12 rounded border border-zinc-700 bg-zinc-800 flex-shrink-0"></div>
-              </div>
-            </div>
-          </div>
-
-          <hr class="border-zinc-800 my-4" />
-
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 items-start">
-            <div class="space-y-1">
-              <label class="text-[10px] text-gold uppercase font-black">Headlights:</label>
-              <div class="flex gap-2 items-stretch">
-                <select id="headlights" class="w-full bg-black border border-zinc-800 rounded-lg p-3 text-white text-sm outline-none focus:border-gold">
-                  {headlightColors.map((h) => <option value={h.name} data-rgb={h.rgb}>{h.name}</option>)}
-                </select>
-                <div id="headlightsPrev" class="w-10 h-12 rounded border border-zinc-700 bg-zinc-800 flex-shrink-0"></div>
-              </div>
-            </div>
-            <div class="space-y-1">
-              <label class="text-[10px] text-gold uppercase font-black">Neon Setup:</label>
-              <div class="flex gap-2 items-stretch">
-                <select id="neon" class="w-full bg-black border border-zinc-800 rounded-lg p-3 text-white text-sm outline-none focus:border-gold">
-                  {neonOptions.map((c) => <option value={c}>{c}</option>)}
-                </select>
-                <div id="neonPrev" class="w-10 h-12 rounded border border-zinc-700 bg-zinc-800 flex-shrink-0"></div>
-              </div>
-            </div>
-          </div>
-
-          <div id="neonRgbArea" class="bg-gold/10 p-4 rounded-xl border border-gold/50" style="display:none;">
-            <label class="block text-[10px] text-gold uppercase font-black mb-2">Neon Crew Color (RGB):</label>
+          <div class="space-y-1">
+            <label class="text-[10px] text-gold uppercase font-black">Secondary:</label>
             <div class="flex gap-2 items-stretch">
-              <input type="text" id="neonRgb" placeholder="0, 255, 255" class="min-w-0 flex-1 bg-black border-2 border-gold rounded-lg p-3 text-white text-sm font-mono outline-none" />
-              <div id="neonRgbPrev" class="w-12 h-12 rounded border border-gold/60 bg-zinc-800 flex-shrink-0"></div>
+              <select id="secondary" class="min-w-0 flex-1 bg-black border border-zinc-800 rounded-lg p-3 text-white text-sm outline-none focus:border-gold"></select>
+              <div id="secondaryPrev" class="w-10 h-12 rounded border border-zinc-700 bg-zinc-800 flex-shrink-0"></div>
             </div>
-          </div>
-
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div class="space-y-1">
-              <label class="text-[10px] text-gold uppercase font-black">Tire Smoke:</label>
-              <div class="flex gap-2 items-stretch">
-                <select id="tireSmoke" class="w-full bg-black border border-zinc-800 rounded-lg p-3 text-white text-sm outline-none focus:border-gold">
-                  {tireSmokeOptions.map((o) => <option value={o}>{o}</option>)}
-                </select>
-                <div id="tireSmokePrev" class="w-10 h-12 rounded border border-zinc-700 bg-zinc-800 flex-shrink-0"></div>
-              </div>
-              <input type="text" id="tireSmokeCustom" placeholder="Custom RGB (e.g. 255, 0, 0)" class="w-full mt-2 bg-black border border-zinc-800 rounded-lg p-3 text-white text-sm outline-none focus:border-gold hidden" />
-            </div>
-            
-            <div class="space-y-1">
-              <div class="grid grid-cols-2 gap-2">
-                <div>
-                  <label class="block text-[10px] text-zinc-400 uppercase font-black mb-1">Horn:</label>
-                  <select id="horn" class="w-full bg-black border border-zinc-800 rounded-lg p-3 text-white text-sm outline-none focus:border-gold">
-                    {horns.map(h => <option value={h}>{h}</option>)}
-                  </select>
-                </div>
-                <div>
-                  <label class="block text-[10px] text-zinc-400 uppercase font-black mb-1">Livery:</label>
-                  <input type="text" id="livery" placeholder="Type Livery Name" class="w-full bg-black border border-zinc-800 rounded-lg p-3 text-white text-sm outline-none focus:border-gold" />
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="flex gap-3 pt-6 border-t border-zinc-800">
-             <button id="btn-prev-3" class="flex-1 bg-zinc-800 hover:bg-zinc-700 text-white font-black uppercase py-3 rounded-xl text-xs tracking-widest transition-all">Back</button>
-             <button id="btn-next-3" class="flex-1 bg-zinc-800 hover:bg-gold hover:text-black text-white font-black uppercase py-3 rounded-xl text-xs tracking-widest transition-all">Next: Wheels</button>
           </div>
         </div>
 
-        <!-- STEP 4: WHEELS & OUTPUT -->
-        <div id="step-4" class="step-section space-y-6 hidden">
-          <h2 class="text-gold font-black uppercase text-lg mb-4">Wheels & Stance</h2>
+        <div id="rgbInputArea" class="bg-gold/10 p-4 rounded-xl border border-gold/50" style="display:none;">
+          <label class="block text-[10px] text-gold uppercase font-black mb-2">Custom RGB applied to BOTH Primary & Secondary:</label>
+          <div class="flex gap-2 items-stretch">
+            <input type="text" id="sharedRgb" placeholder="255, 255, 255" class="min-w-0 flex-1 bg-black border-2 border-gold rounded-lg p-3 text-white text-sm font-mono outline-none" />
+            <div id="sharedRgbPrev" class="w-12 h-12 rounded border border-gold/60 bg-zinc-800 flex-shrink-0"></div>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="space-y-1">
+            <label class="text-[10px] text-gold uppercase font-black">Pearlescent:</label>
+            <div class="flex gap-2 items-stretch">
+              <select id="pearl" class="min-w-0 flex-1 bg-black border border-zinc-800 rounded-lg p-3 text-white text-sm outline-none focus:border-gold"></select>
+              <div id="pearlPrev" class="w-10 h-12 rounded border border-zinc-700 bg-zinc-800 flex-shrink-0"></div>
+            </div>
+          </div>
+          <div class="space-y-1">
+            <label class="text-[10px] text-gold uppercase font-black">Interior:</label>
+            <div class="flex gap-2 items-stretch">
+              <select id="interior" class="min-w-0 flex-1 bg-black border border-zinc-800 rounded-lg p-3 text-white text-sm outline-none focus:border-gold"></select>
+              <div id="interiorPrev" class="w-10 h-12 rounded border border-zinc-700 bg-zinc-800 flex-shrink-0"></div>
+            </div>
+          </div>
+        </div>
+
+        <hr class="border-zinc-800 my-4" />
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 items-start">
+          <div class="space-y-1">
+            <label class="text-[10px] text-gold uppercase font-black">Headlights:</label>
+            <div class="flex gap-2 items-stretch">
+              <select id="headlights" class="w-full bg-black border border-zinc-800 rounded-lg p-3 text-white text-sm outline-none focus:border-gold">
+                <option value="">-- Select --</option>
+                {lightColors.filter(h => h.name !== "Pure White").map((h) => <option value={h.name}>{h.name}</option>)}
+              </select>
+              <div id="headlightsPrev" class="w-10 h-12 rounded border border-zinc-700 bg-zinc-800 flex-shrink-0"></div>
+            </div>
+          </div>
+          <div class="space-y-1">
+            <label class="text-[10px] text-gold uppercase font-black">Neon Setup:</label>
+            <div class="flex gap-2 items-stretch">
+              <select id="neon" class="w-full bg-black border border-zinc-800 rounded-lg p-3 text-white text-sm outline-none focus:border-gold">
+                <option value="">-- Select --</option>
+                {neonOptions.map((c) => <option value={c}>{c}</option>)}
+              </select>
+              <div id="neonPrev" class="w-10 h-12 rounded border border-zinc-700 bg-zinc-800 flex-shrink-0"></div>
+            </div>
+          </div>
+        </div>
+
+        <div id="neonRgbArea" class="bg-gold/10 p-4 rounded-xl border border-gold/50" style="display:none;">
+          <label class="block text-[10px] text-gold uppercase font-black mb-2">Neon Custom RGB:</label>
+          <div class="flex gap-2 items-stretch">
+            <input type="text" id="neonRgb" placeholder="0, 255, 255" class="min-w-0 flex-1 bg-black border-2 border-gold rounded-lg p-3 text-white text-sm font-mono outline-none" />
+            <div id="neonRgbPrev" class="w-12 h-12 rounded border border-gold/60 bg-zinc-800 flex-shrink-0"></div>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="space-y-1">
+            <label class="text-[10px] text-gold uppercase font-black">Tire Smoke:</label>
+            <div class="flex gap-2 items-stretch">
+              <select id="tireSmoke" class="w-full bg-black border border-zinc-800 rounded-lg p-3 text-white text-sm outline-none focus:border-gold">
+                <option value="">-- Select --</option>
+                {tireSmokeOptions.map((o) => <option value={o}>{o}</option>)}
+              </select>
+              <div id="tireSmokePrev" class="w-10 h-12 rounded border border-zinc-700 bg-zinc-800 flex-shrink-0"></div>
+            </div>
+            <input type="text" id="tireSmokeCustom" placeholder="Custom RGB (e.g. 255, 0, 0)" class="w-full mt-2 bg-black border border-zinc-800 rounded-lg p-3 text-white text-sm outline-none focus:border-gold hidden" />
+          </div>
           
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 items-start">
-            <div>
-              <label class="block text-[10px] text-gold uppercase font-black mb-1">Wheel Category:</label>
-              <select id="wheelCategory" class="w-full bg-black border border-zinc-800 rounded-lg p-3 text-white text-sm outline-none focus:border-gold">
-                {Object.keys(wheelCategories).map((cat) => (
-                  <option value={cat}>{cat}</option>
-                ))}
-              </select>
-            </div>
-            <div>
-              <label class="block text-[10px] text-gold uppercase font-black mb-1">Rim Style:</label>
-              <select id="rimStyle" class="w-full bg-black border border-zinc-800 rounded-lg p-3 text-white text-sm outline-none focus:border-gold"></select>
-            </div>
-          </div>
-
-          <div id="activatorWrapper" class="hidden p-3 bg-red-900/20 rounded-lg border border-red-500/50">
-            <div class="flex items-center gap-3">
-              <input type="checkbox" id="activator" class="w-4 h-4 accent-red-500 cursor-pointer" />
-              <label for="activator" class="text-[10px] text-red-400 uppercase font-black cursor-pointer tracking-widest">Apply Activator (Waves Selected)</label>
-            </div>
-          </div>
-
-          <div class="flex items-center gap-4">
-            <img id="wheelThumb" src="/images/wheels/bennys-bespoke.png" alt="Wheel category" class="w-24 h-16 object-cover rounded border border-zinc-700 cursor-pointer hover:border-gold transition-all" />
-            <button id="expandWheel" type="button" class="text-[10px] text-zinc-400 uppercase tracking-widest hover:text-gold">Click to expand full grid</button>
-          </div>
-
-          <div id="wheelExpanded" class="hidden mt-2">
-            <img id="wheelFull" src="/images/wheels/bennys-bespoke.png" alt="Full wheel grid" class="w-full rounded-lg border border-zinc-700 max-h-96 object-contain bg-black" />
-            <button id="collapseWheel" type="button" class="mt-2 text-[10px] text-zinc-500 uppercase tracking-widest hover:text-gold">Collapse</button>
-          </div>
-
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div class="space-y-1">
-              <label class="text-[10px] text-gold uppercase font-black">Rim Color:</label>
-              <div class="flex gap-2 items-stretch">
-                <select id="rimColor" class="min-w-0 flex-1 bg-black border border-zinc-800 rounded-lg p-3 text-white text-sm outline-none focus:border-gold"></select>
-                <div id="rimColorPrev" class="w-10 h-12 rounded border border-zinc-700 bg-zinc-800 flex-shrink-0"></div>
-              </div>
-            </div>
-            <div>
-              <label class="block text-[10px] text-gold uppercase font-black mb-1">Tire Design:</label>
-              <select id="tires" class="w-full bg-black border border-zinc-800 rounded-lg p-3 text-white text-sm outline-none focus:border-gold">
-                {tireDesigns.map((d) => <option value={d}>{d}</option>)}
-              </select>
-            </div>
-          </div>
-
-          <div class="flex gap-3 pt-6 border-t border-zinc-800">
-            <button id="btn-prev-4" class="flex-1 bg-zinc-800 hover:bg-zinc-700 text-white font-black uppercase py-3 rounded-xl text-xs tracking-widest transition-all">Back</button>
-            <button id="generate" type="button" class="flex-[2] bg-gold hover:bg-gold/90 text-black font-black uppercase py-3 rounded-xl text-xs tracking-widest transition-all shadow-[0_0_15px_rgba(212,175,55,0.4)]">Generate DMO Spec</button>
+          <div class="space-y-1">
+            <label class="block text-[10px] text-zinc-400 uppercase font-black mb-1">Livery:</label>
+            <input type="text" id="livery" placeholder="Type Livery Name" class="w-full bg-black border border-zinc-800 rounded-lg p-3 text-white text-sm outline-none focus:border-gold" />
           </div>
         </div>
 
+        <div class="flex gap-3 pt-6 border-t border-zinc-800">
+           <button id="btn-prev-3" class="flex-1 bg-zinc-800 hover:bg-zinc-700 text-white font-black uppercase py-3 rounded-xl text-xs tracking-widest transition-all">Back</button>
+           <button id="btn-next-3" class="flex-1 bg-zinc-800 hover:bg-gold hover:text-black text-white font-black uppercase py-3 rounded-xl text-xs tracking-widest transition-all">Next: Wheels</button>
+        </div>
       </div>
 
-      <div class="lg:col-span-5">
-        <div class="bg-zinc-900/40 p-6 rounded-3xl border border-zinc-800 sticky top-6">
-          <h2 class="text-sm font-black uppercase tracking-widest text-gold mb-4">Final Spec</h2>
-          <pre id="output" class="text-[10px] text-zinc-300 font-mono whitespace-pre-wrap break-all bg-black/50 p-4 rounded-xl border border-zinc-800 min-h-[400px]"></pre>
-          <button id="copy" type="button" class="mt-4 w-full bg-zinc-800 hover:bg-zinc-700 text-white font-black uppercase py-3 rounded-xl text-xs tracking-widest transition-all">Copy</button>
+      <!-- STEP 4: WHEELS -->
+      <div id="step-4" class="step-section space-y-6 hidden">
+        <h2 class="text-gold font-black uppercase text-lg mb-4">Wheels</h2>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 items-start">
+          <div>
+            <label class="block text-[10px] text-gold uppercase font-black mb-1">Wheel Category:</label>
+            <select id="wheelCategory" class="w-full bg-black border border-zinc-800 rounded-lg p-3 text-white text-sm outline-none focus:border-gold">
+              <option value="">-- Select --</option>
+              {Object.keys(wheelCategories).map((cat) => (
+                <option value={cat}>{cat}</option>
+              ))}
+            </select>
+          </div>
+          <div>
+            <label class="block text-[10px] text-gold uppercase font-black mb-1">Rim Style:</label>
+            <select id="rimStyle" class="w-full bg-black border border-zinc-800 rounded-lg p-3 text-white text-sm outline-none focus:border-gold">
+              <option value="">-- Select Category First --</option>
+            </select>
+          </div>
+        </div>
+
+        <div id="activatorWrapper" class="hidden p-3 bg-red-900/20 rounded-lg border border-red-500/50">
+          <div class="flex items-center gap-3">
+            <input type="checkbox" id="activator" class="w-4 h-4 accent-red-500 cursor-pointer" />
+            <label for="activator" class="text-[10px] text-red-400 uppercase font-black cursor-pointer tracking-widest">Apply Activator (Waves Selected)</label>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-4">
+          <img id="wheelThumb" src="/images/wheels/bennys-bespoke.png" alt="Wheel preview" class="w-24 h-16 object-cover rounded border border-zinc-700 cursor-pointer hover:border-gold transition-all bg-black" />
+          <button id="expandWheel" type="button" class="text-[10px] text-zinc-400 uppercase tracking-widest hover:text-gold">Click to expand full grid</button>
+        </div>
+
+        <div id="wheelExpanded" class="hidden mt-2">
+          <img id="wheelFull" src="/images/wheels/bennys-bespoke.png" alt="Full wheel grid" class="w-full rounded-lg border border-zinc-700 max-h-96 object-contain bg-black" />
+          <button id="collapseWheel" type="button" class="mt-2 text-[10px] text-zinc-500 uppercase tracking-widest hover:text-gold">Collapse</button>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="space-y-1">
+            <label class="text-[10px] text-gold uppercase font-black">Rim Color:</label>
+            <div class="flex gap-2 items-stretch">
+              <select id="rimColor" class="min-w-0 flex-1 bg-black border border-zinc-800 rounded-lg p-3 text-white text-sm outline-none focus:border-gold"></select>
+              <div id="rimColorPrev" class="w-10 h-12 rounded border border-zinc-700 bg-zinc-800 flex-shrink-0"></div>
+            </div>
+          </div>
+          <div>
+            <label class="block text-[10px] text-gold uppercase font-black mb-1">Tire Design:</label>
+            <select id="tires" class="w-full bg-black border border-zinc-800 rounded-lg p-3 text-white text-sm outline-none focus:border-gold">
+              <option value="">-- Select --</option>
+              {tireDesigns.map((d) => <option value={d}>{d}</option>)}
+            </select>
+          </div>
+        </div>
+
+        <div class="flex gap-3 pt-6 border-t border-zinc-800">
+          <button id="btn-prev-4" class="flex-1 bg-zinc-800 hover:bg-zinc-700 text-white font-black uppercase py-3 rounded-xl text-xs tracking-widest transition-all">Back</button>
+          <button id="generate" type="button" class="flex-[2] bg-gold hover:bg-gold/90 text-black font-black uppercase py-3 rounded-xl text-xs tracking-widest transition-all shadow-[0_0_15px_rgba(212,175,55,0.4)]">Generate DMO Spec</button>
         </div>
       </div>
     </div>
+
+    <!-- FINAL OUTPUT (Hidden until Generated) -->
+    <div id="outputContainer" class="mt-8 bg-zinc-900/40 p-6 rounded-3xl border border-zinc-800 hidden">
+      <h2 class="text-sm font-black uppercase tracking-widest text-gold mb-4">Final Spec</h2>
+      <pre id="output" class="text-[10px] text-zinc-300 font-mono whitespace-pre-wrap break-all bg-black/50 p-4 rounded-xl border border-zinc-800 min-h-[300px]"></pre>
+      <button id="copy" type="button" class="mt-4 w-full bg-zinc-800 hover:bg-zinc-700 text-white font-black uppercase py-3 rounded-xl text-xs tracking-widest transition-all">Copy</button>
+    </div>
+
   </div>
 </MainLayout>
 
-<script is:inline define:vars={{ allUnselected, wheelCategories, byTexture, headlightColors }}>
+<script is:inline define:vars={{ allUnselected, wheelCategories, byTexture, lightColors }}>
   const hexMap = {};
   allUnselected.forEach((c) => {
     const key = c.texture + "|" + c.name;
     hexMap[key] = c.hex;
   });
 
-  const headlightMap = {};
-  headlightColors.forEach((h) => {
-    headlightMap[h.name] = `rgb(${h.rgb})`;
+  const lightColorMap = {};
+  lightColors.forEach((h) => {
+    lightColorMap[h.name] = h.rgb;
   });
 
-  // UI Wizard Steps
+  // UI Wizard Logic
   let currentStep = 1;
   function showStep(step) {
     document.querySelectorAll('.step-section').forEach(el => el.classList.add('hidden'));
@@ -473,15 +456,44 @@ const randomizableRimCats = Object.keys(wheelCategories).filter((c) => c !== "Bi
     currentStep = step;
   }
 
+  function validateStep(step) {
+    if (step === 1) {
+      if (!document.getElementById("vehicle").value.trim()) { alert("Please enter a Vehicle Name."); return false; }
+    }
+    if (step === 2) {
+      if (document.getElementById("plate").value.length !== 8) { alert("Plate text must be EXACTLY 8 characters."); return false; }
+    }
+    if (step === 3) {
+      const required = ["windows", "primary", "secondary", "pearl", "interior", "headlights", "neon", "tireSmoke"];
+      for (let id of required) {
+        if (!document.getElementById(id).value) { alert(`Please select an option for ${id}.`); return false; }
+      }
+      if (document.getElementById("primary").value === "Custom" && !document.getElementById("sharedRgb").value) { alert("Please enter a Custom RGB for the paint."); return false; }
+      if (document.getElementById("neon").value === "Custom RGB" && !document.getElementById("neonRgb").value) { alert("Please enter a Custom RGB for Neon."); return false; }
+      if (document.getElementById("tireSmoke").value === "Custom RGB" && !document.getElementById("tireSmokeCustom").value) { alert("Please enter a Custom RGB for Tire Smoke."); return false; }
+    }
+    if (step === 4) {
+      const required = ["wheelCategory", "rimStyle", "rimColor", "tires"];
+      for (let id of required) {
+        if (!document.getElementById(id).value) { alert(`Please select an option for ${id}.`); return false; }
+      }
+    }
+    return true;
+  }
+
   [1, 2, 3, 4].forEach(step => {
-    document.getElementById(`nav-step-${step}`).addEventListener('click', () => showStep(step));
+    document.getElementById(`nav-step-${step}`).addEventListener('click', () => {
+      // Allow moving backwards freely, but validate going forwards
+      if (step > currentStep && !validateStep(currentStep)) return;
+      showStep(step);
+    });
     const btnNext = document.getElementById(`btn-next-${step}`);
     const btnPrev = document.getElementById(`btn-prev-${step}`);
-    if (btnNext) btnNext.addEventListener('click', () => showStep(step + 1));
+    if (btnNext) btnNext.addEventListener('click', () => { if(validateStep(step)) showStep(step + 1); });
     if (btnPrev) btnPrev.addEventListener('click', () => showStep(step - 1));
   });
 
-  // Plate Enforcement, Live Preview & BLANKTON
+  // Plate Preview Logic
   const plateInput = document.getElementById('plate');
   const blanktonToggle = document.getElementById('blanktonToggle');
   const plateStyleSelect = document.getElementById('plateStyle');
@@ -489,109 +501,92 @@ const randomizableRimCats = Object.keys(wheelCategories).filter((c) => c !== "Bi
   const platePreviewText = document.getElementById('platePreviewText');
 
   function updatePlatePreview() {
-    // Background Image & Text Color
     const selectedOption = plateStyleSelect.options[plateStyleSelect.selectedIndex];
-    const fileName = selectedOption.getAttribute('data-file');
-    const color = selectedOption.getAttribute('data-color');
-    
-    platePreviewImg.src = `/images/plates/${fileName}`;
-    platePreviewText.style.color = color;
-
-    // Output Text (replacing underscores with spaces visually)
-    const rawVal = plateInput.value;
-    platePreviewText.textContent = rawVal.replace(/_/g, " ");
+    platePreviewImg.src = `/images/plates/${selectedOption.getAttribute('data-file')}`;
+    platePreviewText.style.color = selectedOption.getAttribute('data-color');
+    platePreviewText.textContent = plateInput.value.replace(/_/g, " ");
   }
 
-  plateInput.addEventListener('input', function(e) {
+  plateInput.addEventListener('input', function() {
     if(blanktonToggle.checked) blanktonToggle.checked = false;
     updatePlatePreview();
   });
-
   plateStyleSelect.addEventListener('change', updatePlatePreview);
-
-  blanktonToggle.addEventListener('change', function(e) {
-    if(this.checked) {
-      plateInput.value = "        "; // 8 spaces
-    } else {
-      plateInput.value = "";
-    }
+  blanktonToggle.addEventListener('change', function() {
+    plateInput.value = this.checked ? "        " : "";
     updatePlatePreview();
   });
 
-  // Color Parsing
+  // Data Loading & Handlers
   function parseColor(input) {
     if (!input) return null;
     input = input.trim();
     if (input.startsWith("#")) {
       const hex = input.slice(1);
       if (hex.length === 6) {
-        const r = parseInt(hex.slice(0, 2), 16);
-        const g = parseInt(hex.slice(2, 4), 16);
-        const b = parseInt(hex.slice(4, 6), 16);
+        const r = parseInt(hex.slice(0, 2), 16), g = parseInt(hex.slice(2, 4), 16), b = parseInt(hex.slice(4, 6), 16);
         if (!isNaN(r) && !isNaN(g) && !isNaN(b)) return `rgb(${r}, ${g}, ${b})`;
       }
     }
     if (input.includes(",")) {
       const parts = input.split(",").map((n) => parseInt(n.trim()));
-      if (parts.length === 3 && parts.every((n) => !isNaN(n) && n >= 0 && n <= 255)) {
-        return `rgb(${parts.join(", ")})`;
-      }
+      if (parts.length === 3 && parts.every((n) => !isNaN(n) && n >= 0 && n <= 255)) return `rgb(${parts.join(", ")})`;
     }
     return null;
   }
 
-  function getUnselectedForFlag(flag) {
-    return allUnselected.filter((c) => !c[flag]);
-  }
+  function makeOption(c) { return `<option value="${c.texture}|${c.name}">${c.texture} - ${c.name}</option>`; }
+  function populatePrimary() { document.getElementById("primary").innerHTML = '<option value="">-- Select --</option><option value="Custom">Custom RGB / HEX</option>' + allUnselected.map(makeOption).join(""); }
+  function populateSecondary() { document.getElementById("secondary").innerHTML = '<option value="">-- Select --</option><option value="Custom">Custom RGB / HEX</option>' + allUnselected.filter((c) => !c.secondary).map(makeOption).join(""); }
+  function populateUnselectedOnly(selectId, flag) { document.getElementById(selectId).innerHTML = '<option value="">-- Select --</option>' + allUnselected.filter((c) => !c[flag]).map(makeOption).join(""); }
 
-  function makeOption(c) {
-    const key = c.texture + "|" + c.name;
-    return `<option value="${key}">${c.texture} - ${c.name}</option>`;
-  }
+  function slugify(s) { return s.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, ""); }
+  
+  function updateRimThumb() {
+    const cat = document.getElementById("wheelCategory").value;
+    const style = document.getElementById("rimStyle").value;
+    const thumb = document.getElementById("wheelThumb");
+    const full = document.getElementById("wheelFull");
+    const catImg = wheelImages[cat] || wheelImages["Bennys Bespoke"];
 
-  function populatePrimary() {
-    const sel = document.getElementById("primary");
-    sel.innerHTML = '<option value="">-- Select --</option><option value="Custom">Custom RGB / HEX</option>' + allUnselected.map(makeOption).join("");
-  }
-
-  function populateSecondary() {
-    const sel = document.getElementById("secondary");
-    const list = getUnselectedForFlag("secondary");
-    sel.innerHTML = '<option value="">-- Select --</option><option value="Custom">Custom RGB / HEX</option>' + list.map(makeOption).join("");
-  }
-
-  function populateUnselectedOnly(selectId, flag) {
-    const sel = document.getElementById(selectId);
-    const list = getUnselectedForFlag(flag);
-    sel.innerHTML = '<option value="">-- Select --</option>' + list.map(makeOption).join("");
+    if (!style || style === "Stock" || !cat) {
+      thumb.src = catImg;
+      full.src = catImg;
+      return;
+    }
+    const rimImg = `/images/wheels/rims/${slugify(cat)}/${slugify(style)}.webp`;
+    thumb.src = rimImg;
+    full.src = rimImg;
+    thumb.onerror = () => { thumb.src = catImg; };
+    full.onerror = () => { full.src = catImg; };
   }
 
   function populateRims() {
     const cat = document.getElementById("wheelCategory").value;
     const sel = document.getElementById("rimStyle");
-    const styles = wheelCategories[cat] || [];
-    sel.innerHTML = styles.map((s) => `<option value="${s}">${s}</option>`).join("");
-    handleActivatorVisibility();
+    if(!cat) { sel.innerHTML = '<option value="">-- Select Category First --</option>'; return; }
+    sel.innerHTML = '<option value="">-- Select --</option>' + (wheelCategories[cat] || []).map((s) => `<option value="${s}">${s}</option>`).join("");
+    updateRimThumb();
+    const wrap = document.getElementById("activatorWrapper");
+    wrap.classList.add("hidden"); document.getElementById("activator").checked = false;
   }
 
   function getColorForPreview(id) {
-    const sel = document.getElementById(id);
-    if (!sel) return "#111";
-    const val = sel.value;
-    if (val === "Custom") {
+    const val = document.getElementById(id)?.value;
+    if (!val) return "#111";
+    if (val === "Custom" || val === "Custom RGB") {
+      if (id === "neon") return parseColor(document.getElementById("neonRgb").value) || "#666";
       return parseColor(document.getElementById("sharedRgb").value) || "#666";
     }
-    if (val === "Crew" && id === "neon") {
-      return parseColor(document.getElementById("neonRgb").value) || "#666";
-    }
-    if (id === "headlights") {
-      return headlightMap[val] || "#111";
+    if (id === "headlights" || id === "neon") {
+      const rgbStr = lightColorMap[val];
+      return rgbStr ? `rgb(${rgbStr})` : "#111";
     }
     return hexMap[val] || "#111";
   }
 
   function refreshPreviews() {
-    ["primary", "secondary", "pearl", "interior", "rimColor", "neon", "headlights"].forEach((id) => {
+    ["primary", "secondary", "pearl", "interior", "rimColor", "headlights", "neon"].forEach((id) => {
       const box = document.getElementById(id + "Prev");
       if (box) box.style.backgroundColor = getColorForPreview(id);
     });
@@ -606,45 +601,46 @@ const randomizableRimCats = Object.keys(wheelCategories).filter((c) => c !== "Bi
     const smokeVal = document.getElementById("tireSmoke").value;
     if(smokeVal === "Patriot Black (0,0,0)") smokeBox.style.backgroundColor = "rgb(0,0,0)";
     else if(smokeVal === "Custom RGB") smokeBox.style.backgroundColor = parseColor(document.getElementById("tireSmokeCustom").value) || "#666";
-    else if(smokeVal === "Match Headlights") {
-      const hlRGB = document.querySelector(`#headlights option[value="${document.getElementById("headlights").value}"]`).getAttribute('data-rgb');
-      const parts = hlRGB.split(',').map(n => parseInt(n.trim()));
+    else if(smokeVal === "Match Headlights" || smokeVal === "Match Neon") {
+      let baseRgbStr = "255, 255, 255";
+      if(smokeVal === "Match Headlights") {
+        baseRgbStr = lightColorMap[document.getElementById("headlights").value] || "255, 255, 255";
+      } else {
+        const ne = document.getElementById("neon").value;
+        if(ne === "Custom RGB") {
+          baseRgbStr = (parseColor(document.getElementById("neonRgb").value) || "255, 255, 255").replace('rgb(','').replace(')','');
+        } else {
+          baseRgbStr = lightColorMap[ne] || "255, 255, 255";
+        }
+      }
+      const parts = baseRgbStr.split(',').map(n => parseInt(n.trim()));
       parts[0] = Math.max(0, parts[0] - 1);
       smokeBox.style.backgroundColor = `rgb(${parts.join(',')})`;
     }
   }
 
-  function handleActivatorVisibility() {
-    const cat = document.getElementById("wheelCategory").value;
-    const style = document.getElementById("rimStyle").value;
-    const wrap = document.getElementById("activatorWrapper");
-    if (cat === "Bennys Originals" && style === "Waves") {
-      wrap.classList.remove("hidden");
-    } else {
-      wrap.classList.add("hidden");
-      document.getElementById("activator").checked = false;
-    }
-  }
-
-  document.getElementById("rimStyle").addEventListener("change", handleActivatorVisibility);
-  document.getElementById("wheelCategory").addEventListener("change", populateRims);
-
-  document.getElementById("texture").addEventListener("change", () => {
-    populatePrimary();
-    populateSecondary();
-    refreshPreviews();
+  // Event Listeners
+  ["primary", "secondary", "pearl", "interior", "rimColor", "headlights"].forEach(id => {
+    document.getElementById(id).addEventListener("change", refreshPreviews);
   });
 
+  document.getElementById("rimStyle").addEventListener("change", (e) => {
+    updateRimThumb();
+    const wrap = document.getElementById("activatorWrapper");
+    if (document.getElementById("wheelCategory").value === "Bennys Originals" && e.target.value === "Waves") wrap.classList.remove("hidden");
+    else { wrap.classList.add("hidden"); document.getElementById("activator").checked = false; }
+  });
+  document.getElementById("wheelCategory").addEventListener("change", populateRims);
+
   const checkPaintCustom = () => {
-    const isCustom = document.getElementById("primary").value === "Custom" || document.getElementById("secondary").value === "Custom";
-    document.getElementById("rgbInputArea").style.display = isCustom ? "block" : "none";
+    document.getElementById("rgbInputArea").style.display = (document.getElementById("primary").value === "Custom" || document.getElementById("secondary").value === "Custom") ? "block" : "none";
     refreshPreviews();
   };
   document.getElementById("primary").addEventListener("change", checkPaintCustom);
   document.getElementById("secondary").addEventListener("change", checkPaintCustom);
 
   document.getElementById("neon").addEventListener("change", () => {
-    document.getElementById("neonRgbArea").style.display = (document.getElementById("neon").value === "Crew") ? "block" : "none";
+    document.getElementById("neonRgbArea").style.display = (document.getElementById("neon").value === "Custom RGB") ? "block" : "none";
     refreshPreviews();
   });
 
@@ -653,22 +649,17 @@ const randomizableRimCats = Object.keys(wheelCategories).filter((c) => c !== "Bi
     refreshPreviews();
   });
 
-  document.getElementById("headlights").addEventListener("change", refreshPreviews);
-  document.getElementById("sharedRgb").addEventListener("input", refreshPreviews);
-  document.getElementById("neonRgb").addEventListener("input", refreshPreviews);
-  document.getElementById("tireSmokeCustom").addEventListener("input", refreshPreviews);
+  ["sharedRgb", "neonRgb", "tireSmokeCustom"].forEach(id => document.getElementById(id).addEventListener("input", refreshPreviews));
 
   document.getElementById("expandWheel").addEventListener("click", () => document.getElementById("wheelExpanded").classList.remove("hidden"));
   document.getElementById("collapseWheel").addEventListener("click", () => document.getElementById("wheelExpanded").classList.add("hidden"));
 
+  // Generation
   document.getElementById("generate").addEventListener("click", () => {
+    if (!validateStep(4)) return;
+
     const get = (id) => document.getElementById(id).value || "";
-    
-    let rawPlate = get("plate");
-    let outPlate = rawPlate.replace(/_/g, " "); 
-    if(outPlate.length < 8 && !blanktonToggle.checked) {
-      alert("WARNING: Plate text is not 8 characters. It must be exactly 8 characters.");
-    }
+    const outPlate = get("plate").replace(/_/g, " "); 
 
     const formatColor = (val) => {
       if (!val) return "N/A";
@@ -677,42 +668,43 @@ const randomizableRimCats = Object.keys(wheelCategories).filter((c) => c !== "Bi
       return parts.length === 2 ? `${parts[0]} - ${parts[1]}` : val;
     };
     
-    const formatNeon = (val) => {
-      if (val === "Crew") return `Crew (${get("neonRgb")})`;
-      return val || "N/A";
-    };
+    const formatNeon = (val) => val === "Custom RGB" ? `Custom RGB (${get("neonRgb")})` : (val || "N/A");
 
     const smokeSelect = get("tireSmoke");
     let finalSmoke = "N/A";
     if (smokeSelect === "Patriot Black (0,0,0)") finalSmoke = "0, 0, 0 (Patriot Black)";
     else if (smokeSelect === "Custom RGB") finalSmoke = `Custom: ${get("tireSmokeCustom")}`;
-    else if (smokeSelect === "Match Headlights") {
-      const hlRGB = document.querySelector(`#headlights option[value="${get("headlights")}"]`).getAttribute('data-rgb');
-      const parts = hlRGB.split(',').map(n => parseInt(n.trim()));
+    else if (smokeSelect === "Match Headlights" || smokeSelect === "Match Neon") {
+      let baseRgbStr = "255, 255, 255";
+      if(smokeSelect === "Match Headlights") baseRgbStr = lightColorMap[get("headlights")] || "255, 255, 255";
+      else {
+        const ne = get("neon");
+        baseRgbStr = ne === "Custom RGB" ? (parseColor(get("neonRgb")) || "255, 255, 255").replace('rgb(','').replace(')','') : (lightColorMap[ne] || "255, 255, 255");
+      }
+      const parts = baseRgbStr.split(',').map(n => parseInt(n.trim()));
       parts[0] = Math.max(0, parts[0] - 1);
       finalSmoke = `${parts.join(', ')} (Offset to remain unselected)`;
     }
 
-    const isActivator = document.getElementById("activator").checked ? "Yes" : "No";
+    const isActivator = document.getElementById("activator").checked;
+    const activatorOutput = isActivator ? `\nActivator Applied: Yes` : "";
 
     const out = `=== DMO SPECIFICATION ===
 
 [VEHICLE & PLATE]
-Vehicle: ${get("vehicle") || "N/A"}
+Vehicle: ${get("vehicle")}
 Plate Style: ${get("plateStyle")}
-Plate Text: "${outPlate}" (Length: ${outPlate.length})
+Plate Text: "${outPlate}"
 Window Tint: ${get("windows")}
-Horn: ${get("horn")}
 Livery: ${get("livery") || "None"}
 
-[PAINTS]
-Texture Base: ${get("texture")}
+[COLORS & PAINTS]
+Texture Base: ${get("texture") || "Default"}
 Primary: ${formatColor(get("primary"))}
 Secondary: ${formatColor(get("secondary"))}
 Pearlescent: ${formatColor(get("pearl"))}
 Interior: ${formatColor(get("interior"))}
-
-[LIGHTS & SMOKE]
+Rim Color: ${formatColor(get("rimColor"))}
 Headlight Color: ${get("headlights")}
 Neon Setup: ${formatNeon(get("neon"))}
 Tire Smoke (RGB): ${finalSmoke}
@@ -720,16 +712,15 @@ Tire Smoke (RGB): ${finalSmoke}
 [WHEELS]
 Category: ${get("wheelCategory")}
 Rim Style: ${get("rimStyle")}
-Rim Color: ${formatColor(get("rimColor"))}
-Tire Design: ${get("tires")}
-Activator Applied: ${isActivator}`;
+Tire Design: ${get("tires")}${activatorOutput}`;
     
     document.getElementById("output").textContent = out;
+    document.getElementById("outputContainer").classList.remove("hidden");
+    document.getElementById("outputContainer").scrollIntoView({ behavior: "smooth" });
   });
 
   document.getElementById("copy").addEventListener("click", () => {
-    const text = document.getElementById("output").textContent;
-    navigator.clipboard.writeText(text).then(() => {
+    navigator.clipboard.writeText(document.getElementById("output").textContent).then(() => {
       const btn = document.getElementById("copy");
       const orig = btn.textContent;
       btn.textContent = "Copied!";
@@ -738,12 +729,7 @@ Activator Applied: ${isActivator}`;
   });
 
   // Initialization
-  populatePrimary();
-  populateSecondary();
-  populateUnselectedOnly("pearl", "pearl");
-  populateUnselectedOnly("interior", "interior");
-  populateUnselectedOnly("rimColor", "rim");
-  populateRims();
-  refreshPreviews();
+  populatePrimary(); populateSecondary();
+  populateUnselectedOnly("pearl", "pearl"); populateUnselectedOnly("interior", "interior"); populateUnselectedOnly("rimColor", "rim");
   updatePlatePreview(); 
 </script>
