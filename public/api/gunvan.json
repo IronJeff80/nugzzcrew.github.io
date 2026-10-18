@@ -1,8 +1,8 @@
 {
-  "locationId": 7,
-  "zone": "Gun Van Location #7",
-  "description": "Paleto Forest Lumber Yard",
-  "mapPath": "map_7.jpg",
+  "locationId": 25,
+  "zone": "Gun Van Location #25",
+  "description": "Caesars Auto Parking, Little Seoul",
+  "mapPath": "map_25.jpg",
   "inventory": [
     "Service Carbine: -30 %",
     "Precision Rifle: -10 %",
@@ -17,5 +17,5 @@
     "Pipe Bomb: -10 %",
     "Body armor: -10 %"
   ],
-  "updatedAt": "2026-10-17T11:06:00.739Z"
+  "updatedAt": "2026-10-18T11:36:31.169Z"
 }
