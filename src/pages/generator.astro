@@ -193,9 +193,9 @@ const tireSmokeOptions = ["Match Headlights", "Match Neon", "Patriot Black (0,0,
               </select>
             </div>
             <div>
-              <label class="block text-[10px] text-zinc-400 uppercase font-black mb-1">Plate Text (Exact 8 Chars):</label>
+              <label class="block text-[10px] text-zinc-400 uppercase font-black mb-1">Plate Text (Exact 8 Chars. Alphanumeric only):</label>
               <input type="text" id="plate" maxlength="8" placeholder="8 CHARS" class="w-full bg-black border border-zinc-800 rounded-lg p-3 text-white text-sm uppercase font-mono outline-none focus:border-gold tracking-[0.3em]" />
-              <p class="text-[9px] text-zinc-500 mt-2">Use underscores <span class="text-white">_</span> to center text visually.</p>
+              <p class="text-[9px] text-zinc-500 mt-2">Spaces will automatically turn into underscores <span class="text-white">_</span> to help you count characters. Special characters are disabled.</p>
             </div>
             <div class="flex items-center gap-3 p-3 bg-zinc-800/50 rounded-lg border border-zinc-700">
               <input type="checkbox" id="blanktonToggle" class="w-4 h-4 accent-gold cursor-pointer" />
@@ -207,7 +207,6 @@ const tireSmokeOptions = ["Match Headlights", "Match Neon", "Patriot Black (0,0,
             <label class="block text-[10px] text-zinc-400 uppercase font-black mb-2 w-full text-center">Live Preview:</label>
             <div class="relative w-[280px] h-[140px] rounded overflow-hidden shadow-2xl border border-zinc-700 bg-black">
               <img id="platePreviewImg" src={`/images/plates/${plateData[0].file}`} alt="Plate Background" class="absolute inset-0 w-full h-full object-cover" />
-              <!-- Added scaleY(1.6) and inline-block to vertically stretch the text -->
               <div class="absolute inset-0 flex items-center justify-center pt-[15%] drop-shadow-md">
                 <span id="platePreviewText" class="text-4xl font-black uppercase tracking-widest whitespace-pre inline-block" style={`font-family: 'Courier New', Courier, monospace; transform: scaleY(1.6); color: ${plateData[0].color};`}></span>
               </div>
@@ -452,7 +451,7 @@ const tireSmokeOptions = ["Match Headlights", "Match Neon", "Patriot Black (0,0,
       if (document.getElementById("plate").value.length !== 8) { alert("Plate text must be EXACTLY 8 characters."); return false; }
     }
     if (step === 3) {
-      const required = ["windows", "primary", "secondary", "pearl", "headlights", "neon", "tireSmoke"]; // Removed interior
+      const required = ["windows", "primary", "secondary", "pearl", "headlights", "neon", "tireSmoke"];
       for (let id of required) {
         if (!document.getElementById(id).value) { alert(`Please select an option for ${id}.`); return false; }
       }
@@ -480,7 +479,7 @@ const tireSmokeOptions = ["Match Headlights", "Match Neon", "Patriot Black (0,0,
     if (btnPrev) btnPrev.addEventListener('click', () => showStep(step - 1));
   });
 
-  // Plate Preview Logic
+  // Plate Preview & Input Restriction Logic
   const plateInput = document.getElementById('plate');
   const blanktonToggle = document.getElementById('blanktonToggle');
   const plateStyleSelect = document.getElementById('plateStyle');
@@ -495,12 +494,27 @@ const tireSmokeOptions = ["Match Headlights", "Match Neon", "Patriot Black (0,0,
   }
 
   plateInput.addEventListener('input', function() {
+    // 1. Force uppercase
+    let val = this.value.toUpperCase();
+    
+    // 2. Convert spaces to underscores visually
+    val = val.replace(/ /g, "_");
+    
+    // 3. Remove all special characters (Allow ONLY A-Z, 0-9, and _)
+    val = val.replace(/[^A-Z0-9_]/g, "");
+    
+    // 4. Set cleaned value back
+    this.value = val;
+
     if(blanktonToggle.checked) blanktonToggle.checked = false;
     updatePlatePreview();
   });
+
   plateStyleSelect.addEventListener('change', updatePlatePreview);
+  
   blanktonToggle.addEventListener('change', function() {
-    plateInput.value = this.checked ? "        " : "";
+    // Fill with 8 underscores so the user visually sees the slots are taken
+    plateInput.value = this.checked ? "________" : "";
     updatePlatePreview();
   });
 
@@ -648,6 +662,7 @@ const tireSmokeOptions = ["Match Headlights", "Match Neon", "Patriot Black (0,0,
     if (!validateStep(4)) return;
 
     const get = (id) => document.getElementById(id).value || "";
+    // Revert user underscores back into actual blank spaces for the output spec
     const outPlate = get("plate").replace(/_/g, " "); 
 
     const formatColor = (val) => {
