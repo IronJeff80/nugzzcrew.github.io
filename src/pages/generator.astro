@@ -145,7 +145,7 @@ const plateData = [
 const windowTints = ["Clear", "Green"];
 const neonOptions = ["None", "Pure White", "Blue", "Electric Blue", "Mint Green", "Lime Green", "Yellow", "Golden Shower", "Orange", "Red", "Pony Pink", "Hot Pink", "Purple", "Black Light", "Custom RGB"];
 const tireDesigns = ["White lines", "Classic", "Retro", "Red", "Blue"];
-const tireSmokeOptions = ["Match Headlights", "Match Neon", "Patriot Black (0,0,0)", "Custom RGB"];
+const tireSmokeOptions = ["Match Headlights", "Match Neon", "Patriot", "Custom RGB"];
 ---
 
 <MainLayout title="DMO Generator" description="GTA Online DMO generator. Official Nugzz Crew.">
@@ -173,8 +173,8 @@ const tireSmokeOptions = ["Match Headlights", "Match Neon", "Patriot Black (0,0,
       <div id="step-1" class="step-section space-y-6">
         <h2 class="text-gold font-black uppercase text-lg mb-4">Vehicle Details</h2>
         <div>
-          <label class="block text-[10px] text-zinc-400 uppercase font-black mb-1">Vehicle Name (Required):</label>
-          <input type="text" id="vehicle" placeholder="e.g. Buffalo STX" class="w-full bg-black border border-zinc-800 rounded-lg p-3 text-white text-sm outline-none focus:border-gold"/>
+          <label class="block text-[10px] text-zinc-400 uppercase font-black mb-1">Vehicle Name or Set (Required):</label>
+          <input type="text" id="vehicle" placeholder="e.g. Buffalo STX or Nightclub Set" class="w-full bg-black border border-zinc-800 rounded-lg p-3 text-white text-sm outline-none focus:border-gold"/>
         </div>
         <div class="flex gap-3 pt-6 border-t border-zinc-800">
           <button id="btn-next-1" class="w-full bg-zinc-800 hover:bg-gold hover:text-black text-white font-black uppercase py-3 rounded-xl text-xs tracking-widest transition-all">Next: Plates</button>
@@ -494,16 +494,9 @@ const tireSmokeOptions = ["Match Headlights", "Match Neon", "Patriot Black (0,0,
   }
 
   plateInput.addEventListener('input', function() {
-    // 1. Force uppercase
     let val = this.value.toUpperCase();
-    
-    // 2. Convert spaces to underscores visually
     val = val.replace(/ /g, "_");
-    
-    // 3. Remove all special characters (Allow ONLY A-Z, 0-9, and _)
     val = val.replace(/[^A-Z0-9_]/g, "");
-    
-    // 4. Set cleaned value back
     this.value = val;
 
     if(blanktonToggle.checked) blanktonToggle.checked = false;
@@ -513,7 +506,6 @@ const tireSmokeOptions = ["Match Headlights", "Match Neon", "Patriot Black (0,0,
   plateStyleSelect.addEventListener('change', updatePlatePreview);
   
   blanktonToggle.addEventListener('change', function() {
-    // Fill with 8 underscores so the user visually sees the slots are taken
     plateInput.value = this.checked ? "________" : "";
     updatePlatePreview();
   });
@@ -602,9 +594,16 @@ const tireSmokeOptions = ["Match Headlights", "Match Neon", "Patriot Black (0,0,
 
     const smokeBox = document.getElementById("tireSmokePrev");
     const smokeVal = document.getElementById("tireSmoke").value;
-    if(smokeVal === "Patriot Black (0,0,0)") smokeBox.style.backgroundColor = "rgb(0,0,0)";
-    else if(smokeVal === "Custom RGB") smokeBox.style.backgroundColor = parseColor(document.getElementById("tireSmokeCustom").value) || "#666";
-    else if(smokeVal === "Match Headlights" || smokeVal === "Match Neon") {
+    
+    // Clear background styles before applying new ones to avoid conflicts
+    smokeBox.style.background = "";
+    smokeBox.style.backgroundColor = "#111";
+
+    if(smokeVal === "Patriot") {
+      smokeBox.style.background = "linear-gradient(135deg, #FF0101 33%, #FFFFFF 33%, #FFFFFF 66%, #0215FF 66%)";
+    } else if(smokeVal === "Custom RGB") {
+      smokeBox.style.backgroundColor = parseColor(document.getElementById("tireSmokeCustom").value) || "#666";
+    } else if(smokeVal === "Match Headlights" || smokeVal === "Match Neon") {
       let baseRgbStr = "255, 255, 255";
       if(smokeVal === "Match Headlights") {
         baseRgbStr = lightColorMap[document.getElementById("headlights").value] || "255, 255, 255";
@@ -676,7 +675,7 @@ const tireSmokeOptions = ["Match Headlights", "Match Neon", "Patriot Black (0,0,
 
     const smokeSelect = get("tireSmoke");
     let finalSmoke = "N/A";
-    if (smokeSelect === "Patriot Black (0,0,0)") finalSmoke = "0, 0, 0 (Patriot Black)";
+    if (smokeSelect === "Patriot") finalSmoke = "Patriot";
     else if (smokeSelect === "Custom RGB") finalSmoke = `Custom: ${get("tireSmokeCustom")}`;
     else if (smokeSelect === "Match Headlights" || smokeSelect === "Match Neon") {
       let baseRgbStr = "255, 255, 255";
@@ -696,7 +695,7 @@ const tireSmokeOptions = ["Match Headlights", "Match Neon", "Patriot Black (0,0,
     const out = `=== DMO SPECIFICATION ===
 
 [VEHICLE & PLATE]
-Vehicle: ${get("vehicle")}
+Vehicle / Set: ${get("vehicle")}
 Plate Style: ${get("plateStyle")}
 Plate Text: "${outPlate}"
 Window Tint: ${get("windows")}
@@ -711,7 +710,7 @@ Interior: ${formatColor(get("interior"))}
 Rim Color: ${formatColor(get("rimColor"))}
 Headlight Color: ${get("headlights")}
 Neon Setup: ${formatNeon(get("neon"))}
-Tire Smoke (RGB): ${finalSmoke}
+Tire Smoke: ${finalSmoke}
 
 [WHEELS]
 Category: ${get("wheelCategory")}
