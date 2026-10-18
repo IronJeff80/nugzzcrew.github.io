@@ -149,18 +149,14 @@ const headlightColors = [
 ];
 
 const plateData = [
-  { name: "Blue on White 1", file: "blue-on-white-1.png", color: "#112A61" },
-  { name: "Blue on White 2", file: "blue-on-white-2.png", color: "#112A61" },
-  { name: "Blue on White 3", file: "blue-on-white-3.png", color: "#112A61" },
-  { name: "Yellow on Blue", file: "yellow-on-blue.png", color: "#F7B815" },
-  { name: "Yellow on Black", file: "yellow-on-black.png", color: "#F7B815" },
-  { name: "North Yankton", file: "north-yankton.png", color: "#141517" },
-  { name: "E-Cola", file: "e-cola.png", color: "#FFFFFF" },
-  { name: "Las Venturas", file: "las-venturas.png", color: "#112A61" },
-  { name: "Liberty City", file: "liberty-city.png", color: "#112A61" },
-  { name: "Panic", file: "panic.png", color: "#0A0A0A" },
-  { name: "Pounders", file: "pounders.png", color: "#112A61" },
-  { name: "Sprunk", file: "sprunk.png", color: "#005500" }
+  { name: "North Yankton", file: "Yankton.png", color: "#0A0A0A" },
+  { name: "E-Cola", file: "ECola.png", color: "#FFFFFF" },
+  { name: "Las Venturas", file: "LosVenturas.png", color: "#112A61" },
+  { name: "Liberty City", file: "LibertyCity.png", color: "#112A61" },
+  { name: "LSCM", file: "LSCM.png", color: "#0A0A0A" },
+  { name: "Panic", file: "Panic.png", color: "#F7B815" },
+  { name: "Pounders", file: "Pounders.png", color: "#F7B815" },
+  { name: "Sprunk", file: "Sprunk.png", color: "#FFFFFF" }
 ];
 
 const horns = ["Stock", "Truck Horn", "Cop Horn", "Clown Horn", "Musical Horn 1", "Musical Horn 2", "Musical Horn 3", "Musical Horn 4", "Musical Horn 5", "Sadtrombone", "Classical Horn 1", "Classical Horn 2", "Classical Horn 3", "Classical Horn 4", "Classical Horn 5", "Classical Horn 6", "Classical Horn 7", "Classical Horn 8"];
@@ -239,8 +235,8 @@ const randomizableRimCats = Object.keys(wheelCategories).filter((c) => c !== "Bi
             <div class="flex-1 flex flex-col items-center justify-center">
               <label class="block text-[10px] text-zinc-400 uppercase font-black mb-2 w-full text-center">Live Preview:</label>
               <div class="relative w-[280px] h-[140px] rounded overflow-hidden shadow-2xl border border-zinc-700 bg-black">
-                <img id="platePreviewImg" src="/images/plates/blue-on-white-1.png" alt="Plate Background" class="absolute inset-0 w-full h-full object-cover" />
-                <div id="platePreviewText" class="absolute inset-0 flex items-center justify-center text-4xl font-black uppercase tracking-widest whitespace-pre drop-shadow-md" style="font-family: 'Courier New', Courier, monospace; color: #112A61;">
+                <img id="platePreviewImg" src={`/images/plates/${plateData[0].file}`} alt="Plate Background" class="absolute inset-0 w-full h-full object-cover" />
+                <div id="platePreviewText" class="absolute inset-0 flex items-center justify-center text-4xl font-black uppercase tracking-widest whitespace-pre drop-shadow-md" style={`font-family: 'Courier New', Courier, monospace; color: ${plateData[0].color};`}>
                   
                 </div>
               </div>
@@ -749,5 +745,5 @@ Activator Applied: ${isActivator}`;
   populateUnselectedOnly("rimColor", "rim");
   populateRims();
   refreshPreviews();
-  updatePlatePreview(); // Init the plate preview visually
+  updatePlatePreview(); 
 </script>
