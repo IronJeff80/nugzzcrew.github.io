@@ -467,7 +467,7 @@ const tireSmokeOptions = ["Match Headlights", "Match Neon", "Patriot", "Custom R
           <button id="expandWheel" type="button" class="text-[10px] text-zinc-400 uppercase tracking-widest hover:text-gold">Click to expand full grid</button>
         </div>
 
-        <div id="wheelExpanded" class="hidden mt-2">
+        <div id="wheelExpanded" class="mt-2">
           <div class="relative w-full h-96 rounded-lg border border-zinc-700 overflow-hidden bg-black flex items-center justify-center">
             <img id="wheelFull" src="/images/wheels/bennys-bespoke.png" alt="Full wheel grid" class="absolute inset-0 w-full h-full object-contain" />
             <img id="tireFull" src="" alt="Full tire design overlay" class="absolute inset-0 w-full h-full object-contain hidden pointer-events-none" />
@@ -686,6 +686,7 @@ const tireSmokeOptions = ["Match Headlights", "Match Neon", "Patriot", "Custom R
 
   function updateTireOverlay() {
     const tireSelect = document.getElementById("tires");
+    const rimStyle = document.getElementById("rimStyle").value;
     const selectedOption = tireSelect.options[tireSelect.selectedIndex];
     const tireThumb = document.getElementById("tireThumb");
     const tireFull = document.getElementById("tireFull");
@@ -693,7 +694,7 @@ const tireSmokeOptions = ["Match Headlights", "Match Neon", "Patriot", "Custom R
     const file = selectedOption ? selectedOption.getAttribute("data-file") : null;
     const folder = selectedOption ? selectedOption.getAttribute("data-folder") : null;
 
-    if (!file || file === "none" || !folder) {
+    if (!rimStyle || rimStyle === "Stock" || !file || file === "none" || !folder) {
       tireThumb.classList.add("hidden");
       tireFull.classList.add("hidden");
       tireThumb.src = "";
