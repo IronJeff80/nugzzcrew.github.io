@@ -130,22 +130,95 @@ const plateData = [
 const windowTints = ["Clear", "Green"];
 const neonOptions = ["None", "Pure White", "Blue", "Electric Blue", "Mint Green", "Lime Green", "Yellow", "Golden Shower", "Orange", "Red", "Pony Pink", "Hot Pink", "Purple", "Black Light", "Custom RGB"];
 
-const tireDesignsRace = [
-  { name: "Atomic", file: "Atomic.png" },
-  { name: "Atomic Logo", file: "Atomic-Logo.png" },
-  { name: "Chapalle Green", file: "Chapalle-Green.png" },
-  { name: "Chapalle Yellow", file: "Chapalle-Yellow.png" },
-  { name: "Fukaru Red", file: "Fukaru-Red.png" },
-  { name: "Fukaru White", file: "Fukaru-White.png" }
-];
-
-const tireDesignsBenny = [
-  { name: "White Lines", file: "White-Lines.png" },
-  { name: "Classic White Wall", file: "Classic-White-Wall.png" },
-  { name: "Retro White Wall", file: "Retro-White-Wall.png" },
-  { name: "Redlines", file: "Redlines.png" },
-  { name: "Bluelines", file: "Bluelines.png" }
-];
+const tireDesignMap = {
+  "Bennys Bespoke": {
+    folder: "bennys",
+    options: [
+      { name: "Atomic", file: "Atomic-Bennys.png" },
+      { name: "Bluelines", file: "Bluelines-Bennys.png" },
+      { name: "Classic White Wall", file: "ClassicWhiteWall-Bennys.png" },
+      { name: "Redlines", file: "Redlines-Bennys.png" },
+      { name: "Retro White Wall", file: "RetroWhiteWall-Bennys.png" },
+      { name: "White Lines", file: "WhiteLines-Bennys.png" }
+    ]
+  },
+  "Bennys Originals": {
+    folder: "bennys",
+    options: [
+      { name: "Atomic", file: "Atomic-Bennys.png" },
+      { name: "Bluelines", file: "Bluelines-Bennys.png" },
+      { name: "Classic White Wall", file: "ClassicWhiteWall-Bennys.png" },
+      { name: "Redlines", file: "Redlines-Bennys.png" },
+      { name: "Retro White Wall", file: "RetroWhiteWall-Bennys.png" },
+      { name: "White Lines", file: "WhiteLines-Bennys.png" }
+    ]
+  },
+  "Bike": {
+    folder: "bike",
+    options: [{ name: "Custom Tires", file: "CustomTires-Bike.png" }]
+  },
+  "High End": {
+    folder: "high-end",
+    options: [{ name: "Custom Tires", file: "CustomTires-HighEnd.png" }]
+  },
+  "Lowrider": {
+    folder: "lowrider",
+    options: [{ name: "Custom Tires", file: "CustomTires-Lowrider.png" }]
+  },
+  "Muscle": {
+    folder: "muscle",
+    options: [{ name: "Custom Tires", file: "CustomTires-Muscle.png" }]
+  },
+  "Offroad": {
+    folder: "offroad",
+    options: [{ name: "Custom Tires", file: "CustomTires-Offroad.png" }]
+  },
+  "Race": {
+    folder: "race",
+    options: [
+      { name: "Atomic Logo", file: "AtomicLogo-Race.png" },
+      { name: "Atomic", file: "AtomicRace.png" },
+      { name: "Chapalle Green", file: "ChapalleGreen-Race.png" },
+      { name: "Chapalle Yellow", file: "ChapalleYellow-Race.png" },
+      { name: "Fukaru Red", file: "FukaruRed-Race.png" },
+      { name: "Fukaru White", file: "FukaruWhite-Race.png" }
+    ]
+  },
+  "Sport": {
+    folder: "sport",
+    options: [{ name: "Custom Tires", file: "CustomTires-Sport.png" }]
+  },
+  "Street": {
+    folder: "street",
+    options: [
+      { name: "Atomic", file: "Atomic-Street.png" },
+      { name: "Atomic Yellow", file: "AtomicYellow-Street.png" },
+      { name: "Chepalle Green", file: "ChepalleGreen-Street.png" },
+      { name: "Chepalle Yellow", file: "ChepalleYellow-Street.png" },
+      { name: "Fukaru Red", file: "FukaruRed-Street.png" },
+      { name: "Fukaru White", file: "FukaruWhite-Street.png" }
+    ]
+  },
+  "SUV": {
+    folder: "suv",
+    options: [{ name: "Custom Tires", file: "CustomTires-SUV.png" }]
+  },
+  "Track": {
+    folder: "track",
+    options: [
+      { name: "Atomic", file: "Atomic-Track.png" },
+      { name: "Atomic Yellow", file: "AtomicYellow-Track.png" },
+      { name: "Chepalle Green", file: "ChepalleGreen-Track.png" },
+      { name: "Chepalle Yellow", file: "ChepalleYellow-Track.png" },
+      { name: "Fukaru Red", file: "FukaruRed-Track.png" },
+      { name: "Fukaru White", file: "FukaruWhite-Track.png" }
+    ]
+  },
+  "Tuner": {
+    folder: "tuner",
+    options: [{ name: "Custom Tires", file: "CustomTires-Tuner.png" }]
+  }
+};
 
 const tireSmokeOptions = ["Match Headlights", "Match Neon", "Patriot", "Custom RGB"];
 ---
@@ -413,7 +486,7 @@ const tireSmokeOptions = ["Match Headlights", "Match Neon", "Patriot", "Custom R
           <div>
             <label class="block text-[10px] text-gold uppercase font-black mb-1">Tire Design:</label>
             <select id="tires" class="w-full bg-black border border-zinc-800 rounded-lg p-3 text-white text-sm outline-none focus:border-gold" disabled>
-              <option value="None" selected>-- Select Wheel Category First --</option>
+              <option value="None" data-file="none" selected>-- Select Wheel Category First --</option>
             </select>
           </div>
         </div>
@@ -435,7 +508,7 @@ const tireSmokeOptions = ["Match Headlights", "Match Neon", "Patriot", "Custom R
   </div>
 </MainLayout>
 
-<script is:inline define:vars={{ colors, unselectedSecondary, allUnselected, wheelCategories, lightColors, tireDesignsRace, tireDesignsBenny }}>
+<script is:inline define:vars={{ colors, unselectedSecondary, allUnselected, wheelCategories, lightColors, tireDesignMap }}>
   const globalHexMap = {};
   colors.forEach((c) => {
     const key = c.texture + "|" + c.name;
@@ -618,8 +691,9 @@ const tireSmokeOptions = ["Match Headlights", "Match Neon", "Patriot", "Custom R
     const tireFull = document.getElementById("tireFull");
 
     const file = selectedOption ? selectedOption.getAttribute("data-file") : null;
+    const folder = selectedOption ? selectedOption.getAttribute("data-folder") : null;
 
-    if (!file || file === "none") {
+    if (!file || file === "none" || !folder) {
       tireThumb.classList.add("hidden");
       tireFull.classList.add("hidden");
       tireThumb.src = "";
@@ -627,7 +701,7 @@ const tireSmokeOptions = ["Match Headlights", "Match Neon", "Patriot", "Custom R
       return;
     }
 
-    const tireImgPath = `/images/wheels/rims/tiredesign/${file}`;
+    const tireImgPath = `/images/wheels/rims/tiredesign/${folder}/${file}`;
 
     tireThumb.src = tireImgPath;
     tireThumb.classList.remove("hidden");
@@ -638,18 +712,20 @@ const tireSmokeOptions = ["Match Headlights", "Match Neon", "Patriot", "Custom R
 
   function populateTiresForCategory(cat) {
     const tireSelect = document.getElementById("tires");
-    tireSelect.disabled = false;
     
-    let optionsHtml = '<option value="None" data-file="none">None</option>';
-    if (cat === "Race") {
-      optionsHtml += tireDesignsRace.map(d => `<option value="${d.name}" data-file="${d.file}">${d.name}</option>`).join("");
-    } else if (cat === "Bennys Bespoke" || cat === "Bennys Originals") {
-      optionsHtml += tireDesignsBenny.map(d => `<option value="${d.name}" data-file="${d.file}">${d.name}</option>`).join("");
-    } else {
-      optionsHtml = '<option value="None" data-file="none" selected>None</option>';
+    const categoryData = tireDesignMap[cat];
+
+    if (!categoryData || !categoryData.options || categoryData.options.length === 0) {
+      tireSelect.innerHTML = '<option value="None" data-file="none" selected>N/A</option>';
       tireSelect.disabled = true;
+    } else {
+      tireSelect.disabled = false;
+      const folder = categoryData.folder;
+      let optionsHtml = '<option value="None" data-file="none">None</option>';
+      optionsHtml += categoryData.options.map(d => `<option value="${d.name}" data-file="${d.file}" data-folder="${folder}">${d.name}</option>`).join("");
+      tireSelect.innerHTML = optionsHtml;
     }
-    tireSelect.innerHTML = optionsHtml;
+
     updateTireOverlay();
   }
 
@@ -893,6 +969,9 @@ const tireSmokeOptions = ["Match Headlights", "Match Neon", "Patriot", "Custom R
     const pVal = get("primary");
     const sVal = get("secondary");
 
+    const tireSelectVal = get("tires");
+    const formattedTire = (tireSelectVal === "None" || tireSelectVal === "") ? "N/A" : tireSelectVal;
+
     const out = `=== DMO SPECIFICATION ===
 
 [VEHICLE & PLATE]
@@ -915,7 +994,7 @@ Tire Smoke: ${finalSmoke}
 [WHEELS]
 Category: ${get("wheelCategory")}
 Rim Style: ${get("rimStyle")}
-Tire Design: ${get("tires")}${activatorOutput}`;
+Tire Design: ${formattedTire}${activatorOutput}`;
     
     document.getElementById("output").textContent = out;
     document.getElementById("outputContainer").classList.remove("hidden");
