@@ -1,20 +1,20 @@
 {
-  "eventTitle": "Halloween Week 3",
-  "weekEnding": "October 21, 2026",
-  "eventDates": "October 15–21, 2026",
-  "fibFile": "The Brute Force File",
+  "eventTitle": "Halloween Week 4",
+  "weekEnding": "October 28, 2026",
+  "eventDates": "October 22–28, 2026",
+  "fibFile": "The Fine Art File",
   "primaryTargets": [
-    "Twindifference",
-    "Teckels",
-    "A Cast of Characters"
+    "Stacks Study V",
+    "Trust",
+    "Brother Brother"
   ],
-  "weeklyChallenge": "Win three Races for GTA$100,000 and the Orange Glow Skeletal Onesie",
-  "podium": "Grotti LSCM Cheetah Classic",
-  "prizeRide": "Dinka Kanjo SJ",
-  "prizeRideRequirement": "Place Top 5 in the LS Car Meet Series",
+  "weeklyChallenge": "Complete all waves of a Survival to get the Gray Interloper Outfit and GTA$150,000",
+  "podium": "Pfister Comet S2",
+  "prizeRide": "Grotti Itali Classic",
+  "prizeRideRequirement": "Place Top 2 in the LS Car Meet Series for two days in a row",
   "weeklyRewards": [
-    "Play GTA Online through October 21 to receive the Butchery and Other Hobbies T-Shirt",
-    "Complete Don't Fuck With Dre before October 21 to receive GTA$500,000 within 72 hours of completion",
+    "Play GTA Online through October 28 to receive the White & Red Tech Demon Mask",
+    "Complete all three Short Trips before October 28 to receive GTA$500,000 within 72 hours of completion",
     "Complete all Weekly Challenges through November 4 to receive GTA$2,000,000 within 72 hours of completion"
   ],
   "bonuses": [
@@ -35,7 +35,47 @@
     },
     {
       "category": "3X GTA$ & RP",
-      "name": "Community Race Series",
+      "name": "Community Mission Series (PS5, Xbox Series X|S & PC Enhanced)",
+      "value": "3X"
+    },
+    {
+      "category": "3X GTA$ & RP",
+      "name": "Alien Retribution by ShelbyGR",
+      "value": "3X"
+    },
+    {
+      "category": "3X GTA$ & RP",
+      "name": "Miss: Rise of the Beast by ajm_agrajag",
+      "value": "3X"
+    },
+    {
+      "category": "3X GTA$ & RP",
+      "name": "Final Extraction by Seangib",
+      "value": "3X"
+    },
+    {
+      "category": "3X GTA$ & RP",
+      "name": "House Hunting by GTA Series Videos",
+      "value": "3X"
+    },
+    {
+      "category": "3X GTA$ & RP",
+      "name": "Last Ones Out | LSS by DarkSoulBlue",
+      "value": "3X"
+    },
+    {
+      "category": "3X GTA$ & RP",
+      "name": "The Chiliad Anomaly by GTA Series Videos",
+      "value": "3X"
+    },
+    {
+      "category": "3X GTA$ & RP",
+      "name": "Sasquatch Hunters by II_TREIZIEME_II",
+      "value": "3X"
+    },
+    {
+      "category": "3X GTA$ & RP",
+      "name": "Biohazard Outbreak by lezou_playzzz",
       "value": "3X"
     },
     {
@@ -65,16 +105,16 @@
     }
   ],
   "loginRewards": [
-    "Butchery and Other Hobbies T-Shirt (Free for playing GTA Online through Oct 21)"
+    "White & Red Tech Demon Mask (Free for playing GTA Online through Oct 28)"
   ],
   "specialRewards": [
     {
-      "action": "Complete Don't Fuck With Dre before Oct 21",
+      "action": "Complete all three Short Trips before Oct 28",
       "reward": "GTA$500,000 (within 72 hours)"
     },
     {
-      "action": "Win three Races",
-      "reward": "Orange Glow Skeletal Onesie + GTA$100,000"
+      "action": "Complete all waves of a Survival",
+      "reward": "Gray Interloper Outfit + GTA$150,000"
     },
     {
       "action": "Complete all Weekly Challenges through Nov 4",
@@ -95,15 +135,16 @@
       "LCC Sanctus"
     ],
     "thirty": [
-      "Annis Hardy",
-      "BF Raptor",
-      "Buckingham Miljet",
-      "Buckingham Tug",
-      "Dinka Sugoi",
-      "Karin Calico GTF",
-      "Nagasaki Weaponized Dinghy",
-      "Vapid Winky",
-      "Western Company Annihilator"
+      "Annis Euros X32",
+      "Bravado Dorado",
+      "Canis Freecrawler",
+      "Dinka Veto Classic",
+      "HVY Dump",
+      "Karin Boor",
+      "Ocelot Swinger",
+      "Pfister Astron",
+      "Vapid Desert Raid",
+      "Vulcar Nebula Turbo"
     ]
   },
   "gunVan": [
@@ -120,27 +161,27 @@
     "Widowmaker (50% OFF for GTA+ Members)"
   ],
   "rotatingContent": {
-    "fibPriorityFile": "The Brute Force File",
+    "fibPriorityFile": "The Fine Art File",
     "kortzCenterPrimaryTargets": [
-      "Twindifference",
-      "Teckels",
-      "A Cast of Characters"
+      "Stacks Study V",
+      "Trust",
+      "Brother Brother"
     ]
   },
   "salvageYard": [
     {
-      "robbery": "The Gangbanger Robbery",
-      "name": "Grotti Itali RSX",
+      "robbery": "The Duggan Robbery",
+      "name": "Ocelot Virtue",
       "type": "Top Tier"
     },
     {
-      "robbery": "The Podium Robbery",
+      "robbery": "The Cargo Ship Robbery",
       "name": "Albany Fränken Stange",
       "type": "Standard Tier"
     },
     {
-      "robbery": "The Cargo Ship Robbery",
-      "name": "BF Weevil",
+      "robbery": "The McTony Robbery",
+      "name": "Vapid Caracara 4x4",
       "type": "Low Tier"
     }
   ],
@@ -156,8 +197,8 @@
     "Übermacht Sentinel XS4"
   ],
   "lsCarMeet": {
-    "prizeRide": "Dinka Kanjo SJ",
-    "prizeRideRequirement": "Place Top 5 in the LS Car Meet Series",
+    "prizeRide": "Grotti Itali Classic",
+    "prizeRideRequirement": "Place Top 2 in the LS Car Meet Series for two days in a row",
     "testTrack": [
       "Declasse Vamos",
       "Dewbauchee Seven-70",
@@ -166,9 +207,9 @@
     "hsw": "Maibatsu MonstroCiti"
   },
   "timeTrials": {
-    "regular": "Coast to Coast",
-    "hsw": "Pacific Bluffs to Mount Gordo",
-    "premium": "Criminal Records"
+    "regular": "Casino",
+    "hsw": "North Chumash to Palomino Highlands",
+    "premium": "Route 68"
   },
   "halloweenSeason": {
     "duration": "October 1 - November 4, 2026",
@@ -201,7 +242,7 @@
       {
         "dates": "October 22–28",
         "challenge": "Complete all waves of a Survival",
-        "reward": "Gray Space Interloper Outfit and GTA$150,000",
+        "reward": "Gray Interloper Outfit and GTA$150,000",
         "apparel": "White & Red Tech Demon Mask"
       },
       {
