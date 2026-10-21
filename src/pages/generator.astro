@@ -699,19 +699,41 @@ const vehicleSets = [
 
   function slugify(s) { return s.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, ""); }
   
+  const rimFolder = {
+    "Bennys Bespoke": "bennysbespoke", "Bennys Originals": "bennysoriginals",
+    "Race": "race", "Bike": "bike", "High End": "highend", "Lowrider": "lowrider",
+    "Muscle": "muscle", "Offroad": "offroad", "Sport": "sport", "Street": "street",
+    "SUV": "suv", "Track": "track", "Tuner": "tuner"
+  };
+  const rimPrefix = {
+    "bennysbespoke": "Benny'sBespoke", "bennysoriginals": "Benny'sOriginals",
+    "bike": "Bike", "highend": "Highend", "lowrider": "Lowrider", "muscle": "Muscle",
+    "offroad": "Offroad", "race": "Race", "sport": "Sport", "street": "Street",
+    "suv": "Suv", "track": "Track", "tuner": "Tuner"
+  };
+
+  function styleToFile(style) {
+    let s = style
+      .replace(/\(Chrome Lip\)/gi, "ChromeLip")
+      .replace(/\(Solid Color\)/gi, "SolidColor")
+      .replace(/\(Striped\)/gi, "Striped")
+      .replace(/[()]/g, "");
+    s = s.replace(/(^|\s)(\w)/g, (_, sp, c) => c.toUpperCase()).replace(/\s+/g, "");
+    s = s.replace(/V(\d)/g, "V.$1");
+    return s;
+  }
+
   function updateRimThumb() {
     const cat = document.getElementById("wheelCategory").value;
     const style = document.getElementById("rimStyle").value;
     const full = document.getElementById("wheelFull");
-    
-    const categorySlug = slugify(cat || "Bennys Bespoke");
-    const catImg = `/images/wheels/${categorySlug}.png`;
-
-    let rimImg = catImg;
+    const folder = rimFolder[cat] || "bennysbespoke";
+    const prefix = rimPrefix[folder] || "";
+    let rimImg = `/images/wheels/${slugify(cat || "Bennys Bespoke")}.png`;
     if (style && style !== "Stock" && cat) {
-      rimImg = `/images/wheels/rims/${categorySlug}/${slugify(style)}.webp`;
+      const filePart = styleToFile(style);
+      rimImg = `/images/wheels/rims/${folder}/${prefix}${filePart}.png`;
     }
-    
     full.src = rimImg;
     updateTireOverlay();
   }
@@ -1164,5 +1186,6 @@ Tire Design: ${formattedTire}${activatorOutput}`;
   populateUnselectedOnly("pearl", "pearl"); populateUnselectedOnly("interior", "interior"); populateUnselectedOnly("rimColor", "rim");
   updatePlatePreview(); 
 </script>
+
 
 
