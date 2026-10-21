@@ -2,7 +2,7 @@ name: Daily Gun Van Scraper & Deploy
 
 on:
   schedule:
-    - cron: '30 6 * * *' # Scheduled for 06:30 UTC every day
+    - cron: '30 6 * * *' # 06:30 UTC every day
   workflow_dispatch:
 
 permissions:
@@ -14,12 +14,19 @@ permissions:
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
+concurrency:
+  group: gunvan-updater
+  cancel-in-progress: false
+
 jobs:
   scrape-build-deploy:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Setup Node Environment
         uses: actions/setup-node@v4
@@ -43,8 +50,14 @@ jobs:
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git add public/api/gunvan.json
-          git commit -m "🤖 Auto-update Gun Van location data assets" || echo "No changes to commit"
-          git push
+          if git diff --staged --quiet; then
+            echo "No changes to commit"
+            exit 0
+          fi
+          git commit -m "🤖 Auto-update Gun Van location data assets"
+          git fetch origin main
+          git rebase origin/main
+          git push origin HEAD:main
 
       - name: Install, build, and upload static site bundles
         uses: withastro/action@v3
