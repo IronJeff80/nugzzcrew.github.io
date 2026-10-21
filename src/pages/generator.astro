@@ -539,7 +539,7 @@ const vehicleSets = [
   </div>
 </MainLayout>
 
-<script is:inline define:vars={{ colors, unselectedSecondary, allUnselected, wheelCategories, lightColors, tireDesignMap }}>
+<script is:inline define:vars={{ colors, unselectedSecondary, allUnselected, wheelCategories, lightColors, tireDesignMap, vehicles }}>
   const globalHexMap = {};
   colors.forEach((c) => {
     const key = c.texture + "|" + c.name;
@@ -1033,11 +1033,7 @@ Tire Design: ${formattedTire}${activatorOutput}`;
 
 
   // ========== VEHICLE / SET SELECTOR ==========
-  let vehicles = [];
-  fetch("/data/vehicles.json")
-    .then(r => r.json())
-    .then(data => { vehicles = data; })
-    .catch(() => { console.warn("Could not load vehicles.json"); });
+  // vehicles is provided by define:vars from src/data/vehicles.json
   const setsList = ["Facility Set","Nightclub Set","Arena Set","Special Vehicle Set","Set 1 Set","Set 2 Set"];
 
   let selectedVehicle = null; // {display, value, file} or {display, value: setName, isSet: true}
@@ -1157,3 +1153,4 @@ Tire Design: ${formattedTire}${activatorOutput}`;
   populateUnselectedOnly("pearl", "pearl"); populateUnselectedOnly("interior", "interior"); populateUnselectedOnly("rimColor", "rim");
   updatePlatePreview(); 
 </script>
+
