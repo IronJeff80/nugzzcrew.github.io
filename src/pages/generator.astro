@@ -273,10 +273,10 @@ const vehicleSets = [
         <!-- Vehicle Search + Dropdown -->
         <div id="vehicle-selector">
           <label class="block text-[10px] text-gold uppercase font-black mb-1">Search & Select Vehicle (Required):</label>
-          <div class="relative">
+          <div>
             <input type="text" id="vehicleSearch" placeholder="Type to filter (e.g. Buffalo, Dominator, Vigero...)" autocomplete="off"
               class="w-full bg-black border border-zinc-800 rounded-lg p-3 text-white text-sm outline-none focus:border-gold" />
-            <div id="vehicleDropdown" class="absolute z-50 w-full mt-1 max-h-60 overflow-y-auto bg-zinc-950 border border-zinc-800 rounded-lg shadow-2xl hidden"></div>
+            <div id="vehicleDropdown" class="w-full mt-1 max-h-60 overflow-y-auto bg-zinc-950 border border-zinc-800 rounded-lg shadow-2xl hidden"></div>
           </div>
           <p id="vehicleSelectedLabel" class="text-[10px] text-zinc-400 mt-2 min-h-[1.2em]"></p>
           <input type="hidden" id="vehicle" />
@@ -1153,4 +1153,5 @@ Tire Design: ${formattedTire}${activatorOutput}`;
   populateUnselectedOnly("pearl", "pearl"); populateUnselectedOnly("interior", "interior"); populateUnselectedOnly("rimColor", "rim");
   updatePlatePreview(); 
 </script>
+
 
