@@ -279,6 +279,9 @@ const vehicleSets = [
             <div id="vehicleDropdown" class="w-full mt-1 max-h-60 overflow-y-auto bg-zinc-950 border border-zinc-800 rounded-lg shadow-2xl hidden"></div>
           </div>
           <p id="vehicleSelectedLabel" class="text-[10px] text-zinc-400 mt-2 min-h-[1.2em]"></p>
+          <div id="vehiclePreviewWrap" class="mt-3 hidden">
+            <img id="vehiclePreviewImg" src="" alt="Vehicle" class="max-h-40 mx-auto rounded-lg border border-zinc-700 bg-black object-contain" />
+          </div>
           <input type="hidden" id="vehicle" />
         </div>
 
@@ -1074,6 +1077,13 @@ Tire Design: ${formattedTire}${activatorOutput}`;
     document.getElementById("vehicle").value = v.value;
     document.getElementById("vehicleSearch").value = v.display;
     document.getElementById("vehicleSelectedLabel").textContent = `Selected: ${v.display}`;
+    const img = document.getElementById("vehiclePreviewImg");
+    const wrap = document.getElementById("vehiclePreviewWrap");
+    if (v.file) {
+      img.src = `/images/Vehicles/${v.file}`;
+      img.alt = v.display;
+      wrap.classList.remove("hidden");
+    }
     document.getElementById("vehicleDropdown").classList.add("hidden");
     updateNextButton();
   }
@@ -1082,6 +1092,7 @@ Tire Design: ${formattedTire}${activatorOutput}`;
     selectedVehicle = null;
     document.getElementById("vehicle").value = "";
     document.getElementById("vehicleSelectedLabel").textContent = "";
+    document.getElementById("vehiclePreviewWrap").classList.add("hidden");
     updateNextButton();
   }
 
