@@ -1,6 +1,7 @@
 ---
 import MainLayout from "../layouts/MainLayout.astro";
 import colors from "../data/colors.json";
+import vehicles from "../data/vehicles.json";
 
 const unselectedSecondary = colors.filter((c) => !c.secondary);
 const allUnselected = colors.filter(
@@ -221,6 +222,15 @@ const tireDesignMap = {
 };
 
 const tireSmokeOptions = ["Match Headlights", "Match Neon", "Patriot", "Custom RGB"];
+const vehicleSets = [
+  "Facility Set",
+  "Nightclub Set",
+  "Arena Set",
+  "Special Vehicle Set",
+  "Set 1 Set",
+  "Set 2 Set"
+];
+
 ---
 
 <MainLayout title="DMO Generator" description="GTA Online DMO generator. Official Nugzz Crew.">
@@ -247,12 +257,42 @@ const tireSmokeOptions = ["Match Headlights", "Match Neon", "Patriot", "Custom R
       <!-- STEP 1: VEHICLE -->
       <div id="step-1" class="step-section space-y-6">
         <h2 class="text-gold font-black uppercase text-lg mb-4">Vehicle Details</h2>
-        <div>
-          <label class="block text-[10px] text-gold uppercase font-black mb-1">Vehicle Name or Set (Required):</label>
-          <input type="text" id="vehicle" placeholder="e.g. Buffalo STX or Nightclub Set" class="w-full bg-black border border-zinc-800 rounded-lg p-3 text-white text-sm outline-none focus:border-gold"/>
+
+        <!-- Mode Toggle -->
+        <div class="flex gap-4 mb-4">
+          <label class="flex items-center gap-2 cursor-pointer">
+            <input type="radio" name="vehicleMode" value="vehicle" checked class="accent-gold" />
+            <span class="text-[11px] uppercase font-black tracking-widest text-white">Vehicle</span>
+          </label>
+          <label class="flex items-center gap-2 cursor-pointer">
+            <input type="radio" name="vehicleMode" value="set" class="accent-gold" />
+            <span class="text-[11px] uppercase font-black tracking-widest text-white">Set</span>
+          </label>
         </div>
+
+        <!-- Vehicle Search + Dropdown -->
+        <div id="vehicle-selector">
+          <label class="block text-[10px] text-gold uppercase font-black mb-1">Search & Select Vehicle (Required):</label>
+          <div class="relative">
+            <input type="text" id="vehicleSearch" placeholder="Type to filter (e.g. Buffalo, Dominator, Vigero...)" autocomplete="off"
+              class="w-full bg-black border border-zinc-800 rounded-lg p-3 text-white text-sm outline-none focus:border-gold" />
+            <div id="vehicleDropdown" class="absolute z-50 w-full mt-1 max-h-60 overflow-y-auto bg-zinc-950 border border-zinc-800 rounded-lg shadow-2xl hidden"></div>
+          </div>
+          <p id="vehicleSelectedLabel" class="text-[10px] text-zinc-400 mt-2 min-h-[1.2em]"></p>
+          <input type="hidden" id="vehicle" />
+        </div>
+
+        <!-- Set Selector -->
+        <div id="set-selector" class="hidden">
+          <label class="block text-[10px] text-gold uppercase font-black mb-1">Select Set (Required):</label>
+          <select id="vehicleSet" class="w-full bg-black border border-zinc-800 rounded-lg p-3 text-white text-sm outline-none focus:border-gold">
+            <option value="">— Choose a Set —</option>
+            {vehicleSets.map(s => <option value={s}>{s}</option>)}
+          </select>
+        </div>
+
         <div class="flex gap-3 pt-6 border-t border-zinc-800">
-          <button id="btn-next-1" class="w-full bg-zinc-800 hover:bg-gold hover:text-black text-white font-black uppercase py-3 rounded-xl text-xs tracking-widest transition-all">Next: Plates</button>
+          <button id="btn-next-1" disabled class="w-full bg-zinc-800 disabled:opacity-40 disabled:cursor-not-allowed hover:bg-gold hover:text-black text-white font-black uppercase py-3 rounded-xl text-xs tracking-widest transition-all">Next: Plates</button>
         </div>
       </div>
 
@@ -560,7 +600,7 @@ const tireSmokeOptions = ["Match Headlights", "Match Neon", "Patriot", "Custom R
 
   function validateStep(step) {
     if (step === 1) {
-      if (!document.getElementById("vehicle").value.trim()) { alert("Please enter a Vehicle Name."); return false; }
+      if (!document.getElementById("vehicle").value.trim()) { alert("Please select a valid Vehicle or Set."); return false; }
     }
     if (step === 2) {
       if (document.getElementById("plate").value.length !== 8) { alert("Plate text must be EXACTLY 8 characters."); return false; }
@@ -956,7 +996,7 @@ const tireSmokeOptions = ["Match Headlights", "Match Neon", "Patriot", "Custom R
     const out = `=== DMO SPECIFICATION ===
 
 [VEHICLE & PLATE]
-Vehicle / Set: ${get("vehicle")}
+Vehicle / Set: ${selectedVehicle ? selectedVehicle.display : get("vehicle")}
 Plate Style: ${get("plateStyle")}
 Plate Text: "${outPlate}"
 Window Tint: ${get("windows")}
@@ -991,7 +1031,129 @@ Tire Design: ${formattedTire}${activatorOutput}`;
     });
   });
 
-  populatePrimary(); populateSecondary();
+
+  // ========== VEHICLE / SET SELECTOR ==========
+  let vehicles = [];
+  fetch("/data/vehicles.json")
+    .then(r => r.json())
+    .then(data => { vehicles = data; })
+    .catch(() => { console.warn("Could not load vehicles.json"); });
+  const setsList = ["Facility Set","Nightclub Set","Arena Set","Special Vehicle Set","Set 1 Set","Set 2 Set"];
+
+  let selectedVehicle = null; // {display, value, file} or {display, value: setName, isSet: true}
+
+  function updateNextButton() {
+    const btn = document.getElementById("btn-next-1");
+    const mode = document.querySelector('input[name="vehicleMode"]:checked')?.value;
+    const valid = mode === "set" 
+      ? !!document.getElementById("vehicleSet")?.value 
+      : !!selectedVehicle;
+    btn.disabled = !valid;
+  }
+
+  function renderVehicleDropdown(filter = "") {
+    const dd = document.getElementById("vehicleDropdown");
+    const q = filter.trim().toLowerCase();
+    const matches = vehicles.filter(v => 
+      v.display.toLowerCase().includes(q) || v.value.toLowerCase().includes(q)
+    ).slice(0, 40);
+
+    if (!q || matches.length === 0) {
+      dd.classList.add("hidden");
+      dd.innerHTML = "";
+      return;
+    }
+
+    dd.innerHTML = matches.map(v => `
+      <div class="vehicle-option px-3 py-2 text-sm text-white hover:bg-zinc-800 cursor-pointer border-b border-zinc-800/50 last:border-0"
+           data-value="${v.value}" data-display="${v.display}" data-file="${v.file}">
+        ${v.display}
+      </div>
+    `).join("");
+    dd.classList.remove("hidden");
+  }
+
+  function selectVehicle(v) {
+    selectedVehicle = { display: v.display, value: v.value, file: v.file, isSet: false };
+    document.getElementById("vehicle").value = v.value;
+    document.getElementById("vehicleSearch").value = v.display;
+    document.getElementById("vehicleSelectedLabel").textContent = `Selected: ${v.display}`;
+    document.getElementById("vehicleDropdown").classList.add("hidden");
+    updateNextButton();
+  }
+
+  function clearVehicle() {
+    selectedVehicle = null;
+    document.getElementById("vehicle").value = "";
+    document.getElementById("vehicleSelectedLabel").textContent = "";
+    updateNextButton();
+  }
+
+  // Mode toggle
+  document.querySelectorAll('input[name="vehicleMode"]').forEach(r => {
+    r.addEventListener("change", () => {
+      const isSet = r.value === "set";
+      document.getElementById("vehicle-selector").classList.toggle("hidden", isSet);
+      document.getElementById("set-selector").classList.toggle("hidden", !isSet);
+      clearVehicle();
+      if (isSet) document.getElementById("vehicleSet").value = "";
+      updateNextButton();
+    });
+  });
+
+  // Search input
+  const searchEl = document.getElementById("vehicleSearch");
+  searchEl.addEventListener("input", (e) => {
+    clearVehicle();
+    renderVehicleDropdown(e.target.value);
+  });
+  searchEl.addEventListener("focus", (e) => {
+    if (e.target.value) renderVehicleDropdown(e.target.value);
+  });
+
+  // Click outside to close
+  document.addEventListener("click", (e) => {
+    if (!e.target.closest("#vehicle-selector")) {
+      document.getElementById("vehicleDropdown").classList.add("hidden");
+    }
+  });
+
+  // Option click
+  document.getElementById("vehicleDropdown").addEventListener("click", (e) => {
+    const opt = e.target.closest(".vehicle-option");
+    if (!opt) return;
+    selectVehicle({
+      value: opt.dataset.value,
+      display: opt.dataset.display,
+      file: opt.dataset.file
+    });
+  });
+
+  // Set change
+  document.getElementById("vehicleSet").addEventListener("change", (e) => {
+    const val = e.target.value;
+    if (val) {
+      selectedVehicle = { display: val, value: val, isSet: true };
+      document.getElementById("vehicle").value = val;
+    } else {
+      clearVehicle();
+    }
+    updateNextButton();
+  });
+
+  // Prevent free-text next if not selected
+  document.getElementById("btn-next-1").addEventListener("click", (e) => {
+    if (document.getElementById("btn-next-1").disabled) {
+      e.preventDefault();
+      return;
+    }
+  });
+
+  updateNextButton();
+  // ========== END VEHICLE SELECTOR ==========
+
+
+    populatePrimary(); populateSecondary();
   populateUnselectedOnly("pearl", "pearl"); populateUnselectedOnly("interior", "interior"); populateUnselectedOnly("rimColor", "rim");
   updatePlatePreview(); 
 </script>
