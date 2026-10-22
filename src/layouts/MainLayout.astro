@@ -65,7 +65,10 @@ const desktopLinks = navLinks.slice(1);
         <meta name="twitter:description" content={description} />
         <meta name="twitter:image" content={`${siteUrl}/Logo.png`} />
 
-        <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" href="/favicon.ico" sizes="32x32" />
+        <link rel="icon" type="image/png" href="/icon-192.png" sizes="192x192" />
+        <link rel="apple-touch-icon" href="/icon-192.png" />
+        <link rel="manifest" href="/site.webmanifest" />
 
         <!-- Preload custom font -->
         <link rel="preload" href="/fonts/HighspeedRegular-8MrOn.otf" as="font" type="font/otf" crossorigin />
