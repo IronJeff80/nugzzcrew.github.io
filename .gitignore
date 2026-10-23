@@ -24,3 +24,4 @@ pnpm-debug.log*
 .idea/
 EmblemEditorV2 - Copy.html
 src/pages/emblem-backup.astro
+src/layouts/MainLayout - Backup V1.astro
