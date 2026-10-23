@@ -39,20 +39,20 @@ const channelJoinUrl = "https://www.youtube.com/channel/UCYNmnbEgm3G0m4avmwz_4Eg
         <span class="text-xs font-bold uppercase tracking-wider text-white">LIVE</span>
       </div>
 
-      <!-- Theater Mode Button -->
+      <!-- Theater Mode Button — always visible -->
       <button 
         id="theater-btn"
-        class="absolute bottom-3 right-3 z-30 opacity-0 group-hover:opacity-100 transition-opacity bg-black/70 hover:bg-black/90 text-white text-xs uppercase tracking-widest px-3 py-1.5 rounded-lg border border-zinc-700 hover:border-gold flex items-center gap-1.5"
+        type="button"
+        class="absolute bottom-3 right-3 z-30 bg-black/80 hover:bg-black text-white text-xs uppercase tracking-widest px-3 py-1.5 rounded-lg border border-zinc-600 hover:border-gold"
         aria-label="Toggle theater mode"
       >
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"/></svg>
         Theater
       </button>
     </div>
 
     <!-- Cards with 3D Tilt -->
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 mt-8">
-      <a href="/gta" class="tilt-card p-6 md:p-8 bg-zinc-900 border border-zinc-800 rounded-2xl hover:border-gold transition-all group text-left block">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 mt-8 perspective-wrap">
+      <a href="/gta" class="tilt-card p-6 md:p-8 bg-zinc-900 border border-zinc-800 rounded-2xl hover:border-gold group text-left block">
         <h2 class="text-xl md:text-2xl group-hover:text-gold transition-colors uppercase font-black italic">
           <span class="text-white">GTA</span> <span class="text-gold">Bonuses &rarr;</span>
         </h2>
@@ -63,7 +63,7 @@ const channelJoinUrl = "https://www.youtube.com/channel/UCYNmnbEgm3G0m4avmwz_4Eg
         href={channelJoinUrl} 
         target="_blank" 
         rel="noopener noreferrer"
-        class="tilt-card p-6 md:p-8 bg-zinc-900 border border-zinc-800 rounded-2xl hover:border-gold transition-all group text-left block"
+        class="tilt-card p-6 md:p-8 bg-zinc-900 border border-zinc-800 rounded-2xl hover:border-gold group text-left block"
       >
         <h2 class="text-xl md:text-2xl group-hover:text-gold transition-colors uppercase font-black italic">
           <span class="text-white">The</span> <span class="text-gold">Fam Bam &rarr;</span>
@@ -72,94 +72,89 @@ const channelJoinUrl = "https://www.youtube.com/channel/UCYNmnbEgm3G0m4avmwz_4Eg
       </a>
     </div>
   </section>
-</MainLayout>
 
-<script is:inline>
-  // ===== Live Status WebSocket =====
-  function connectBot() {
-    const ws = new WebSocket("wss://wss.officialnugzzcrew.com/");
+  <script is:inline>
+    function connectBot() {
+      const ws = new WebSocket("wss://wss.officialnugzzcrew.com/");
 
-    ws.onopen = () => {
-      ws.send(JSON.stringify({ "request": "Subscribe", "events": { "general": ["Custom"] }, "id": "SubRequest" }));
-      setTimeout(() => {
-        ws.send(JSON.stringify({ "request": "DoAction", "action": { "name": "Web_Request_Status" }, "id": "StatusCheck" }));
-      }, 1000);
-    };
+      ws.onopen = () => {
+        ws.send(JSON.stringify({ "request": "Subscribe", "events": { "general": ["Custom"] }, "id": "SubRequest" }));
+        setTimeout(() => {
+          ws.send(JSON.stringify({ "request": "DoAction", "action": { "name": "Web_Request_Status" }, "id": "StatusCheck" }));
+        }, 1000);
+      };
 
-    ws.onmessage = (event) => {
-      try {
-        const msg = JSON.parse(event.data);
-        if (msg.data && msg.data.data && msg.data.data.name === "LiveStatusUpdate") {
-          const data = msg.data.data;
-          const videoFrame = document.getElementById('yt-video-frame');
-          const placeholderImg = document.getElementById('offline-placeholder');
-          const liveBadge = document.getElementById('live-badge');
+      ws.onmessage = (event) => {
+        try {
+          const msg = JSON.parse(event.data);
+          if (msg.data && msg.data.data && msg.data.data.name === "LiveStatusUpdate") {
+            const data = msg.data.data;
+            const videoFrame = document.getElementById('yt-video-frame');
+            const placeholderImg = document.getElementById('offline-placeholder');
+            const liveBadge = document.getElementById('live-badge');
+            if (!videoFrame || !placeholderImg || !liveBadge) return;
 
-          if (data.isLive === true && data.videoId && data.videoId.trim() !== "") {
-            videoFrame.classList.remove('hidden');
-            videoFrame.src = `https://www.youtube.com/embed/${data.videoId}?autoplay=1&mute=1`;
-            placeholderImg.style.display = 'none';
-            liveBadge.classList.remove('hidden');
-            liveBadge.classList.add('flex');
-          } else {
-            videoFrame.classList.add('hidden');
-            videoFrame.src = "about:blank";
-            placeholderImg.style.display = 'block';
-            liveBadge.classList.add('hidden');
-            liveBadge.classList.remove('flex');
+            if (data.isLive === true && data.videoId && data.videoId.trim() !== "") {
+              videoFrame.classList.remove('hidden');
+              videoFrame.src = `https://www.youtube.com/embed/${data.videoId}?autoplay=1&mute=1`;
+              placeholderImg.style.display = 'none';
+              liveBadge.classList.remove('hidden');
+              liveBadge.classList.add('flex');
+            } else {
+              videoFrame.classList.add('hidden');
+              videoFrame.src = "about:blank";
+              placeholderImg.style.display = '';
+              liveBadge.classList.add('hidden');
+              liveBadge.classList.remove('flex');
+            }
           }
-        }
-      } catch (e) { console.log("Parsing error:", e); }
-    };
-    
-    ws.onclose = () => setTimeout(connectBot, 5000);
-  }
-  window.addEventListener('load', connectBot);
+        } catch (e) { console.log("Parsing error:", e); }
+      };
 
-  // ===== Theater Mode =====
-  const theaterBtn = document.getElementById('theater-btn');
-  const videoContainer = document.getElementById('video-container');
-  let isTheater = false;
-
-  theaterBtn?.addEventListener('click', () => {
-    isTheater = !isTheater;
-    if (isTheater) {
-      videoContainer.classList.add('theater-mode');
-      document.body.style.overflow = 'hidden';
-      theaterBtn.innerHTML = `<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg> Exit`;
-    } else {
-      videoContainer.classList.remove('theater-mode');
-      document.body.style.overflow = '';
-      theaterBtn.innerHTML = `<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"/></svg> Theater`;
+      ws.onclose = () => setTimeout(connectBot, 5000);
     }
-  });
+    window.addEventListener('load', connectBot);
 
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && isTheater) theaterBtn?.click();
-  });
-</script>
+    const theaterBtn = document.getElementById('theater-btn');
+    const videoContainer = document.getElementById('video-container');
+    let isTheater = false;
+    let theaterSlot = null;
 
-<style>
-  #video-container.theater-mode {
-    position: fixed;
-    inset: 0;
-    z-index: 100;
-    max-width: none;
-    width: 100vw;
-    height: 100vh;
-    border-radius: 0;
-    margin: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: #000;
-  }
-  #video-container.theater-mode iframe,
-  #video-container.theater-mode img {
-    max-width: 100%;
-    max-height: 100%;
-    width: auto;
-    height: auto;
-    aspect-ratio: 16/9;
-  }
-</style>
+    function setTheater(on) {
+      if (!videoContainer || !theaterBtn || on === isTheater) return;
+      isTheater = on;
+
+      if (on) {
+        theaterSlot = document.createComment('theater-slot');
+        videoContainer.parentNode.insertBefore(theaterSlot, videoContainer);
+        document.body.appendChild(videoContainer);
+        videoContainer.classList.add('is-theater');
+        document.body.style.overflow = 'hidden';
+        theaterBtn.textContent = 'Exit';
+      } else {
+        videoContainer.classList.remove('is-theater');
+        if (theaterSlot && theaterSlot.parentNode) {
+          theaterSlot.parentNode.insertBefore(videoContainer, theaterSlot);
+          theaterSlot.remove();
+          theaterSlot = null;
+        }
+        document.body.style.overflow = '';
+        theaterBtn.textContent = 'Theater';
+      }
+    }
+
+    theaterBtn?.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      setTheater(!isTheater);
+    });
+
+    videoContainer?.addEventListener('click', (e) => {
+      if (isTheater && e.target === videoContainer) setTheater(false);
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && isTheater) setTheater(false);
+    });
+  </script>
+</MainLayout>
