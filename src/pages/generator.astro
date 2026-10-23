@@ -299,6 +299,13 @@ const vehicleSets = [
           </div>
         </div>
 
+        <!-- Always-visible Match Primary button -->
+        <div class="mt-2">
+          <button type="button" id="matchPrimaryBtn" class="w-full bg-zinc-800 hover:bg-gold hover:text-black text-white font-black uppercase py-2.5 rounded-lg text-[10px] tracking-widest transition-all border border-zinc-700">
+            Match Primary → Secondary
+          </button>
+        </div>
+
         <div id="rgbInputArea" class="bg-gold/10 p-4 rounded-xl border border-gold/50 hidden mt-2">
           <label class="block text-[10px] text-gold uppercase font-black mb-2">Crew / Custom RGB or HEX (Applies to any slot set to 'Custom'):</label>
           <div class="flex gap-2 items-stretch">
@@ -306,10 +313,10 @@ const vehicleSets = [
             <input type="color" id="colorPicker" value="#ffffff" class="w-12 h-12 rounded border border-gold/60 bg-black cursor-pointer flex-shrink-0" title="Color wheel" />
             <div id="sharedRgbPrev" class="w-12 h-12 rounded border border-gold/60 bg-zinc-800 flex-shrink-0"></div>
           </div>
-          <button type="button" id="matchPrimaryBtn" class="mt-3 w-full bg-zinc-800 hover:bg-gold hover:text-black text-white font-black uppercase py-2 rounded-lg text-[10px] tracking-widest transition-all border border-zinc-700">
-            Match Primary → Secondary (Custom RGB)
-          </button>
         </div>
+
+        <!-- Hidden color picker used by color tiles -->
+        <input type="color" id="tileColorPicker" class="hidden" />
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
           <div class="space-y-1">
@@ -806,6 +813,62 @@ const vehicleSets = [
         if (colorPicker) colorPicker.value = hex.startsWith("#") ? hex : "#" + hex;
         refreshPreviews();
       }
+    });
+  }
+
+  // Color tiles open color wheel and switch slot to Custom RGB
+  const tilePicker = document.getElementById("tileColorPicker");
+  const tileTargets = {
+    primaryPrev: "primary",
+    secondaryPrev: "secondary",
+    neonPrev: "neon",
+    tireSmokePrev: "tireSmoke"
+  };
+  Object.entries(tileTargets).forEach(([tileId, selectId]) => {
+    const tile = document.getElementById(tileId);
+    if (!tile || !tilePicker) return;
+    tile.style.cursor = "pointer";
+    tile.title = "Click to pick color";
+    tile.addEventListener("click", () => {
+      // Set picker to current color if possible
+      const current = tile.style.backgroundColor;
+      if (current && current !== "transparent") {
+        // Convert rgb(...) to hex for the picker
+        const m = current.match(/rgb\((\d+),\s*(\d+),\s*(\d+)\)/);
+        if (m) {
+          const hex = "#" + [m[1],m[2],m[3]].map(n => parseInt(n).toString(16).padStart(2,"0")).join("");
+          tilePicker.value = hex;
+        }
+      }
+      tilePicker.dataset.target = selectId;
+      tilePicker.click();
+    });
+  });
+  if (tilePicker) {
+    tilePicker.addEventListener("input", () => {
+      const target = tilePicker.dataset.target;
+      if (!target) return;
+      const hex = tilePicker.value.toUpperCase();
+      const sel = document.getElementById(target);
+      if (!sel) return;
+      // Switch to Custom and set the value
+      if (target === "primary" || target === "secondary") {
+        sel.value = "Custom";
+        sel.dispatchEvent(new Event("change"));
+        if (sharedRgbInput) sharedRgbInput.value = hex;
+        if (colorPicker) colorPicker.value = hex;
+      } else if (target === "neon") {
+        sel.value = "Custom RGB";
+        sel.dispatchEvent(new Event("change"));
+        const neonRgb = document.getElementById("neonRgb");
+        if (neonRgb) neonRgb.value = hex;
+      } else if (target === "tireSmoke") {
+        sel.value = "Custom RGB";
+        sel.dispatchEvent(new Event("change"));
+        const smokeRgb = document.getElementById("tireSmokeCustom");
+        if (smokeRgb) smokeRgb.value = hex;
+      }
+      refreshPreviews();
     });
   }
 
