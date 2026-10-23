@@ -310,13 +310,12 @@ const vehicleSets = [
           <label class="block text-[10px] text-gold uppercase font-black mb-2">Crew / Custom RGB or HEX (Applies to any slot set to 'Custom'):</label>
           <div class="flex gap-2 items-stretch">
             <input type="text" id="sharedRgb" placeholder="255, 255, 255 or #FFFFFF" class="min-w-0 flex-1 bg-black border-2 border-gold rounded-lg p-3 text-white text-sm font-mono outline-none" />
-            <input type="color" id="colorPicker" value="#ffffff" class="w-12 h-12 rounded border border-gold/60 bg-black cursor-pointer flex-shrink-0" title="Color wheel" />
-            <div id="sharedRgbPrev" class="w-12 h-12 rounded border border-gold/60 bg-zinc-800 flex-shrink-0"></div>
+            <input type="color" id="colorPicker" value="#ffffff" class="w-12 h-12 rounded border-2 border-gold/60 cursor-pointer flex-shrink-0" title="Click to pick color" style="padding:0; background:none;" />
           </div>
         </div>
 
-        <!-- Hidden color picker used by color tiles -->
-        <input type="color" id="tileColorPicker" class="hidden" />
+        <!-- Positioned color picker for tiles (not display:none so popup appears near it) -->
+        <input type="color" id="tileColorPicker" class="fixed opacity-0 w-8 h-8 pointer-events-none" style="z-index:-1;" />
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
           <div class="space-y-1">
@@ -711,8 +710,7 @@ const vehicleSets = [
       if (box) box.style.backgroundColor = getColorForPreview(id);
     });
 
-    const paintBox = document.getElementById("sharedRgbPrev");
-    if (paintBox) paintBox.style.backgroundColor = parseColor(document.getElementById("sharedRgb").value) || "#333";
+    // colorPicker itself shows the color; no separate preview needed
     
     const neonBox = document.getElementById("neonRgbPrev");
     if (neonBox) neonBox.style.backgroundColor = parseColor(document.getElementById("neonRgb").value) || "#333";
@@ -829,17 +827,19 @@ const vehicleSets = [
     if (!tile || !tilePicker) return;
     tile.style.cursor = "pointer";
     tile.title = "Click to pick color";
-    tile.addEventListener("click", () => {
-      // Set picker to current color if possible
+    tile.addEventListener("click", (e) => {
       const current = tile.style.backgroundColor;
       if (current && current !== "transparent") {
-        // Convert rgb(...) to hex for the picker
         const m = current.match(/rgb\((\d+),\s*(\d+),\s*(\d+)\)/);
         if (m) {
           const hex = "#" + [m[1],m[2],m[3]].map(n => parseInt(n).toString(16).padStart(2,"0")).join("");
           tilePicker.value = hex;
         }
       }
+      // Position the picker over the tile so the native popup appears nearby
+      const rect = tile.getBoundingClientRect();
+      tilePicker.style.left = rect.left + "px";
+      tilePicker.style.top = rect.top + "px";
       tilePicker.dataset.target = selectId;
       tilePicker.click();
     });
