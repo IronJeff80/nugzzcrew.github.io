@@ -303,8 +303,12 @@ const vehicleSets = [
           <label class="block text-[10px] text-gold uppercase font-black mb-2">Crew / Custom RGB or HEX (Applies to any slot set to 'Custom'):</label>
           <div class="flex gap-2 items-stretch">
             <input type="text" id="sharedRgb" placeholder="255, 255, 255 or #FFFFFF" class="min-w-0 flex-1 bg-black border-2 border-gold rounded-lg p-3 text-white text-sm font-mono outline-none" />
+            <input type="color" id="colorPicker" value="#ffffff" class="w-12 h-12 rounded border border-gold/60 bg-black cursor-pointer flex-shrink-0" title="Color wheel" />
             <div id="sharedRgbPrev" class="w-12 h-12 rounded border border-gold/60 bg-zinc-800 flex-shrink-0"></div>
           </div>
+          <button type="button" id="matchPrimaryBtn" class="mt-3 w-full bg-zinc-800 hover:bg-gold hover:text-black text-white font-black uppercase py-2 rounded-lg text-[10px] tracking-widest transition-all border border-zinc-700">
+            Match Primary → Secondary (Custom RGB)
+          </button>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
@@ -603,7 +607,7 @@ const vehicleSets = [
     return null;
   }
 
-  function makeOption(c) { return `<option value="${c.texture}|${c.name}">${c.texture} - ${c.name}</option>`; }
+  function makeOption(c) { return `<option value="${c.texture}|${c.name}" data-hex="${c.hex}">${c.texture} - ${c.name}</option>`; }
   
   function populatePrimary() { document.getElementById("primary").innerHTML = '<option value="">-- Select --</option><option value="Custom">Custom RGB / HEX</option>' + colors.map(makeOption).join(""); }
   function populateSecondary() { document.getElementById("secondary").innerHTML = '<option value="">-- Select --</option><option value="Custom">Custom RGB / HEX</option>' + unselectedSecondary.map(makeOption).join(""); }
@@ -761,6 +765,49 @@ const vehicleSets = [
   
   document.getElementById("primary").addEventListener("change", checkPaintCustom);
   document.getElementById("secondary").addEventListener("change", checkPaintCustom);
+
+  // Color wheel ↔ RGB text sync
+  const colorPicker = document.getElementById("colorPicker");
+  const sharedRgbInput = document.getElementById("sharedRgb");
+  if (colorPicker && sharedRgbInput) {
+    colorPicker.addEventListener("input", () => {
+      sharedRgbInput.value = colorPicker.value.toUpperCase();
+      refreshPreviews();
+    });
+    sharedRgbInput.addEventListener("input", () => {
+      const val = sharedRgbInput.value.trim();
+      if (/^#?[0-9A-Fa-f]{6}$/.test(val)) {
+        colorPicker.value = val.startsWith("#") ? val : "#" + val;
+      }
+    });
+  }
+
+  // Match Primary → Secondary (switches secondary to Custom RGB and copies the color)
+  const matchBtn = document.getElementById("matchPrimaryBtn");
+  if (matchBtn) {
+    matchBtn.addEventListener("click", () => {
+      const primarySel = document.getElementById("primary");
+      const secondarySel = document.getElementById("secondary");
+      const primaryVal = primarySel.value;
+      if (!primaryVal) return;
+      secondarySel.value = "Custom";
+      secondarySel.dispatchEvent(new Event("change"));
+      // If primary is a named color, grab its hex; if Custom, copy current RGB
+      let hex = "";
+      if (primaryVal === "Custom") {
+        hex = sharedRgbInput.value.trim();
+      } else {
+        const opt = primarySel.options[primarySel.selectedIndex];
+        hex = opt?.dataset?.hex || "";
+      }
+      if (hex) {
+        if (!hex.startsWith("#") && /^[0-9A-Fa-f]{6}$/.test(hex)) hex = "#" + hex;
+        sharedRgbInput.value = hex.toUpperCase();
+        if (colorPicker) colorPicker.value = hex.startsWith("#") ? hex : "#" + hex;
+        refreshPreviews();
+      }
+    });
+  }
 
   document.getElementById("neon").addEventListener("change", () => {
     document.getElementById("neonRgbArea").classList.toggle("hidden", document.getElementById("neon").value !== "Custom RGB");
