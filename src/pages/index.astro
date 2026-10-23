@@ -1,94 +1,372 @@
 ---
-import MainLayout from '../layouts/MainLayout.astro';
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const { title, description = "Official Nugzz Crew — Streaming, GTA updates, community tools, and the best Fam Bam on the internet." } = Astro.props;
+import '../styles/global.css';
 
 const channelJoinUrl = "https://www.youtube.com/channel/UCYNmnbEgm3G0m4avmwz_4Eg/join?v=dummy";
+
+const socials = [
+  { name: 'YouTube', url: channelJoinUrl, img: 'YouTube Logo.png' },
+  { name: 'Twitch', url: 'https://www.twitch.tv/officialnugzzcrew', img: 'Twitch Logo.png' },
+  { name: 'Kick', url: 'https://kick.com/officialnugzzcrew', img: 'Kick Logo.png' },
+  { name: 'Discord', url: 'https://discord.gg/officialnugzzcrew', img: 'Discord Logo.png' },
+  { name: 'TikTok', url: 'https://www.tiktok.com/@officialnugzzcrew', img: 'TikTok Logo.png' },
+  { name: 'Instagram', url: 'https://www.instagram.com/officialnugzzcrew', img: 'IG Logo.png' },
+  { name: 'X', url: 'https://x.com/NugzzCrew', img: 'X Logo.png' },
+  { name: 'Facebook', url: 'https://www.facebook.com/nugzzcrew', img: 'FB Logo.png' },
+  { name: 'Snapchat', url: 'https://www.snapchat.com/add/nugzzcrew', img: 'SnapChat Logo.png' },
+  { name: 'Suno', url: 'https://suno.com/@officialnugzzcrew', img: 'Suno Logo.png' },
+  { name: 'Shop', url: 'https://officialnugzzcrew-shop.fourthwall.com', img: 'FourthWall Logo.png' },
+  { name: 'Crew', url: 'https://socialclub.rockstargames.com/crew/official_nugzz_crew', img: 'Rockstar Logo.png' },
+];
+
+const navLinks = [
+  { href: '/', label: 'Home' },
+  { href: '/gta', label: 'GTA Bonuses' },
+  { href: '/generator', label: 'DMO Gen' },
+  { href: '/gtaresources', label: 'GTA Resources' },
+  { href: '/emblem', label: 'Emblem Creator' },
+];
+
+const currentPath = Astro.url.pathname.replace(/\/$/, '') || '/';
+const isActive = (href: string) => {
+  if (href === '/') return currentPath === '/' || currentPath === '/index.html';
+  return currentPath === href || currentPath.startsWith(`${href}/`);
+};
+
+const isHomePage = currentPath === '/' || currentPath === '/index.html';
+const siteUrl = 'https://officialnugzzcrew.com';
+const desktopLinks = navLinks.slice(1);
 ---
 
-<MainLayout title="Home" description="Official Nugzz Crew homepage — live streams, GTA weekly bonuses, community tools, and the Fam Bam.">
-  <section class="max-w-4xl mx-auto py-12 md:py-20 px-4 md:px-6 text-center">
-    
-    <h1 class="text-[clamp(32px,10vw,60px)] mb-4 tracking-tighter uppercase font-black italic leading-[0.9]">
-      <span class="text-white">Fam</span> <span class="text-gold">Bam Central</span>
-    </h1>
-    
-    <p class="text-base md:text-xl text-zinc-400 mb-10 italic max-w-2xl mx-auto">
-      "Streaming, GTA Updates, and the best community in the game."
-    </p>
-    
-    <!-- Video Wrapper -->
-    <div class="relative aspect-video w-full rounded-xl md:rounded-2xl border border-zinc-800 mb-12 overflow-hidden bg-black shadow-[0_0_50px_-12px_rgba(212,175,55,0.3)]">
-      <img 
-        id="offline-placeholder" 
-        src="/images/offline.png" 
-        alt="Stream is currently offline" 
-        style="display: block; width: 100%; height: 100%; object-fit: cover; position: absolute; top: 0; left: 0; z-index: 10;" 
-      />
-      <iframe 
-        id="yt-video-frame" 
-        src="about:blank" 
-        allowfullscreen 
-        style="display: none; width: 100%; height: 100%; position: relative; z-index: 20;">
-      </iframe>
-    </div>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title>{title} | Official Nugzz Crew</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
+        <meta name="description" content={description} />
+        <meta name="theme-color" content="#000000" />
+        <link rel="canonical" href={new URL(Astro.url.pathname, siteUrl)} />
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 mt-12">
-        <a href="/gta" class="p-6 md:p-8 bg-zinc-900 border border-zinc-800 rounded-2xl hover:border-gold transition-all group text-left">
-          <h2 class="text-xl md:text-2xl group-hover:text-gold transition-colors uppercase font-black italic">
-            <span class="text-white">GTA</span> <span class="text-gold">Bonuses &rarr;</span>
-          </h2>
-          <p class="text-zinc-500 mt-2 text-sm md:text-base">Get the latest on bonuses, car meets, and robberies.</p>
+        <!-- Open Graph / Social -->
+        <meta property="og:type" content="website" />
+        <meta property="og:site_name" content="Official Nugzz Crew" />
+        <meta property="og:title" content={`${title} | Official Nugzz Crew`} />
+        <meta property="og:description" content={description} />
+        <meta property="og:url" content={new URL(Astro.url.pathname, siteUrl)} />
+        <meta property="og:image" content={`${siteUrl}/Logo.png`} />
+
+        <meta name="twitter:card" content="summary" />
+        <meta name="twitter:title" content={`${title} | Official Nugzz Crew`} />
+        <meta name="twitter:description" content={description} />
+        <meta name="twitter:image" content={`${siteUrl}/Logo.png`} />
+
+        <link rel="icon" href="/favicon.ico" sizes="32x32" />
+        <link rel="icon" type="image/png" href="/icon-192.png" sizes="192x192" />
+        <link rel="apple-touch-icon" href="/icon-192.png" />
+        <link rel="manifest" href="/site.webmanifest" />
+
+        <!-- Preload custom font -->
+        <link rel="preload" href="/fonts/HighspeedRegular-8MrOn.otf" as="font" type="font/otf" crossorigin />
+
+        <script src="https://unpkg.com/lucide@latest"></script>
+    </head>
+    <body class="bg-black text-white antialiased">
+        <!-- Custom Cursor (desktop only) -->
+        <div id="cursor-dot" class="fixed w-2 h-2 bg-gold rounded-full pointer-events-none z-[9999] mix-blend-difference transition-opacity duration-200" style="transform: translate(-50%, -50%);"></div>
+        <div id="cursor-ring" class="fixed w-10 h-10 border border-gold/60 rounded-full pointer-events-none z-[9998] transition-all duration-300 ease-out" style="transform: translate(-50%, -50%);"></div>
+
+        <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-[60] focus:bg-black focus:text-gold focus:px-4 focus:py-2 focus:rounded-lg focus:outline-gold">
+            Skip to content
         </a>
-  
-        <a 
-          href={channelJoinUrl} 
-          target="_blank" 
-          rel="noopener noreferrer"
-          class="p-6 md:p-8 bg-zinc-900 border border-zinc-800 rounded-2xl hover:border-gold transition-all group text-left"
+
+        <nav id="site-header" class="sticky top-0 z-50 bg-black/95 backdrop-blur-md border-b border-zinc-800 px-3 py-3 md:px-4 md:pt-3 md:pb-2">
+            <div class="max-w-7xl mx-auto flex flex-col items-center">
+                <div class="relative flex items-center justify-center w-full min-h-[48px]">
+                    <button 
+                        id="menu-toggle" 
+                        aria-label="Open menu" 
+                        aria-expanded="false"
+                        class="absolute left-0 md:left-2 flex items-center justify-center w-16 h-16 text-zinc-300 hover:text-gold transition-colors md:hidden focus-visible:outline-gold"
+                    >
+                        <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 6h16M4 12h16M4 18h16" />
+                        </svg>
+                    </button>
+
+                    <a href="/" class="flex items-center gap-2 group transition-opacity hover:opacity-90 focus-visible:outline-gold rounded">
+                        <img src="/Logo.png" alt="Official Nugzz Crew Logo" class="w-7 h-7 md:w-9 md:h-9 object-contain" />
+                        <span class="text-[clamp(12px,3.2vw,20px)] font-header uppercase tracking-tighter whitespace-nowrap">
+                            <span class="text-white">Official</span> <span class="text-gold">Nugzz Crew</span>
+                        </span>
+                    </a>
+                </div>
+
+                <div class="hidden md:flex w-full items-center justify-center flex-wrap gap-1 pt-1">
+                    {desktopLinks.map((link) => (
+                        <a 
+                            href={link.href}
+                            aria-current={isActive(link.href) ? 'page' : undefined}
+                            class:list={[
+                                'px-3 py-1.5 rounded-lg transition-colors uppercase tracking-wider text-xs font-bold focus-visible:outline-gold',
+                                isActive(link.href)
+                                    ? 'text-gold bg-zinc-900/80'
+                                    : 'text-zinc-300 hover:text-gold hover:bg-zinc-900/60'
+                            ]}
+                        >
+                            {link.label}
+                        </a>
+                    ))}
+                </div>
+            </div>
+        </nav>
+
+        <div id="nav-overlay" class="fixed inset-0 bg-black/60 z-40 hidden"></div>
+        <aside 
+            id="nav-menu" 
+            class="fixed top-0 left-0 h-full w-80 md:w-96 max-w-[90vw] bg-black/98 border-r border-zinc-800 z-50 transform -translate-x-full transition-transform duration-300 ease-in-out overflow-y-auto"
+            aria-hidden="true"
         >
-          <h2 class="text-xl md:text-2xl group-hover:text-gold transition-colors uppercase font-black italic">
-            <span class="text-white">The</span> <span class="text-gold">Fam Bam &rarr;</span>
-          </h2>
-          <p class="text-zinc-500 mt-2 text-sm md:text-base">Catch every live stream and join the best community on YouTube.</p>
-        </a>
-      </div>
-  </section>
-</MainLayout>
+            <div id="menu-header" class="flex items-center justify-between px-5 border-b border-zinc-800 min-h-[88px]">
+                <span class="font-header text-gold text-base uppercase tracking-wider">Menu</span>
+                <button id="menu-close" aria-label="Close menu" class="text-zinc-400 hover:text-gold focus-visible:outline-gold rounded">
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
 
-<script is:inline>
-  function connectBot() {
-      const ws = new WebSocket("wss://wss.officialnugzzcrew.com/");
+            <nav class="flex flex-col p-5 gap-2">
+                {navLinks.map((link) => (
+                    <a 
+                        href={link.href} 
+                        aria-current={isActive(link.href) ? 'page' : undefined}
+                        class:list={[
+                            'nav-link px-5 py-4 rounded-lg transition-colors uppercase tracking-widest text-base font-bold focus-visible:outline-gold',
+                            isActive(link.href)
+                                ? 'text-gold bg-zinc-900/70'
+                                : 'text-zinc-300 hover:text-gold hover:bg-zinc-900/70'
+                        ]}
+                    >
+                        {link.label}
+                    </a>
+                ))}
+            </nav>
+        </aside>
+        
+        <main id="main-content" class="relative z-10">
+            <slot /> 
+        </main>
 
-      ws.onopen = () => {
-          ws.send(JSON.stringify({ "request": "Subscribe", "events": { "general": ["Custom"] }, "id": "SubRequest" }));
-          
-          setTimeout(() => {
-            ws.send(JSON.stringify({ "request": "DoAction", "action": { "name": "Web_Request_Status" }, "id": "StatusCheck" }));
-          }, 1000);
-      };
+        {!isHomePage && (
+            <div class="text-center py-8">
+                <a 
+                    href="/" 
+                    class="inline-block px-6 py-3 bg-zinc-900 border border-zinc-700 rounded-lg text-gold hover:border-gold hover:bg-zinc-800 transition-all uppercase tracking-widest text-sm font-bold focus-visible:outline-gold"
+                >
+                    &larr; Back To Home
+                </a>
+            </div>
+        )}
 
-      ws.onmessage = (event) => {
-          try {
-              const msg = JSON.parse(event.data);
-              
-              if (msg.data && msg.data.data && msg.data.data.name === "LiveStatusUpdate") {
-                  const data = msg.data.data;
-                  const videoFrame = document.getElementById('yt-video-frame');
-                  const placeholderImg = document.getElementById('offline-placeholder');
-                  
-                  if (data.isLive === true && data.videoId && data.videoId.trim() !== "") {
-                      videoFrame.style.display = 'block';
-                      videoFrame.src = `https://www.youtube.com/embed/${data.videoId}?autoplay=1&mute=1`;
-                      placeholderImg.style.display = 'none';
-                  } else {
-                      videoFrame.style.display = 'none';
-                      videoFrame.src = "about:blank";
-                      placeholderImg.style.display = 'block';
-                  }
+        <footer class="pt-3 pb-3 md:pt-4 md:pb-4 text-center text-zinc-600 text-[10px] uppercase tracking-widest border-t border-zinc-900 mt-4">
+            <div class="flex justify-center flex-wrap gap-3 md:gap-4 mb-2">
+                {socials.map((social) => (
+                    <a 
+                        href={social.url} 
+                        target="_blank" 
+                        rel="noopener noreferrer" 
+                        class="group transition-transform hover:scale-110 active:scale-95 focus-visible:outline-gold rounded" 
+                        title={social.name}
+                    >
+                        <div class="w-6 h-6 md:w-7 md:h-7 flex items-center justify-center">
+                            <img 
+                                src={`/images/${social.img}`} 
+                                alt={`${social.name} Logo`} 
+                                class="w-full h-full object-contain opacity-70 group-hover:opacity-100 transition-opacity" 
+                                loading="lazy"
+                            />
+                        </div>
+                    </a>
+                ))}
+            </div>
+
+            &copy; 2026 Official Nugzz Crew | Built for The Fam Bam
+        </footer>
+
+        <script is:inline>
+          function initIcons() { if (window.lucide) window.lucide.createIcons(); }
+          window.addEventListener('load', initIcons);
+          document.addEventListener('astro:page-load', initIcons);
+
+          function initMenu() {
+            const toggle = document.getElementById('menu-toggle');
+            const closeBtn = document.getElementById('menu-close');
+            const menu = document.getElementById('nav-menu');
+            const overlay = document.getElementById('nav-overlay');
+            const links = document.querySelectorAll('.nav-link');
+            const header = document.getElementById('site-header');
+            const menuHeader = document.getElementById('menu-header');
+
+            function syncMenuHeaderHeight() {
+              if (header && menuHeader) {
+                menuHeader.style.minHeight = header.offsetHeight + 'px';
               }
-          } catch (e) { console.log("Parsing error:", e); }
-      };
-      
-      ws.onclose = () => setTimeout(connectBot, 5000);
-  }
-  window.addEventListener('load', connectBot);
-</script>
+            }
+            syncMenuHeaderHeight();
+            window.addEventListener('resize', syncMenuHeaderHeight);
+
+            function openMenu() {
+              syncMenuHeaderHeight();
+              menu.classList.remove('-translate-x-full');
+              menu.setAttribute('aria-hidden', 'false');
+              overlay.classList.remove('hidden');
+              toggle.setAttribute('aria-expanded', 'true');
+              document.body.style.overflow = 'hidden';
+            }
+
+            function closeMenu() {
+              menu.classList.add('-translate-x-full');
+              menu.setAttribute('aria-hidden', 'true');
+              overlay.classList.add('hidden');
+              toggle.setAttribute('aria-expanded', 'false');
+              document.body.style.overflow = '';
+            }
+
+            toggle?.addEventListener('click', openMenu);
+            closeBtn?.addEventListener('click', closeMenu);
+            overlay?.addEventListener('click', closeMenu);
+            links.forEach(link => link.addEventListener('click', closeMenu));
+
+            document.addEventListener('keydown', (e) => {
+              if (e.key === 'Escape') closeMenu();
+            });
+          }
+
+          window.addEventListener('load', initMenu);
+          document.addEventListener('astro:page-load', initMenu);
+
+          // ===== Custom Cursor =====
+          if (window.matchMedia('(pointer: fine)').matches && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+            const dot = document.getElementById('cursor-dot');
+            const ring = document.getElementById('cursor-ring');
+            if (dot && ring) {
+              let mouseX = 0, mouseY = 0;
+              let ringX = 0, ringY = 0;
+
+              document.addEventListener('mousemove', (e) => {
+                mouseX = e.clientX;
+                mouseY = e.clientY;
+                dot.style.left = mouseX + 'px';
+                dot.style.top = mouseY + 'px';
+                dot.style.opacity = '1';
+              });
+
+              function animateRing() {
+                ringX += (mouseX - ringX) * 0.15;
+                ringY += (mouseY - ringY) * 0.15;
+                ring.style.left = ringX + 'px';
+                ring.style.top = ringY + 'px';
+                requestAnimationFrame(animateRing);
+              }
+              animateRing();
+
+              const interactives = 'a, button, .tilt-card, [role="button"]';
+              document.addEventListener('mouseover', (e) => {
+                if (e.target.closest(interactives)) {
+                  ring.style.width = '48px';
+                  ring.style.height = '48px';
+                  ring.style.borderColor = 'rgba(212,175,55,0.9)';
+                }
+              });
+              document.addEventListener('mouseout', (e) => {
+                if (e.target.closest(interactives)) {
+                  ring.style.width = '40px';
+                  ring.style.height = '40px';
+                  ring.style.borderColor = 'rgba(212,175,55,0.6)';
+                }
+              });
+
+              document.addEventListener('mouseleave', () => {
+                dot.style.opacity = '0';
+                ring.style.opacity = '0';
+              });
+              document.addEventListener('mouseenter', () => {
+                ring.style.opacity = '1';
+              });
+            }
+          } else {
+            document.getElementById('cursor-dot')?.remove();
+            document.getElementById('cursor-ring')?.remove();
+          }
+
+          // ===== Global 3D Tilt (any .tilt-card) =====
+          function initTilt() {
+            if (!window.matchMedia('(pointer: fine)').matches || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+            document.querySelectorAll('.tilt-card').forEach(card => {
+              if (card.dataset.tiltBound) return;
+              card.dataset.tiltBound = 'true';
+
+              card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+                const rotateX = ((y - centerY) / centerY) * -8;
+                const rotateY = ((x - centerX) / centerX) * 8;
+                card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.02)`;
+              });
+
+              card.addEventListener('mouseleave', () => {
+                card.style.transform = 'rotateX(0) rotateY(0) scale(1)';
+              });
+            });
+          }
+
+          window.addEventListener('load', initTilt);
+          document.addEventListener('astro:page-load', initTilt);
+        </script>
+    </body>
+</html>
+
+<style is:global>
+    *, *::before, *::after {
+        box-sizing: border-box;
+    }
+
+    body {
+        margin: 0;
+        padding: 0;
+        min-height: 100vh;
+        overflow-x: hidden;
+
+        background-image: url('/Texture-LS-Map-Black.jpg');
+        background-repeat: no-repeat;
+        background-position: center center;
+        background-size: cover;
+        background-attachment: fixed;
+    }
+
+    @media (max-width: 768px) {
+        body {
+            background-attachment: scroll;
+        }
+    }
+
+    .text-gold-bright {
+        color: #D4AF37;
+        text-shadow: 0 0 10px rgba(212, 175, 55, 0.2);
+    }
+
+    .tilt-card {
+        transform-style: preserve-3d;
+        transition: transform 0.15s ease-out, border-color 0.2s;
+        will-change: transform;
+    }
+</style>
