@@ -41,7 +41,7 @@ const plateData = [
 ];
 
 const windowTints = ["Clear", "Green"];
-const neonOptions = ["None", "Pure White", "Blue", "Electric Blue", "Mint Green", "Lime Green", "Yellow", "Golden Shower", "Orange", "Red", "Pony Pink", "Hot Pink", "Purple", "Black Light", "Custom RGB"];
+const neonOptions = ["None", "Match Headlights", "Pure White", "Blue", "Electric Blue", "Mint Green", "Lime Green", "Yellow", "Golden Shower", "Orange", "Red", "Pony Pink", "Hot Pink", "Purple", "Black Light", "Custom RGB"];
 
 const tireDesignMap = {
   "Bennys Bespoke": {
@@ -911,8 +911,18 @@ const vehicleSets = [
     const get = (id) => document.getElementById(id).value || "";
     const outPlate = get("plate").replace(/_/g, " "); 
 
+    const detectFormat = (v) => {
+      if (!v) return "RGB";
+      const s = v.trim();
+      if (s.startsWith("#") || /^[0-9A-Fa-f]{6}$/.test(s)) return "HEX";
+      return "RGB";
+    };
     const formatPaint = (val, isCustom, tex) => {
-      if (isCustom) return `Custom RGB (${get("sharedRgb")}) over ${tex} Base`;
+      if (isCustom) {
+        const raw = get("sharedRgb");
+        const fmt = detectFormat(raw);
+        return `Custom ${fmt} (${raw}) over ${tex} Base`;
+      }
       if (!val) return "N/A";
       const parts = val.split("|");
       return parts.length === 2 ? `${parts[0]} - ${parts[1]}` : val;
@@ -924,12 +934,29 @@ const vehicleSets = [
       return parts.length === 2 ? `${parts[0]} - ${parts[1]}` : val;
     };
 
-    const formatNeon = (val) => val === "Custom RGB" ? `Custom RGB (${get("neonRgb")})` : (val || "N/A");
+    const formatNeon = (val) => {
+      if (val === "Custom RGB") {
+        const raw = get("neonRgb");
+        const fmt = detectFormat(raw);
+        return `Custom ${fmt} (${raw})`;
+      }
+      if (val === "Match Headlights") {
+        const base = lightColorMap[get("headlights")] || "255, 255, 255";
+        const parts = base.split(',').map(n => parseInt(n.trim()));
+        parts[0] = Math.max(0, parts[0] - 1);
+        return parts.join(', ');
+      }
+      return val || "N/A";
+    };
 
     const smokeSelect = get("tireSmoke");
     let finalSmoke = "N/A";
     if (smokeSelect === "Patriot") finalSmoke = "Patriot";
-    else if (smokeSelect === "Custom RGB") finalSmoke = `Custom: ${get("tireSmokeCustom")}`;
+    else if (smokeSelect === "Custom RGB") {
+      const raw = get("tireSmokeCustom");
+      const fmt = detectFormat(raw);
+      finalSmoke = `Custom ${fmt} (${raw})`;
+    }
     else if (smokeSelect === "Match Headlights" || smokeSelect === "Match Neon") {
       let baseRgbStr = "255, 255, 255";
       if(smokeSelect === "Match Headlights") baseRgbStr = lightColorMap[get("headlights")] || "255, 255, 255";
@@ -939,7 +966,7 @@ const vehicleSets = [
       }
       const parts = baseRgbStr.split(',').map(n => parseInt(n.trim()));
       parts[0] = Math.max(0, parts[0] - 1);
-      finalSmoke = `${parts.join(', ')} (Offset to remain unselected)`;
+      finalSmoke = parts.join(', ');
     }
 
     const isActivator = document.getElementById("activator").checked;
