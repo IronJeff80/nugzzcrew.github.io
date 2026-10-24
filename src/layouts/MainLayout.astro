@@ -6,6 +6,9 @@ interface Props {
 const { title } = Astro.props;
 import '../styles/global.css';
 
+const path = Astro.url.pathname.replace(/\/$/, '') || '/';
+const isHomePage = path === '/' || path === '/index.html';
+
 // Use your verified Channel ID with the join trigger
 const channelJoinUrl = "https://www.youtube.com/channel/UCYNmnbEgm3G0m4avmwz_4Eg/join?v=dummy";
 
@@ -57,7 +60,7 @@ const socials = [
                 </a>
 
                 <div class="nav-desktop flex-1 justify-center gap-4 text-[9px] md:text-xs uppercase font-bold tracking-widest text-zinc-400">
-                    <a href="/" class="hover:text-gold transition-colors">Home</a>
+                    {!isHomePage && <a href="/" class="hover:text-gold transition-colors">Home</a>}
                     <a href="/gta" class="hover:text-gold transition-colors">GTA Bonuses</a>
                     <a href="/generator" class="hover:text-gold transition-colors">DMO Gen</a>
                     <a href="/gtaresources" class="hover:text-gold transition-colors">GTA Resources</a>
@@ -81,7 +84,7 @@ const socials = [
                 </button>
             </div>
             <div class="flex flex-col p-5 gap-2">
-                <a href="/" class="nav-link px-5 py-4 rounded-lg text-zinc-300 hover:text-gold hover:bg-zinc-900/70 uppercase tracking-widest text-base font-bold">Home</a>
+                {!isHomePage && <a href="/" class="nav-link px-5 py-4 rounded-lg text-zinc-300 hover:text-gold hover:bg-zinc-900/70 uppercase tracking-widest text-base font-bold">Home</a>}
                 <a href="/gta" class="nav-link px-5 py-4 rounded-lg text-zinc-300 hover:text-gold hover:bg-zinc-900/70 uppercase tracking-widest text-base font-bold">GTA Bonuses</a>
                 <a href="/generator" class="nav-link px-5 py-4 rounded-lg text-zinc-300 hover:text-gold hover:bg-zinc-900/70 uppercase tracking-widest text-base font-bold">DMO Gen</a>
                 <a href="/gtaresources" class="nav-link px-5 py-4 rounded-lg text-zinc-300 hover:text-gold hover:bg-zinc-900/70 uppercase tracking-widest text-base font-bold">GTA Resources</a>
@@ -92,6 +95,14 @@ const socials = [
         <main id="main-content" class="relative z-10">
             <slot /> 
         </main>
+
+        {!isHomePage && (
+            <div class="text-center py-8">
+                <a href="/" class="inline-block px-6 py-3 bg-zinc-900 border border-zinc-700 rounded-lg text-gold hover:border-gold hover:bg-zinc-800 transition-all uppercase tracking-widest text-sm font-bold">
+                    &larr; Back To Home
+                </a>
+            </div>
+        )}
 
         <footer class="p-10 text-center text-zinc-600 text-[10px] uppercase tracking-widest border-t border-zinc-900 mt-20">
             <div class="flex justify-center flex-wrap gap-3 md:gap-4 mb-4">
