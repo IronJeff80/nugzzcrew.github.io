@@ -51,7 +51,7 @@ const socials = [
 
                 <a href="/" class="brand-link flex items-center gap-2 group transition-opacity hover:opacity-90 min-w-0">
                     <img src="/Logo.png" alt="Logo" class="w-7 h-7 md:w-9 md:h-9 object-contain shrink-0" />
-                    <span class="brand-mark text-[clamp(11px,3vw,18px)] font-header uppercase tracking-tighter whitespace-nowrap">
+                    <span class="brand-mark font-header uppercase tracking-tighter whitespace-nowrap">
                         <span class="text-white">Official</span> <span class="text-gold">Nugzz Crew</span>
                     </span>
                 </a>
@@ -293,8 +293,14 @@ const socials = [
         .brand-link {
             max-width: calc(100% - 6.5rem);
         }
+    }
+
+    .brand-mark {
+        font-size: clamp(14px, 1.15vw, 18px) !important;
+    }
+    @media (max-width: 1099px) {
         .brand-mark {
-            font-size: clamp(14px, 4.4vw, 19px);
+            font-size: clamp(14px, 4.4vw, 19px) !important;
         }
     }
 
