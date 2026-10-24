@@ -1,11 +1,18 @@
 ---
 import MainLayout from '../layouts/MainLayout.astro';
 import gtaData from '../data/gta-weekly.json';
+import fs from 'node:fs';
+import path from 'node:path';
 
 const eventTitle = gtaData.eventTitle || gtaData.eventtitle || "GTA Weekly Showcase";
 const eventDates = gtaData.eventDates || gtaData.weekEnding || gtaData.weekending;
 const gtaPlus = gtaData.gtaPlus || gtaData.gtaplus;
 const halloween = gtaData.halloweenSeason || gtaData.halloweenseason;
+
+const unlockDir = path.join(process.cwd(), 'public/images/unlocks');
+const unlockShots = fs.existsSync(unlockDir)
+  ? fs.readdirSync(unlockDir).filter((file) => /\.(png|jpe?g|webp)$/i.test(file)).sort()
+  : [];
 ---
 
 <MainLayout title="GTA Weekly & GTA+">
@@ -88,6 +95,24 @@ const halloween = gtaData.halloweenSeason || gtaData.halloweenseason;
       </div>
 
     </div>
+
+    {unlockShots.length > 0 && (
+      <div class="space-y-4">
+        <div class="flex flex-wrap justify-center gap-4">
+          {unlockShots.map((file) => (
+            <img
+              src={`/images/unlocks/${file}`}
+              alt=""
+              class="max-h-56 w-auto rounded-xl border border-zinc-700 bg-black object-contain"
+            />
+          ))}
+        </div>
+        <p class="text-center text-[10px] uppercase tracking-widest text-zinc-500">
+          Unlock photos by
+          <a href="https://www.youtube.com/@GTASeriesVideos" target="_blank" rel="noopener noreferrer" class="text-gold hover:underline">GTA Series Videos</a>
+        </p>
+      </div>
+    )}
 
     <div class="flex flex-wrap justify-center gap-3">
       {gtaData.bonuses?.map(bonus => (
