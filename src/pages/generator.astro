@@ -4,9 +4,9 @@ import colors from "../data/colors.json";
 import vehicles from "../data/vehicles.json";
 import rimData from "../data/rim-data.json";
 
-const unselectedSecondary = colors.filter((c) => !c.secondary);
+const unselectedSecondary = colors.filter((c) => c.secondary);
 const allUnselected = colors.filter(
-  (c) => !c.primary || !c.secondary || !c.pearl || !c.rim || !c.interior,
+  (c) => c.primary || c.secondary || c.pearl || c.rim || c.interior,
 );
 
 const wheelCategories = rimData.categories;
@@ -146,14 +146,14 @@ const vehicleSets = [
 ---
 
 <MainLayout title="DMO Generator" description="GTA Online DMO generator. Official Nugzz Crew.">
-  <div class="page-shell">
-    <header class="page-head">
-      <h1 class="page-title">
+  <div class="max-w-3xl mx-auto px-4 py-12">
+    <div class="mb-10 text-center">
+      <h1 class="text-4xl font-header uppercase tracking-tighter mb-2">
         <span class="text-white">DMO</span>
-        <span class="text-gold">Gen</span>
+        <span class="text-gold">Generator</span>
       </h1>
-      <p class="page-kicker">Step-by-Step Spec Builder</p>
-    </header>
+      <p class="text-zinc-400 uppercase text-xs tracking-[0.2em]">Step-by-Step Spec Builder</p>
+    </div>
 
     <!-- Step Progress Bar -->
     <div class="flex justify-between mb-8 border-b border-zinc-800 pb-4">
@@ -164,7 +164,7 @@ const vehicleSets = [
     </div>
 
     <!-- Main Content Container -->
-    <div class="bg-zinc-900/40 p-6 rounded-3xl border border-zinc-800 space-y-6 min-h-[500px] flex flex-col justify-between">
+    <div class="tilt-card bg-zinc-900/40 p-6 rounded-3xl border border-zinc-800 space-y-6 min-h-[500px] flex flex-col justify-between">
       
       <!-- STEP 1: VEHICLE -->
       <div id="step-1" class="step-section space-y-6">
@@ -417,7 +417,6 @@ const vehicleSets = [
           </div>
         </div>
 
-
         <div id="activatorWrapper" class="hidden p-3 bg-red-900/20 rounded-lg border border-red-500/50">
           <div class="flex items-center gap-3">
             <input type="checkbox" id="activator" class="w-4 h-4 accent-red-500 cursor-pointer" />
@@ -456,7 +455,7 @@ const vehicleSets = [
     </div>
 
     <!-- FINAL OUTPUT (Hidden until Generated) -->
-    <div id="outputContainer" class="mt-8 bg-zinc-900/40 p-6 rounded-3xl border border-zinc-800 hidden">
+    <div id="outputContainer" class="tilt-card mt-8 bg-zinc-900/40 p-6 rounded-3xl border border-zinc-800 hidden">
       <h2 class="text-sm font-black uppercase tracking-widest text-gold mb-4">Final Spec</h2>
       <pre id="output" class="text-[10px] text-zinc-300 font-mono whitespace-pre-wrap break-all bg-black/50 p-4 rounded-xl border border-zinc-800 min-h-[300px]"></pre>
       <button id="copy" type="button" class="mt-4 w-full bg-zinc-800 hover:bg-zinc-700 text-white font-black uppercase py-3 rounded-xl text-xs tracking-widest transition-all">Copy</button>
@@ -618,7 +617,7 @@ const vehicleSets = [
   
   function populatePrimary() { document.getElementById("primary").innerHTML = '<option value="">-- Select --</option><option value="Custom">Custom RGB / HEX</option>' + colors.map(makeOption).join(""); }
   function populateSecondary() { document.getElementById("secondary").innerHTML = '<option value="">-- Select --</option><option value="Custom">Custom RGB / HEX</option>' + unselectedSecondary.map(makeOption).join(""); }
-  function populateUnselectedOnly(selectId, flag) { document.getElementById(selectId).innerHTML = '<option value="">-- Select --</option>' + allUnselected.filter((c) => !c[flag]).map(makeOption).join(""); }
+  function populateUnselectedOnly(selectId, flag) { document.getElementById(selectId).innerHTML = '<option value="">-- Select --</option>' + allUnselected.filter((c) => c[flag]).map(makeOption).join(""); }
 
   function slugify(s) { return s.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, ""); }
   
@@ -711,6 +710,8 @@ const vehicleSets = [
       if (box) box.style.backgroundColor = getColorForPreview(id);
     });
 
+    // colorPicker itself shows the color; no separate preview needed
+    
     const neonBox = document.getElementById("neonRgbPrev");
     if (neonBox) neonBox.style.backgroundColor = parseColor(document.getElementById("neonRgb").value) || "#333";
 
@@ -770,6 +771,7 @@ const vehicleSets = [
   document.getElementById("primary").addEventListener("change", checkPaintCustom);
   document.getElementById("secondary").addEventListener("change", checkPaintCustom);
 
+  // Color wheel ↔ RGB text sync
   const colorPicker = document.getElementById("colorPicker");
   const sharedRgbInput = document.getElementById("sharedRgb");
   if (colorPicker && sharedRgbInput) {
@@ -785,6 +787,7 @@ const vehicleSets = [
     });
   }
 
+  // Match Primary → Secondary (switches secondary to Custom RGB and copies the color)
   const matchBtn = document.getElementById("matchPrimaryBtn");
   if (matchBtn) {
     matchBtn.addEventListener("click", () => {
@@ -794,6 +797,7 @@ const vehicleSets = [
       if (!primaryVal) return;
       secondarySel.value = "Custom";
       secondarySel.dispatchEvent(new Event("change"));
+      // If primary is a named color, grab its hex; if Custom, copy current RGB
       let hex = "";
       if (primaryVal === "Custom") {
         hex = sharedRgbInput.value.trim();
@@ -810,6 +814,7 @@ const vehicleSets = [
     });
   }
 
+  // Color tiles open color wheel and switch slot to Custom RGB
   const tilePicker = document.getElementById("tileColorPicker");
   const tileTargets = {
     primaryPrev: "primary",
@@ -831,6 +836,7 @@ const vehicleSets = [
           tilePicker.value = hex;
         }
       }
+      // Position the picker over the tile so the native popup appears nearby
       const rect = tile.getBoundingClientRect();
       tilePicker.style.left = rect.left + "px";
       tilePicker.style.top = rect.top + "px";
@@ -845,6 +851,7 @@ const vehicleSets = [
       const hex = tilePicker.value.toUpperCase();
       const sel = document.getElementById(target);
       if (!sel) return;
+      // Switch to Custom and set the value
       if (target === "primary" || target === "secondary") {
         sel.value = "Custom";
         sel.dispatchEvent(new Event("change"));
@@ -1073,9 +1080,11 @@ Tire Design: ${formattedTire}${activatorOutput}`;
   });
 
 
+  // ========== VEHICLE / SET SELECTOR ==========
+  // vehicles is provided by define:vars from src/data/vehicles.json
   const setsList = ["Facility Set","Nightclub Set","Arena Set","Special Vehicle Set","Set 1 Set","Set 2 Set"];
 
-  let selectedVehicle = null;
+  let selectedVehicle = null; // {display, value, file} or {display, value: setName, isSet: true}
 
   function updateNextButton() {
     const btn = document.getElementById("btn-next-1");
@@ -1132,6 +1141,7 @@ Tire Design: ${formattedTire}${activatorOutput}`;
     updateNextButton();
   }
 
+  // Mode toggle
   document.querySelectorAll('input[name="vehicleMode"]').forEach(r => {
     r.addEventListener("change", () => {
       const isSet = r.value === "set";
@@ -1143,6 +1153,7 @@ Tire Design: ${formattedTire}${activatorOutput}`;
     });
   });
 
+  // Search input
   const searchEl = document.getElementById("vehicleSearch");
   searchEl.addEventListener("input", (e) => {
     clearVehicle();
@@ -1152,12 +1163,14 @@ Tire Design: ${formattedTire}${activatorOutput}`;
     if (e.target.value) renderVehicleDropdown(e.target.value);
   });
 
+  // Click outside to close
   document.addEventListener("click", (e) => {
     if (!e.target.closest("#vehicle-selector")) {
       document.getElementById("vehicleDropdown").classList.add("hidden");
     }
   });
 
+  // Option click
   document.getElementById("vehicleDropdown").addEventListener("click", (e) => {
     const opt = e.target.closest(".vehicle-option");
     if (!opt) return;
@@ -1168,6 +1181,7 @@ Tire Design: ${formattedTire}${activatorOutput}`;
     });
   });
 
+  // Set change
   document.getElementById("vehicleSet").addEventListener("change", (e) => {
     const val = e.target.value;
     if (val) {
@@ -1179,6 +1193,7 @@ Tire Design: ${formattedTire}${activatorOutput}`;
     updateNextButton();
   });
 
+  // Prevent free-text next if not selected
   document.getElementById("btn-next-1").addEventListener("click", (e) => {
     if (document.getElementById("btn-next-1").disabled) {
       e.preventDefault();
@@ -1187,8 +1202,13 @@ Tire Design: ${formattedTire}${activatorOutput}`;
   });
 
   updateNextButton();
+  // ========== END VEHICLE SELECTOR ==========
+
 
     populatePrimary(); populateSecondary();
   populateUnselectedOnly("pearl", "pearl"); populateUnselectedOnly("interior", "interior"); populateUnselectedOnly("rimColor", "rim");
   updatePlatePreview(); 
 </script>
+
+
+
