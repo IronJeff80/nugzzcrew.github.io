@@ -104,16 +104,6 @@ import MainLayout from '../layouts/MainLayout.astro';
             <div class="w-8 h-4 bg-zinc-700 rounded-full peer peer-checked:after:translate-x-full peer-checked:bg-gold after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-3 after:w-3 after:transition-all"></div>
           </div>
         </label>
-
-        <label class="flex items-center justify-between cursor-pointer">
-          <span class="text-white text-xs font-bold flex items-center gap-1.5">
-            Pixelization <i data-lucide="info" class="w-3 h-3 text-zinc-500"></i>
-          </span>
-          <div class="relative">
-            <input type="checkbox" id="pixelization" class="sr-only peer">
-            <div class="w-8 h-4 bg-zinc-700 rounded-full peer peer-checked:after:translate-x-full peer-checked:bg-gold after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-3 after:w-3 after:transition-all"></div>
-          </div>
-        </label>
       </div>
 
       <button id="resetBtn" class="w-full bg-zinc-800 hover:bg-zinc-700 text-white text-[10px] font-black uppercase tracking-widest py-3 rounded-xl transition-colors mt-2">
@@ -268,7 +258,6 @@ import MainLayout from '../layouts/MainLayout.astro';
     const outputCode = document.getElementById('outputCode');
     const sizeValue = document.getElementById('sizeValue');
     const sizeBar = document.getElementById('sizeBar');
-    const pixelization = document.getElementById('pixelization');
     const circularCrop = document.getElementById('circularCrop');
     const resetBtn = document.getElementById('resetBtn');
     const EMBLEM_BUDGET = 1269000;
@@ -305,11 +294,10 @@ import MainLayout from '../layouts/MainLayout.astro';
       });
     });
 
-    [pixelization, circularCrop].forEach(el => {
-      if (!el) return;
-      el.addEventListener('change', () => {
+    if (circularCrop) {
+      circularCrop.addEventListener('change', () => {
         const file = imageInput.files && imageInput.files[0];
-        if (el === circularCrop && file) {
+        if (file) {
           loadImageToData(file, (data) => {
             currentImageData = data;
             generateEmblem();
@@ -318,14 +306,13 @@ import MainLayout from '../layouts/MainLayout.astro';
           generateEmblem();
         }
       });
-    });
+    }
 
     if (resetBtn) {
       resetBtn.addEventListener('click', () => {
         setActive(document.querySelector('[data-setting="resolution"]'), '256');
         setActive(document.querySelector('[data-setting="method"]'), 'auto');
         setActive(document.querySelector('[data-setting="detail"]'), 'auto');
-        pixelization.checked = false;
         if (circularCrop) circularCrop.checked = false;
         const file = imageInput.files && imageInput.files[0];
         if (file) {
@@ -403,7 +390,6 @@ import MainLayout from '../layouts/MainLayout.astro';
       const res = getSetting('resolution');
       const method = getSetting('method');
       const detail = getSetting('detail');
-      const pix = pixelization.checked;
 
       const opts = {
         N: res === 'auto' ? 'auto' : parseInt(res, 10),
@@ -412,7 +398,7 @@ import MainLayout from '../layouts/MainLayout.astro';
         autofit: true,
         pareto: true,
         paretoLadder: [512, 384, 320, 256, 192, 160, 128, 96, 80, 64],
-        plOn: !pix,
+        plOn: true,
         budget: EMBLEM_BUDGET,
         precision: 3,
         overlap: 2,
