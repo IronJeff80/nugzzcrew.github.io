@@ -35,6 +35,8 @@ const socials = [
         <script src="https://unpkg.com/lucide@latest"></script>
     </head>
     <body class="bg-black text-white antialiased">
+        <div id="cursor-dot" aria-hidden="true"></div>
+        <div id="cursor-ring" aria-hidden="true"></div>
         <nav class="sticky top-0 z-50 bg-black/95 backdrop-blur-md border-b border-zinc-800 px-3 py-3 md:px-4">
             <div class="max-w-7xl mx-auto flex flex-col items-center gap-3 md:grid md:grid-cols-3 md:gap-0">
    
@@ -82,7 +84,7 @@ const socials = [
             </div>
         </nav>
         
-        <main class="relative z-10">
+        <main id="main-content" class="relative z-10">
             <slot /> 
         </main>
 
@@ -94,6 +96,55 @@ const socials = [
           function initIcons() { if (window.lucide) window.lucide.createIcons(); }
           window.addEventListener('load', initIcons);
           document.addEventListener('astro:page-load', initIcons);
+
+          (function initFx() {
+            if (window.__nugzzFx) return;
+            window.__nugzzFx = true;
+            const dot = document.getElementById('cursor-dot');
+            const ring = document.getElementById('cursor-ring');
+            let cursorOn = false, mx = -200, my = -200, rx = -200, ry = -200;
+            function armCursor() {
+              if (cursorOn || !dot || !ring) return;
+              cursorOn = true;
+              document.documentElement.classList.add('fx-cursor');
+              dot.style.opacity = '1';
+              ring.style.opacity = '1';
+              (function loop() {
+                rx += (mx - rx) * 0.22;
+                ry += (my - ry) * 0.22;
+                ring.style.left = rx + 'px';
+                ring.style.top = ry + 'px';
+                requestAnimationFrame(loop);
+              })();
+            }
+            window.addEventListener('mousemove', (e) => {
+              mx = e.clientX; my = e.clientY; armCursor();
+              if (dot) { dot.style.left = mx + 'px'; dot.style.top = my + 'px'; }
+            }, { passive: true });
+            document.addEventListener('mouseover', (e) => {
+              if (!ring || !e.target || !e.target.closest) return;
+              ring.classList.toggle('is-hot', !!e.target.closest('a, button, .tilt-card'));
+            });
+            function bindTilt() {
+              if (window.matchMedia('(hover: none), (pointer: coarse)').matches) return;
+              document.querySelectorAll('.tilt-card').forEach((card) => {
+                if (card.dataset.tiltBound) return;
+                card.dataset.tiltBound = '1';
+                card.addEventListener('mousemove', (e) => {
+                  const r = card.getBoundingClientRect();
+                  const px = (e.clientX - r.left) / r.width - 0.5;
+                  const py = (e.clientY - r.top) / r.height - 0.5;
+                  card.style.transform = 'rotateX(' + (-py * 14).toFixed(2) + 'deg) rotateY(' + (px * 14).toFixed(2) + 'deg) scale(1.03)';
+                });
+                card.addEventListener('mouseleave', () => {
+                  card.style.transform = 'rotateX(0deg) rotateY(0deg) scale(1)';
+                });
+              });
+            }
+            if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', bindTilt);
+            else bindTilt();
+            document.addEventListener('astro:page-load', bindTilt);
+          })();
         </script>
     </body>
 </html>
@@ -103,17 +154,115 @@ const socials = [
         box-sizing: border-box;
     }
 
+    html, body {
+        max-width: 100%;
+        overflow-x: clip;
+    }
+
     body {
         margin: 0;
         padding: 0;
         min-height: 100vh;
-        overflow-x: hidden; 
+        overflow-x: clip; 
 
         /* ---FIXED BACKGROUND PATH ---*/
         background-image: url('/Texture-LS_Map-Black.png');
         background-repeat: repeat;
         background-size: 2048px 2048px;
         background-attachment: fixed;
+    }
+
+    #main-content :is(.tilt-card, .rounded-xl, .rounded-2xl, .rounded-3xl, .rounded-\[2\.5rem\]),
+    #video-container {
+        box-shadow: 0 0 50px -12px rgba(212, 175, 55, 0.35);
+    }
+
+    .tilt-card {
+        transform-style: preserve-3d;
+        transition: transform 0.08s linear, border-color 0.2s ease, box-shadow 0.2s ease;
+        will-change: transform;
+    }
+
+    .glow-red:hover {
+        border-color: #ef4444 !important;
+        box-shadow: 0 0 42px -6px rgba(239, 68, 68, 0.8) !important;
+    }
+    .glow-purple:hover {
+        border-color: #c084fc !important;
+        box-shadow: 0 0 42px -6px rgba(192, 132, 252, 0.8) !important;
+    }
+    .glow-blue:hover {
+        border-color: #60a5fa !important;
+        box-shadow: 0 0 42px -6px rgba(96, 165, 250, 0.8) !important;
+    }
+
+    #cursor-dot, #cursor-ring {
+        position: fixed;
+        left: 0;
+        top: 0;
+        border-radius: 9999px;
+        pointer-events: none;
+        opacity: 0;
+        transform: translate(-50%, -50%);
+        z-index: 2147483647;
+    }
+    #cursor-dot {
+        width: 10px;
+        height: 10px;
+        background: #FFD700;
+        box-shadow: 0 0 0 1px #000, 0 0 12px #FFD700;
+    }
+    #cursor-ring {
+        width: 44px;
+        height: 44px;
+        border: 2px solid #D4AF37;
+        z-index: 2147483646;
+        transition: width 0.18s ease, height 0.18s ease;
+    }
+    #cursor-ring.is-hot { width: 68px; height: 68px; }
+    html.fx-cursor, html.fx-cursor * { cursor: none !important; }
+
+    #video-container.is-theater {
+        position: fixed !important;
+        inset: 0 !important;
+        z-index: 9990 !important;
+        width: 100% !important;
+        height: 100% !important;
+        max-width: none !important;
+        margin: 0 !important;
+        border: 0 !important;
+        border-radius: 0 !important;
+        aspect-ratio: auto !important;
+        box-shadow: none !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        background: #000 !important;
+    }
+    #video-container.is-theater #offline-placeholder {
+        position: relative !important;
+        width: auto !important;
+        height: auto !important;
+        max-width: min(1100px, 94vw) !important;
+        max-height: 86dvh !important;
+        object-fit: contain !important;
+    }
+    #video-container.is-theater #yt-video-frame {
+        position: relative !important;
+        width: min(96vw, calc(86dvh * 16 / 9)) !important;
+        height: min(86dvh, calc(96vw * 9 / 16)) !important;
+    }
+    #video-container.is-theater #theater-btn {
+        position: absolute !important;
+        top: 16px !important;
+        right: 16px !important;
+        bottom: auto !important;
+    }
+
+    @media (max-width: 768px) {
+        #cursor-dot, #cursor-ring { display: none !important; }
+        html.fx-cursor, html.fx-cursor * { cursor: auto !important; }
+        body { background-attachment: scroll; }
     }
 
     .text-gold-bright {
