@@ -38,18 +38,18 @@ const socials = [
         <div id="cursor-dot" aria-hidden="true"></div>
         <div id="cursor-ring" aria-hidden="true"></div>
         <nav class="sticky top-0 z-50 bg-black/95 backdrop-blur-md border-b border-zinc-800 px-3 py-3 md:px-4">
-            <div class="max-w-7xl mx-auto flex flex-col items-center gap-3 md:grid md:grid-cols-3 md:gap-0">
+            <div class="max-w-7xl mx-auto flex flex-col items-center gap-3 md:grid md:grid-cols-2 md:gap-0">
    
                 <div class="flex md:justify-start w-full justify-center">
                     <a href="/" class="flex items-center gap-2 group transition-opacity hover:opacity-90">
                         <img src="/Logo.png" alt="Logo" class="w-6 h-6 md:w-9 md:h-9 object-contain" />
-                        <span class="text-[clamp(11px,3vw,18px)] font-header text-gold uppercase tracking-tighter whitespace-nowrap">
-                            Official Nugzz Crew
+                        <span class="text-[clamp(11px,3vw,18px)] font-header uppercase tracking-tighter whitespace-nowrap">
+                            <span class="text-white">Official</span> <span class="text-gold">Nugzz Crew</span>
                         </span>
                     </a>
                 </div>
 
-                <div class="flex flex-col items-center gap-1.5 w-full">
+                <div class="flex justify-center w-full">
                     <div class="flex justify-center gap-4 text-[9px] md:text-xs uppercase font-bold tracking-widest text-zinc-400">
                         <a href="/" class="hover:text-gold transition-colors">Home</a>
                         <a href="/gta" class="hover:text-gold transition-colors">GTA Bonuses</a>
@@ -57,29 +57,6 @@ const socials = [
                         <a href="/gtaresources" class="hover:text-gold transition-colors">GTA Resources</a>
                         <a href="/emblem" class="hover:text-gold transition-colors">Emblem Creator</a>
                     </div>
-                    <a 
-                      href={channelJoinUrl} 
-                      target="_blank" 
-                      rel="noopener noreferrer"
-                      class="text-[clamp(8px,2vw,10px)] text-gold-bright uppercase tracking-[0.2em] font-black text-center transition-all hover:text-white hover:scale-105 active:scale-95"
-                    >
-                        Join The Fam Bam Membership
-                    </a>
-                </div>
-
-                <!-- Custom PNG rendering logic -->
-                <div class="flex justify-center md:justify-end gap-1.5 md:gap-3 w-full flex-wrap">
-                    {socials.map((social) => (
-                        <a href={social.url} target="_blank" rel="noopener noreferrer" class="group transition-transform hover:scale-110 active:scale-95" title={social.name}>
-                            <div class="w-4 h-4 md:w-6 md:h-6 flex items-center justify-center">
-                                <img 
-                                  src={`/images/${social.img}`} 
-                                  alt={`${social.name} Logo`} 
-                                  class="w-full h-full object-contain opacity-70 group-hover:opacity-100 transition-opacity" 
-                                />
-                            </div>
-                        </a>
-                    ))}
                 </div>
             </div>
         </nav>
@@ -89,6 +66,15 @@ const socials = [
         </main>
 
         <footer class="p-10 text-center text-zinc-600 text-[10px] uppercase tracking-widest border-t border-zinc-900 mt-20">
+            <div class="flex justify-center flex-wrap gap-3 md:gap-4 mb-4">
+                {socials.map((social) => (
+                    <a href={social.url} target="_blank" rel="noopener noreferrer" class="group transition-opacity hover:opacity-100" title={social.name}>
+                        <div class="w-5 h-5 md:w-6 md:h-6 flex items-center justify-center">
+                            <img src={`/images/${social.img}`} alt={`${social.name} Logo`} class="w-full h-full object-contain opacity-70 group-hover:opacity-100 transition-opacity" />
+                        </div>
+                    </a>
+                ))}
+            </div>
             &copy; 2026 Official Nugzz Crew | Built for The Fam Bam
         </footer>
 
@@ -134,7 +120,7 @@ const socials = [
                   const r = card.getBoundingClientRect();
                   const px = (e.clientX - r.left) / r.width - 0.5;
                   const py = (e.clientY - r.top) / r.height - 0.5;
-                  card.style.transform = 'rotateX(' + (-py * 14).toFixed(2) + 'deg) rotateY(' + (px * 14).toFixed(2) + 'deg) scale(1.03)';
+                  card.style.transform = 'rotateX(' + (-py * 6).toFixed(2) + 'deg) rotateY(' + (px * 6).toFixed(2) + 'deg)';
                 });
                 card.addEventListener('mouseleave', () => {
                   card.style.transform = 'rotateX(0deg) rotateY(0deg) scale(1)';
@@ -177,10 +163,40 @@ const socials = [
         box-shadow: 0 0 50px -12px rgba(212, 175, 55, 0.35);
     }
 
-    .tilt-card {
-        transform-style: preserve-3d;
-        transition: transform 0.08s linear, border-color 0.2s ease, box-shadow 0.2s ease;
-        will-change: transform;
+    .page-shell {
+        width: 100%;
+        max-width: 80rem;
+        margin-inline: auto;
+        padding: 3rem 1.5rem 1rem;
+    }
+
+    .page-title {
+        margin: 0;
+        text-align: left;
+        font-weight: 900;
+        font-style: italic;
+        text-transform: uppercase;
+        letter-spacing: -0.04em;
+        line-height: 0.85;
+        font-size: clamp(36px, 6vw, 64px);
+    }
+
+    .page-kicker {
+        margin: 0.85rem 0 0;
+        text-align: left;
+        color: #a1a1aa;
+        font-weight: 700;
+        font-size: 0.75rem;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+    }
+
+    .van-map {
+        transform: scale(1);
+        transition: transform 0.7s ease, opacity 0.5s ease;
+    }
+    .group:hover .van-map {
+        transform: scale(1.12);
     }
 
     .glow-red:hover {

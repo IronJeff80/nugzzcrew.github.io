@@ -9,16 +9,16 @@ const halloween = gtaData.halloweenSeason || gtaData.halloweenseason;
 ---
 
 <MainLayout title="GTA Weekly & GTA+">
-  <div class="max-w-7xl mx-auto py-12 px-4 md:px-6 space-y-16">
+  <div class="page-shell space-y-16">
 
     <section>
       <div class="flex flex-col md:flex-row justify-between gap-8 items-start">
         <div>
-          <h1 class="text-[clamp(40px,6vw,80px)] font-black italic uppercase leading-[0.8] text-white tracking-tighter drop-shadow-lg">
-            {eventTitle}
+          <h1 class="page-title">
+            <span class="text-white">GTA</span> <span class="text-gold">Bonuses</span>
           </h1>
-          <p class="text-zinc-400 font-bold uppercase tracking-widest mt-4">
-            Event available through {eventDates}
+          <p class="page-kicker">
+            {eventTitle} · through {eventDates}
           </p>
         </div>
 
@@ -430,7 +430,7 @@ const halloween = gtaData.halloweenSeason || gtaData.halloweenseason;
         Limited Time Discounts
       </h2>
 
-      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
         <div class="lg:col-span-9 grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-8">
 
         {gtaData.discounts?.free && gtaData.discounts.free.length > 0 && (
