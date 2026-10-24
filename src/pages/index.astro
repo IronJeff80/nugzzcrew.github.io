@@ -28,13 +28,6 @@ const channelJoinUrl = "https://www.youtube.com/channel/UCYNmnbEgm3G0m4avmwz_4Eg
         allowfullscreen 
         style="display: none; width: 100%; height: 100%; position: relative; z-index: 20;">
       </iframe>
-      <div id="live-badge" class="absolute top-3 left-3 z-30 hidden items-center gap-2 bg-black/80 backdrop-blur-sm px-3 py-1.5 rounded-full border border-red-500/50">
-        <span class="relative flex h-2.5 w-2.5">
-          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
-          <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-red-500"></span>
-        </span>
-        <span class="text-xs font-bold uppercase tracking-wider text-white">LIVE</span>
-      </div>
       <button id="theater-btn" type="button" class="absolute bottom-3 right-3 z-30 bg-black/80 hover:bg-black text-white text-xs uppercase tracking-widest px-3 py-1.5 rounded-lg border border-zinc-600 hover:border-gold">Theater</button>
     </div>
 
@@ -75,22 +68,15 @@ const channelJoinUrl = "https://www.youtube.com/channel/UCYNmnbEgm3G0m4avmwz_4Eg
                   const data = msg.data.data;
                   const videoFrame = document.getElementById('yt-video-frame');
                   const placeholderImg = document.getElementById('offline-placeholder');
-                  const liveBadge = document.getElementById('live-badge');
                   
-                  // Logical check for live status and video ID presence
                   if (data.isLive === true && data.videoId && data.videoId.trim() !== "") {
                       videoFrame.style.display = 'block';
                       videoFrame.src = `https://www.youtube.com/embed/${data.videoId}?autoplay=1&mute=1`;
                       placeholderImg.style.display = 'none';
-                      liveBadge?.classList.remove('hidden');
-                      liveBadge?.classList.add('flex');
                   } else {
-                      // Offline/End state
                       videoFrame.style.display = 'none';
                       videoFrame.src = "about:blank";
                       placeholderImg.style.display = 'block';
-                      liveBadge?.classList.add('hidden');
-                      liveBadge?.classList.remove('flex');
                   }
               }
           } catch (e) { console.log("Parsing error:", e); }
