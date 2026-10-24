@@ -49,12 +49,16 @@ import MainLayout from '../layouts/MainLayout.astro';
       <!-- Resolution -->
       <div class="space-y-2">
         <label class="text-white text-xs font-bold flex items-center gap-1.5">
-          Resolution <i data-lucide="info" class="w-3 h-3 text-zinc-500"></i>
+          Resolution
+          <span class="info-tip" tabindex="0">
+            <i data-lucide="info" class="w-3 h-3 text-zinc-500"></i>
+            <span class="info-pop">How sharp the emblem is. Auto uses the finest size that still fits Rockstar's limit.</span>
+          </span>
         </label>
         <div class="flex bg-black rounded-lg p-1 border border-zinc-800" data-setting="resolution">
-          <button data-value="auto" class="flex-1 text-zinc-400 hover:text-white text-[10px] font-bold py-1.5 rounded-md uppercase">Auto</button>
+          <button data-value="auto" class="flex-1 bg-zinc-800 text-gold text-[10px] font-bold py-1.5 rounded-md uppercase">Auto</button>
           <button data-value="128" class="flex-1 text-zinc-400 hover:text-white text-[10px] font-bold py-1.5 rounded-md uppercase">128</button>
-          <button data-value="256" class="flex-1 bg-zinc-800 text-gold text-[10px] font-bold py-1.5 rounded-md uppercase">256</button>
+          <button data-value="256" class="flex-1 text-zinc-400 hover:text-white text-[10px] font-bold py-1.5 rounded-md uppercase">256</button>
           <button data-value="512" class="flex-1 text-zinc-400 hover:text-white text-[10px] font-bold py-1.5 rounded-md uppercase">512</button>
         </div>
       </div>
@@ -62,7 +66,11 @@ import MainLayout from '../layouts/MainLayout.astro';
       <!-- Method -->
       <div class="space-y-2">
         <label class="text-white text-xs font-bold flex items-center gap-1.5">
-          Method <i data-lucide="info" class="w-3 h-3 text-zinc-500"></i>
+          Method
+          <span class="info-tip" tabindex="0">
+            <i data-lucide="info" class="w-3 h-3 text-zinc-500"></i>
+            <span class="info-pop">Rows build the picture in horizontal strips. Cols use vertical strips. Auto picks the cleaner one.</span>
+          </span>
         </label>
         <div class="flex bg-black rounded-lg p-1 border border-zinc-800" data-setting="method">
           <button data-value="auto" class="flex-1 bg-zinc-800 text-gold text-[10px] font-bold py-1.5 rounded-md uppercase">Auto</button>
@@ -74,7 +82,11 @@ import MainLayout from '../layouts/MainLayout.astro';
       <!-- Detail -->
       <div class="space-y-2">
         <label class="text-white text-xs font-bold flex items-center gap-1.5">
-          Detail <i data-lucide="info" class="w-3 h-3 text-zinc-500"></i>
+          Detail
+          <span class="info-tip" tabindex="0">
+            <i data-lucide="info" class="w-3 h-3 text-zinc-500"></i>
+            <span class="info-pop">How closely the colors follow the picture. Auto uses the finest match that still fits.</span>
+          </span>
         </label>
         <div class="flex bg-black rounded-lg p-1 border border-zinc-800" data-setting="detail">
           <button data-value="auto" class="flex-1 bg-zinc-800 text-gold text-[10px] font-bold py-1.5 rounded-md uppercase">Auto</button>
@@ -90,7 +102,11 @@ import MainLayout from '../layouts/MainLayout.astro';
       <div class="space-y-3 pt-3 border-t border-zinc-800">
         <label class="flex items-center justify-between cursor-pointer">
           <span class="text-white text-xs font-bold flex items-center gap-1.5">
-            Circular Shape <i data-lucide="info" class="w-3 h-3 text-zinc-500"></i>
+            Circular Shape
+            <span class="info-tip" tabindex="0">
+              <i data-lucide="info" class="w-3 h-3 text-zinc-500"></i>
+              <span class="info-pop">Cuts the emblem into a circle and leaves the corners transparent.</span>
+            </span>
           </span>
           <div class="relative">
             <input type="checkbox" id="circularCrop" class="sr-only peer">
@@ -115,8 +131,13 @@ import MainLayout from '../layouts/MainLayout.astro';
         <span class="text-xs font-bold uppercase tracking-widest opacity-50">Upload an image to preview</span>
       </div>
 
-      <div id="processing" class="hidden absolute inset-0 bg-black/60 flex items-center justify-center">
-        <span class="text-gold text-xs font-bold uppercase tracking-widest">Generating...</span>
+      <div id="processing" class="hidden absolute inset-0 bg-black/70 flex items-center justify-center p-8">
+        <div class="w-full max-w-xs">
+          <div id="progressTrack" class="w-full h-2 bg-zinc-800 rounded-full overflow-hidden border border-zinc-700" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+            <div id="progressBar" class="h-full w-0 bg-gold"></div>
+          </div>
+          <p id="progressPct" class="text-gold text-[10px] font-mono text-center mt-2 tracking-widest">0%</p>
+        </div>
       </div>
     </div>
   </div>
@@ -187,7 +208,7 @@ import MainLayout from '../layouts/MainLayout.astro';
         <div class="w-full lg:w-1/2 aspect-video rounded-xl overflow-hidden border border-zinc-800 bg-black">
           <iframe
             class="w-full h-full"
-            src="https://www.youtube.com/embed/BI_bY-7ZICs"
+            src="https://www.youtube.com/embed/BI_bY-7ZICs?rel=0&modestbranding=1"
             title="Emblem Editor Tutorial"
             frameborder="0"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
@@ -220,6 +241,35 @@ import MainLayout from '../layouts/MainLayout.astro';
   .emblem-preview > div {
     height: 100%;
     min-height: 500px;
+  }
+  .info-tip {
+    position: relative;
+    display: inline-flex;
+    cursor: help;
+  }
+  .info-pop {
+    display: none;
+    position: absolute;
+    left: 0;
+    bottom: calc(100% + 8px);
+    width: 210px;
+    padding: 8px 10px;
+    border-radius: 8px;
+    background: #09090b;
+    border: 1px solid rgba(212, 175, 55, 0.45);
+    color: #e4e4e7;
+    font-size: 11px;
+    font-weight: 600;
+    line-height: 1.35;
+    letter-spacing: 0;
+    text-transform: none;
+    z-index: 30;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+  }
+  .info-tip:hover .info-pop,
+  .info-tip:focus .info-pop,
+  .info-tip:focus-within .info-pop {
+    display: block;
   }
 </style>
 
@@ -291,7 +341,7 @@ import MainLayout from '../layouts/MainLayout.astro';
 
     if (resetBtn) {
       resetBtn.addEventListener('click', () => {
-        setActive(document.querySelector('[data-setting="resolution"]'), '256');
+        setActive(document.querySelector('[data-setting="resolution"]'), 'auto');
         setActive(document.querySelector('[data-setting="method"]'), 'auto');
         setActive(document.querySelector('[data-setting="detail"]'), 'auto');
         if (circularCrop) circularCrop.checked = false;
@@ -401,9 +451,25 @@ import MainLayout from '../layouts/MainLayout.astro';
 
       const yieldFn = typeof makeYield === 'function' ? makeYield() : () => Promise.resolve();
       const raw = new Uint8ClampedArray(currentImageData.data);
+      const progressBar = document.getElementById('progressBar');
+      const progressPct = document.getElementById('progressPct');
+      const progressTrack = document.getElementById('progressTrack');
+      let steps = 0;
+      function setProgress(pct) {
+        const clamped = Math.max(0, Math.min(100, Math.round(pct)));
+        if (progressBar) progressBar.style.width = clamped + '%';
+        if (progressPct) progressPct.textContent = clamped + '%';
+        if (progressTrack) progressTrack.setAttribute('aria-valuenow', String(clamped));
+      }
+      const tickingYield = () => {
+        steps += 1;
+        setProgress(Math.min(92, 8 + (1 - Math.exp(-steps / 40)) * 84));
+        return yieldFn();
+      };
 
       try {
-        const result = await findBestEncode(raw, 512, opts, yieldFn, false, () => false);
+        setProgress(8);
+        const result = await findBestEncode(raw, 512, opts, tickingYield, false, () => false);
         if (!result) {
           outputCode.value = '// No result';
           processing.classList.add('hidden');
@@ -471,6 +537,7 @@ request.send(JSON.stringify({
 
         outputCode.value = snippet;
         copyBtn.disabled = false;
+        setProgress(100);
         console.log('[Emblem] Payload ready, length:', snippet.length);
 
         // Auto-open the raw code section so it's visible
