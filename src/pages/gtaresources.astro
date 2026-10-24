@@ -1,109 +1,355 @@
 ---
-import MainLayout from '../layouts/MainLayout.astro';
+import MainLayout from "../layouts/MainLayout.astro";
 
 const defaultZone = "Locating Active Vector...";
-const defaultDetails = "Polling real-time scraping anchors from gtalens server maps...";
+const defaultDetails =
+  "Polling real-time scraping anchors from gtalens server maps...";
 ---
 
-<MainLayout title="GTA Resources & Tracker">
-  <div class="max-w-5xl mx-auto px-4 py-12">
-    
-    <div class="mb-10 text-center">
-      <h1 class="text-4xl font-header text-gold uppercase tracking-tighter mb-2">GTA Resource Hub</h1>
-      <p class="text-zinc-400 uppercase text-xs tracking-[0.2em]">Live Gun Van Tracking Terminal for the Fam Bam</p>
-    </div>
+<MainLayout
+  title="GTA Resources & Tracker"
+  description="Live Gun Van tracker, inventory, and community resources for GTA Online. License plates, glitches, liveries, rims, and clothing shenanigans."
+>
+  <div class="page-shell">
+    <header class="page-head">
+      <h1 class="page-title">
+        <span class="text-white">GTA</span>
+        <span class="text-gold">Resources</span>
+      </h1>
+      <p class="page-kicker">
+        Live Gun Van Tracking and Community Tools for the Fam Bam
+      </p>
+    </header>
 
-    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
-      
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch mb-16">
       <div class="lg:col-span-6">
-        <div class="bg-zinc-900/40 p-6 rounded-3xl border border-zinc-800 flex flex-col justify-between h-full space-y-6">
-    
+        <div
+          class="bg-zinc-900/40 p-6 rounded-3xl border border-zinc-800 flex flex-col justify-between h-full space-y-6"
+        >
           <div class="space-y-4 flex-grow">
             <div>
-              <label class="block text-[10px] text-zinc-500 uppercase font-black mb-1">Target Sector:</label>
-              <div id="displayZone" class="text-xl font-header text-white uppercase tracking-tight">{defaultZone}</div>
+              <label
+                class="block text-[10px] text-gold uppercase font-black mb-1"
+                >Target Sector:</label
+              >
+              <div
+                id="displayZone"
+                class="text-xl font-header text-white uppercase tracking-tight"
+              >
+                {defaultZone}
+              </div>
             </div>
 
             <div>
-              <label class="block text-[10px] text-zinc-500 uppercase font-black mb-1">Position Landmarks:</label>
-              <p id="displayDetails" class="text-sm text-zinc-400 leading-relaxed">{defaultDetails}</p>
+              <label
+                class="block text-[10px] text-gold uppercase font-black mb-1"
+                >Position Landmarks:</label
+              >
+              <p
+                id="displayDetails"
+                class="text-sm text-zinc-400 leading-relaxed"
+              >
+                {defaultDetails}
+              </p>
             </div>
           </div>
 
-          <div class="relative aspect-video w-full bg-black border border-zinc-800 rounded-2xl overflow-hidden group flex items-center justify-center mt-auto">
-            <img 
-              id="vanMapImage" 
-              src="" 
-              alt="Gun Van Location Map" 
+          <div
+            class="relative aspect-video w-full bg-black border border-zinc-800 rounded-2xl overflow-hidden group flex items-center justify-center mt-auto"
+          >
+            <img
+              id="vanMapImage"
+              src=""
+              alt="Gun Van Location Map"
               class="w-full h-full object-cover opacity-0 scale-100 transition-transform transition-opacity duration-500 ease-out group-hover:scale-200"
+              loading="lazy"
             />
-            
-            <div class="absolute inset-x-0 top-1/2 border-t border-zinc-800/40 pointer-events-none"></div>
-            <div class="absolute inset-y-0 left-1/2 border-l border-zinc-800/40 pointer-events-none"></div>
+
+            <div
+              class="absolute inset-x-0 top-1/2 border-t border-zinc-800/40 pointer-events-none"
+            >
+            </div>
+            <div
+              class="absolute inset-y-0 left-1/2 border-l border-zinc-800/40 pointer-events-none"
+            >
+            </div>
           </div>
         </div>
       </div>
 
       <div class="lg:col-span-6">
-        <div class="bg-black border-2 border-zinc-800 rounded-3xl p-6 flex flex-col justify-between h-full space-y-4">
+        <div
+          class="bg-black border-2 border-zinc-800 rounded-3xl p-6 flex flex-col justify-between h-full space-y-4"
+        >
           <div>
-            <h2 class="text-xl font-header text-gold uppercase tracking-tight">Active Gun Surplus</h2>
-            <p class="text-[10px] text-zinc-500 uppercase tracking-widest">Wholesale Rotation Modifiers</p>
+            <h2 class="text-xl font-header uppercase tracking-tight">
+              <span class="text-white">Active</span>
+              <span class="text-gold">Gun Surplus</span>
+            </h2>
+            <p class="text-[10px] text-zinc-500 uppercase tracking-widest">
+              Wholesale Rotation Modifiers
+            </p>
           </div>
 
           <div id="weaponsContainer" class="space-y-2 flex-grow">
-            <p class="text-xs text-zinc-500 italic">Syncing inventory manifests...</p>
+            <p class="text-xs text-zinc-500 italic">
+              Syncing inventory manifests...
+            </p>
           </div>
 
           <div class="pt-2 border-t border-zinc-800/60 mt-auto">
-            <span class="text-[10px] text-zinc-500 font-black uppercase block mb-2 tracking-wider">Gear & Combat Support</span>
-            <div class="grid grid-cols-2 gap-2 text-xs text-zinc-400 font-medium">
-              <div class="p-2.5 bg-zinc-900/30 border border-zinc-800/60 rounded-xl flex justify-between"><span>Molotovs</span><span class="text-gold">-10%</span></div>
-              <div class="p-2.5 bg-zinc-900/30 border border-zinc-800/60 rounded-xl flex justify-between"><span>Tear Gas</span><span class="text-gold">-10%</span></div>
-              <div class="p-2.5 bg-zinc-900/30 border border-zinc-800/60 rounded-xl flex justify-between"><span>Proximity Mine</span><span class="text-gold">-10%</span></div>
-              <div class="p-2.5 bg-zinc-900/30 border border-zinc-800/60 rounded-xl flex justify-between"><span>Body Armor</span><span class="text-gold">-10%</span></div>
+            <span
+              class="text-[10px] text-gold font-black uppercase block mb-2 tracking-wider"
+              >Gear & Combat Support</span
+            >
+            <div
+              class="grid grid-cols-2 gap-2 text-xs text-zinc-400 font-medium"
+            >
+              <div
+                class="p-2.5 bg-zinc-900/30 border border-zinc-800/60 rounded-xl flex justify-between"
+              >
+                <span>Molotovs</span><span class="text-gold">-10%</span>
+              </div>
+              <div
+                class="p-2.5 bg-zinc-900/30 border border-zinc-800/60 rounded-xl flex justify-between"
+              >
+                <span>Tear Gas</span><span class="text-gold">-10%</span>
+              </div>
+              <div
+                class="p-2.5 bg-zinc-900/30 border border-zinc-800/60 rounded-xl flex justify-between"
+              >
+                <span>Proximity Mine</span><span class="text-gold">-10%</span>
+              </div>
+              <div
+                class="p-2.5 bg-zinc-900/30 border border-zinc-800/60 rounded-xl flex justify-between"
+              >
+                <span>Body Armor</span><span class="text-gold">-10%</span>
+              </div>
             </div>
           </div>
         </div>
       </div>
+    </div>
 
+    <div class="mt-4">
+      <h2
+        class="text-3xl font-header uppercase tracking-tighter text-center mb-2"
+      >
+        <span class="text-white">Community</span>
+        <span class="text-gold">Resources</span>
+      </h2>
+      <p
+        class="text-zinc-500 text-center text-xs uppercase tracking-widest mb-10"
+      >
+        Glitches, Merges, Liveries, Rims & More
+      </p>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <a
+          href="https://www.rockstargames.com/gta-online/license-plates"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="tilt-card group block bg-zinc-900/40 border border-zinc-800 rounded-2xl p-6 hover:border-gold/60 hover:bg-zinc-900/60 transition-all duration-300"
+        >
+          <div class="flex items-center gap-3 mb-3">
+            <div
+              class="w-10 h-10 rounded-lg bg-gold/10 border border-gold/20 flex items-center justify-center text-gold font-bold text-lg"
+            >
+              RP
+            </div>
+            <h3
+              class="text-lg font-header text-white uppercase tracking-tight group-hover:text-gold transition-colors"
+            >
+              License Plate Creator
+            </h3>
+          </div>
+          <p class="text-sm text-zinc-400 leading-relaxed">
+            Official Rockstar Games tool to design and preview custom license
+            plates for your GTA Online vehicles.
+          </p>
+          <span
+            class="inline-block mt-4 text-[10px] uppercase tracking-wider text-gold font-black"
+            >Open Official Tool →</span
+          >
+        </a>
+
+        <a
+          href="https://www.se7ensins.com/forums/forums/grand-theft-auto-5-glitches.432/"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="tilt-card group block bg-zinc-900/40 border border-zinc-800 rounded-2xl p-6 hover:border-gold/60 hover:bg-zinc-900/60 transition-all duration-300"
+        >
+          <div class="flex items-center gap-3 mb-3">
+            <div
+              class="w-10 h-10 rounded-lg bg-gold/10 border border-gold/20 flex items-center justify-center text-gold font-bold text-lg"
+            >
+              S7
+            </div>
+            <h3
+              class="text-lg font-header text-white uppercase tracking-tight group-hover:text-gold transition-colors"
+            >
+              Se7enSins Glitches
+            </h3>
+          </div>
+          <p class="text-sm text-zinc-400 leading-relaxed">
+            Dedicated Grand Theft Auto 5 & Online glitches forum with
+            community guides, reports, and discussions.
+          </p>
+          <span
+            class="inline-block mt-4 text-[10px] uppercase tracking-wider text-gold font-black"
+            >Visit Forum →</span
+          >
+        </a>
+
+        <a
+          href="https://gtaglitches.com/"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="tilt-card group block bg-zinc-900/40 border border-zinc-800 rounded-2xl p-6 hover:border-gold/60 hover:bg-zinc-900/60 transition-all duration-300"
+        >
+          <div class="flex items-center gap-3 mb-3">
+            <div
+              class="w-10 h-10 rounded-lg bg-gold/10 border border-gold/20 flex items-center justify-center text-gold font-bold text-lg"
+            >
+              GG
+            </div>
+            <h3
+              class="text-lg font-header text-white uppercase tracking-tight group-hover:text-gold transition-colors"
+            >
+              GTAGlitches.com
+            </h3>
+          </div>
+          <p class="text-sm text-zinc-400 leading-relaxed">
+            Working glitch lists, step-by-step guides, vehicle database, maps,
+            tools, and more for GTA Online.
+          </p>
+          <span
+            class="inline-block mt-4 text-[10px] uppercase tracking-wider text-gold font-black"
+            >Browse Glitches →</span
+          >
+        </a>
+
+        <a
+          href="https://docs.google.com/spreadsheets/d/1CV8d9A1x55ZDoJ-Q2Bslkek_K6UbqaBzvODG52HHHCM/edit?gid=0#gid=0"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="tilt-card group block bg-zinc-900/40 border border-zinc-800 rounded-2xl p-6 hover:border-gold/60 hover:bg-zinc-900/60 transition-all duration-300"
+        >
+          <div class="flex items-center gap-3 mb-3">
+            <div
+              class="w-10 h-10 rounded-lg bg-gold/10 border border-gold/20 flex items-center justify-center text-gold font-bold text-lg"
+            >
+              LV
+            </div>
+            <h3
+              class="text-lg font-header text-white uppercase tracking-tight group-hover:text-gold transition-colors"
+            >
+              Livery Shenanigans
+            </h3>
+          </div>
+          <p class="text-sm text-zinc-400 leading-relaxed">
+            Community spreadsheet of livery IDs, Set 1/Set 2 compatibility,
+            and vehicle merge references. Maintained by Classique.
+          </p>
+          <span
+            class="inline-block mt-4 text-[10px] uppercase tracking-wider text-gold font-black"
+            >Open Spreadsheet →</span
+          >
+        </a>
+
+        <a
+          href="https://docs.google.com/spreadsheets/d/1G0ySdtFlZy8cNolzumYPbRYagY-u6y2DkhuXIG58ldU/edit?gid=0#gid=0"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="tilt-card group block bg-zinc-900/40 border border-zinc-800 rounded-2xl p-6 hover:border-gold/60 hover:bg-zinc-900/60 transition-all duration-300"
+        >
+          <div class="flex items-center gap-3 mb-3">
+            <div
+              class="w-10 h-10 rounded-lg bg-gold/10 border border-gold/20 flex items-center justify-center text-gold font-bold text-lg"
+            >
+              RM
+            </div>
+            <h3
+              class="text-lg font-header text-white uppercase tracking-tight group-hover:text-gold transition-colors"
+            >
+              Rim Shenanigans
+            </h3>
+          </div>
+          <p class="text-sm text-zinc-400 leading-relaxed">
+            Detailed spreadsheet for wheel/rim merging, IDs, and compatibility
+            across vehicles in GTA Online.
+          </p>
+          <span
+            class="inline-block mt-4 text-[10px] uppercase tracking-wider text-gold font-black"
+            >Open Spreadsheet →</span
+          >
+        </a>
+
+        <a
+          href="https://docs.google.com/spreadsheets/d/1I1a6sf7hPAdPkSCwYnAV0BcPWQA0ssqAwAbAaQWNMw0/htmlview?fbclid=IwAR37ZJirGWQbFFeWdGJ2Sddt_ckbMM-Y_mImu58a_jZklRiEgvJ3zsddfAI#gid=0"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="tilt-card group block bg-zinc-900/40 border border-zinc-800 rounded-2xl p-6 hover:border-gold/60 hover:bg-zinc-900/60 transition-all duration-300"
+        >
+          <div class="flex items-center gap-3 mb-3">
+            <div
+              class="w-10 h-10 rounded-lg bg-gold/10 border border-gold/20 flex items-center justify-center text-gold font-bold text-lg"
+            >
+              CL
+            </div>
+            <h3
+              class="text-lg font-header text-white uppercase tracking-tight group-hover:text-gold transition-colors"
+            >
+              Clothing Shenanigans
+            </h3>
+          </div>
+          <p class="text-sm text-zinc-400 leading-relaxed">
+            Spreadsheet covering clothing merges, drawable/texture IDs, and
+            outfit shenanigans for GTA Online characters.
+          </p>
+          <span
+            class="inline-block mt-4 text-[10px] uppercase tracking-wider text-gold font-black"
+            >Open Spreadsheet →</span
+          >
+        </a>
+      </div>
     </div>
   </div>
-</MainLayout>
 
-<script is:inline>
-  async function fetchLiveMap() {
-    try {
-      const res = await fetch('/api/gunvan.json');
-      if (!res.ok) return;
-      const data = await res.json();
-      
-      document.getElementById('displayZone').textContent = data.zone;
-      document.getElementById('displayDetails').textContent = data.description;
-      
-      if (data.locationId && data.mapPath) {
-        const mapImg = document.getElementById('vanMapImage');
-        if (mapImg) {
-          mapImg.src = `/images/gunvan/${data.mapPath}`;
-          mapImg.onload = function() {
-            mapImg.classList.remove('opacity-0');
-            mapImg.classList.add('opacity-80');
-          };
+  <script is:inline>
+    async function fetchLiveMap() {
+      try {
+        const res = await fetch("/api/gunvan.json");
+        if (!res.ok) return;
+        const data = await res.json();
+
+        document.getElementById("displayZone").textContent = data.zone;
+        document.getElementById("displayDetails").textContent =
+          data.description;
+
+        if (data.locationId && data.mapPath) {
+          const mapImg = document.getElementById("vanMapImage");
+          if (mapImg) {
+            mapImg.src = `/images/gunvan/${data.mapPath}`;
+            mapImg.onload = function () {
+              mapImg.classList.remove("opacity-0");
+              mapImg.classList.add("opacity-80");
+            };
+          }
         }
-      }
 
-      const container = document.getElementById('weaponsContainer');
-      if (container && data.inventory && data.inventory.length > 0) {
-        container.innerHTML = ''; 
-        
-        data.inventory.forEach(item => {
+        const container = document.getElementById("weaponsContainer");
+        if (container && data.inventory && data.inventory.length > 0) {
+          container.innerHTML = "";
+
+          data.inventory.forEach((item) => {
             let name = item;
             let discount = "-10% OFF";
-            
-            if (item.includes(':')) {
-                const parts = item.split(':');
-                name = parts[0].trim();
-                discount = parts[1].replace(/\s/g, '') + ' OFF';
+
+            if (item.includes(":")) {
+              const parts = item.split(":");
+              name = parts[0].trim();
+              discount = parts[1].replace(/\s/g, "") + " OFF";
             }
 
             const itemHTML = `
@@ -113,12 +359,16 @@ const defaultDetails = "Polling real-time scraping anchors from gtalens server m
               </div>
             `;
             container.innerHTML += itemHTML;
-        });
+          });
+        }
+      } catch (e) {
+        console.error(
+          "Error running tracking engine interface synchronization loops:",
+          e,
+        );
       }
-    } catch (e) {
-      console.error("Error running tracking engine interface synchronization loops:", e);
     }
-  }
 
-  fetchLiveMap();
-</script>
+    fetchLiveMap();
+  </script>
+</MainLayout>

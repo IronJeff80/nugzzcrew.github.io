@@ -1,88 +1,162 @@
 ---
 import MainLayout from '../layouts/MainLayout.astro';
+
+const channelJoinUrl = "https://www.youtube.com/channel/UCYNmnbEgm3G0m4avmwz_4Eg/join?v=dummy";
 ---
 
-<MainLayout title="Home">
-  <section class="max-w-4xl mx-auto py-12 md:py-20 px-4 md:px-6 text-center">
-    
-    <h1 class="text-[clamp(32px,10vw,60px)] mb-4 tracking-tighter uppercase font-black italic leading-[0.9]">
-      Official Nugzz Crew
-    </h1>
-    
-    <p class="text-base md:text-xl text-zinc-400 mb-10 italic max-w-2xl mx-auto">
+<MainLayout title="Home" description="Official Nugzz Crew homepage — live streams, GTA weekly bonuses, community tools, and the Fam Bam.">
+  <section class="page-shell">
+    <header class="page-head">
+      <h1 class="page-title">
+        <span class="text-white">Home</span>
+      </h1>
+      <p class="page-kicker">Fam Bam Central</p>
+    </header>
+
+    <p class="text-base md:text-xl text-zinc-400 mb-10 italic">
       "Streaming, GTA Updates, and the best community in the game."
     </p>
     
-    <!-- Video Wrapper -->
-    <div class="relative aspect-video w-full rounded-xl md:rounded-2xl border border-zinc-800 mb-12 overflow-hidden bg-black shadow-[0_0_50px_-12px_rgba(212,175,55,0.3)]">
+    <!-- Video Wrapper with Theater Mode -->
+    <div id="video-container" class="relative aspect-video w-full rounded-xl md:rounded-2xl border border-zinc-800 mb-4 overflow-hidden bg-black shadow-[0_0_50px_-12px_rgba(212,175,55,0.3)] group">
       <img 
         id="offline-placeholder" 
         src="/images/offline.png" 
         alt="Stream is currently offline" 
-        style="display: block; width: 100%; height: 100%; object-fit: cover; position: absolute; top: 0; left: 0; z-index: 10;" 
+        class="absolute inset-0 w-full h-full object-cover z-10"
       />
       <iframe 
         id="yt-video-frame" 
         src="about:blank" 
         allowfullscreen 
-        style="display: none; width: 100%; height: 100%; position: relative; z-index: 20;">
-      </iframe>
+        class="absolute inset-0 w-full h-full z-20 hidden"
+      ></iframe>
+
+      <!-- Live Badge -->
+      <div id="live-badge" class="absolute top-3 left-3 z-30 hidden items-center gap-2 bg-black/80 backdrop-blur-sm px-3 py-1.5 rounded-full border border-red-500/50">
+        <span class="relative flex h-2.5 w-2.5">
+          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+          <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-red-500"></span>
+        </span>
+        <span class="text-xs font-bold uppercase tracking-wider text-white">LIVE</span>
+      </div>
+
+      <!-- Theater Mode Button — always visible -->
+      <button 
+        id="theater-btn"
+        type="button"
+        class="absolute bottom-3 right-3 z-30 bg-black/80 hover:bg-black text-white text-xs uppercase tracking-widest px-3 py-1.5 rounded-lg border border-zinc-600 hover:border-gold"
+        aria-label="Toggle theater mode"
+      >
+        Theater
+      </button>
     </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 mt-12">
-        <a href="/gta" class="p-6 md:p-8 bg-zinc-900 border border-zinc-800 rounded-2xl hover:border-gold transition-all group text-left">
-          <h2 class="text-xl md:text-2xl group-hover:text-gold transition-colors uppercase font-black italic">GTA Bonuses &rarr;</h2>
-          <p class="text-zinc-500 mt-2 text-sm md:text-base">Get the latest on bonuses, car meets, and robberies.</p>
-        </a>
-  
-        <div class="p-6 md:p-8 bg-zinc-900 border border-zinc-800 rounded-2xl text-left">
-          <h2 class="text-xl md:text-2xl uppercase font-black italic text-gold">The Fam Bam</h2>
-          <p class="text-zinc-500 mt-2 text-sm md:text-base">Catch every live stream and join the best community on YouTube.</p>
-        </div>
-      </div>
-  </section>
-</MainLayout>
+    <!-- Cards with 3D Tilt -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 mt-8 perspective-wrap">
+      <a href="/gta" class="tilt-card p-6 md:p-8 bg-zinc-900 border border-zinc-800 rounded-2xl hover:border-gold group text-left block">
+        <h2 class="text-xl md:text-2xl group-hover:text-gold transition-colors uppercase font-black italic">
+          <span class="text-white">GTA</span> <span class="text-gold">Bonuses &rarr;</span>
+        </h2>
+        <p class="text-zinc-500 mt-2 text-sm md:text-base">Get the latest on bonuses, car meets, and robberies.</p>
+      </a>
 
-<script is:inline>
-  function connectBot() {
+      <a 
+        href={channelJoinUrl} 
+        target="_blank" 
+        rel="noopener noreferrer"
+        class="tilt-card p-6 md:p-8 bg-zinc-900 border border-zinc-800 rounded-2xl hover:border-gold group text-left block"
+      >
+        <h2 class="text-xl md:text-2xl group-hover:text-gold transition-colors uppercase font-black italic">
+          <span class="text-white">The</span> <span class="text-gold">Fam Bam &rarr;</span>
+        </h2>
+        <p class="text-zinc-500 mt-2 text-sm md:text-base">Catch every live stream and join the best community on YouTube.</p>
+      </a>
+    </div>
+  </section>
+
+  <script is:inline>
+    function connectBot() {
       const ws = new WebSocket("wss://wss.officialnugzzcrew.com/");
 
       ws.onopen = () => {
-          // Subscribe to custom events
-          ws.send(JSON.stringify({ "request": "Subscribe", "events": { "general": ["Custom"] }, "id": "SubRequest" }));
-          
-          // Request status immediately
-          setTimeout(() => {
-            ws.send(JSON.stringify({ "request": "DoAction", "action": { "name": "Web_Request_Status" }, "id": "StatusCheck" }));
-          }, 1000);
+        ws.send(JSON.stringify({ "request": "Subscribe", "events": { "general": ["Custom"] }, "id": "SubRequest" }));
+        setTimeout(() => {
+          ws.send(JSON.stringify({ "request": "DoAction", "action": { "name": "Web_Request_Status" }, "id": "StatusCheck" }));
+        }, 1000);
       };
 
       ws.onmessage = (event) => {
-          try {
-              const msg = JSON.parse(event.data);
-              
-              // Handle nested data structure
-              if (msg.data && msg.data.data && msg.data.data.name === "LiveStatusUpdate") {
-                  const data = msg.data.data;
-                  const videoFrame = document.getElementById('yt-video-frame');
-                  const placeholderImg = document.getElementById('offline-placeholder');
-                  
-                  // Logical check for live status and video ID presence
-                  if (data.isLive === true && data.videoId && data.videoId.trim() !== "") {
-                      videoFrame.style.display = 'block';
-                      videoFrame.src = `https://www.youtube.com/embed/${data.videoId}?autoplay=1&mute=1`;
-                      placeholderImg.style.display = 'none';
-                  } else {
-                      // Offline/End state
-                      videoFrame.style.display = 'none';
-                      videoFrame.src = "about:blank";
-                      placeholderImg.style.display = 'block';
-                  }
-              }
-          } catch (e) { console.log("Parsing error:", e); }
+        try {
+          const msg = JSON.parse(event.data);
+          if (msg.data && msg.data.data && msg.data.data.name === "LiveStatusUpdate") {
+            const data = msg.data.data;
+            const videoFrame = document.getElementById('yt-video-frame');
+            const placeholderImg = document.getElementById('offline-placeholder');
+            const liveBadge = document.getElementById('live-badge');
+            if (!videoFrame || !placeholderImg || !liveBadge) return;
+
+            if (data.isLive === true && data.videoId && data.videoId.trim() !== "") {
+              videoFrame.classList.remove('hidden');
+              videoFrame.src = `https://www.youtube.com/embed/${data.videoId}?autoplay=1&mute=1`;
+              placeholderImg.style.display = 'none';
+              liveBadge.classList.remove('hidden');
+              liveBadge.classList.add('flex');
+            } else {
+              videoFrame.classList.add('hidden');
+              videoFrame.src = "about:blank";
+              placeholderImg.style.display = '';
+              liveBadge.classList.add('hidden');
+              liveBadge.classList.remove('flex');
+            }
+          }
+        } catch (e) { console.log("Parsing error:", e); }
       };
-      
+
       ws.onclose = () => setTimeout(connectBot, 5000);
-  }
-  window.addEventListener('load', connectBot);
-</script>
+    }
+    window.addEventListener('load', connectBot);
+
+    const theaterBtn = document.getElementById('theater-btn');
+    const videoContainer = document.getElementById('video-container');
+    let isTheater = false;
+    let theaterSlot = null;
+
+    function setTheater(on) {
+      if (!videoContainer || !theaterBtn || on === isTheater) return;
+      isTheater = on;
+
+      if (on) {
+        theaterSlot = document.createComment('theater-slot');
+        videoContainer.parentNode.insertBefore(theaterSlot, videoContainer);
+        document.body.appendChild(videoContainer);
+        videoContainer.classList.add('is-theater');
+        document.body.style.overflow = 'hidden';
+        theaterBtn.textContent = 'Exit';
+      } else {
+        videoContainer.classList.remove('is-theater');
+        if (theaterSlot && theaterSlot.parentNode) {
+          theaterSlot.parentNode.insertBefore(videoContainer, theaterSlot);
+          theaterSlot.remove();
+          theaterSlot = null;
+        }
+        document.body.style.overflow = '';
+        theaterBtn.textContent = 'Theater';
+      }
+    }
+
+    theaterBtn?.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      setTheater(!isTheater);
+    });
+
+    videoContainer?.addEventListener('click', (e) => {
+      if (isTheater && e.target === videoContainer) setTheater(false);
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && isTheater) setTheater(false);
+    });
+  </script>
+</MainLayout>
