@@ -36,7 +36,7 @@ const socials = [
     </head>
     <body class="bg-black text-white antialiased">
         <nav id="site-header" class="sticky top-0 z-50 bg-black/95 backdrop-blur-md border-b border-zinc-800 px-3 py-3 md:px-4">
-            <div class="max-w-7xl mx-auto flex items-center gap-3">
+            <div class="header-row max-w-7xl mx-auto flex items-center gap-3">
                 <button
                     id="menu-toggle"
                     type="button"
@@ -49,9 +49,9 @@ const socials = [
                     </svg>
                 </button>
 
-                <a href="/" class="flex items-center gap-2 group transition-opacity hover:opacity-90 min-w-0">
-                    <img src="/Logo.png" alt="Logo" class="w-6 h-6 md:w-9 md:h-9 object-contain shrink-0" />
-                    <span class="text-[clamp(11px,3vw,18px)] font-header uppercase tracking-tighter whitespace-nowrap truncate">
+                <a href="/" class="brand-link flex items-center gap-2 group transition-opacity hover:opacity-90 min-w-0">
+                    <img src="/Logo.png" alt="Logo" class="w-7 h-7 md:w-9 md:h-9 object-contain shrink-0" />
+                    <span class="brand-mark text-[clamp(11px,3vw,18px)] font-header uppercase tracking-tighter whitespace-nowrap">
                         <span class="text-white">Official</span> <span class="text-gold">Nugzz Crew</span>
                     </span>
                 </a>
@@ -276,6 +276,26 @@ const socials = [
     @media (min-width: 1100px) {
         .nav-burger { display: none; }
         .nav-desktop { display: flex; }
+    }
+
+    @media (max-width: 1099px) {
+        .header-row {
+            position: relative;
+            justify-content: center;
+            min-height: 2.75rem;
+        }
+        .nav-burger {
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+        .brand-link {
+            max-width: calc(100% - 6.5rem);
+        }
+        .brand-mark {
+            font-size: clamp(16px, 5.4vw, 24px);
+        }
     }
 
     .text-gold-bright {
