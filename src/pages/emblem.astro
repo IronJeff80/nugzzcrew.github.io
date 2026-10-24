@@ -6,10 +6,10 @@ import MainLayout from '../layouts/MainLayout.astro';
   <div class="max-w-[1400px] mx-auto py-8 px-4 md:px-6">
     
 <section class="mb-8">
-  <h1 class="text-3xl md:text-4xl font-black italic uppercase leading-none text-white tracking-tighter drop-shadow-md">
-    Emblem <span class="text-gold">Creator</span>
+  <h1 class="page-title">
+    <span class="text-white">Emblem</span> <span class="text-gold">Creator</span>
   </h1>
-  <p class="text-zinc-400 font-bold uppercase tracking-widest text-[10px] mt-1 italic">
+  <p class="page-kicker">
     Image and Text to Emblem Code
   </p>
 </section>
@@ -173,44 +173,45 @@ import MainLayout from '../layouts/MainLayout.astro';
     <div class="bg-zinc-900/60 backdrop-blur-md border border-zinc-700/50 rounded-2xl p-5 shadow-lg">
       <h2 class="text-[10px] text-zinc-500 font-black uppercase tracking-widest mb-4">How to Apply on Social Club</h2>
 
-      <!-- Tutorial Video -->
-      <div class="mb-6 aspect-video w-full max-w-3xl mx-auto rounded-xl overflow-hidden border border-zinc-800 bg-black">
-        <iframe
-          class="w-full h-full"
-          src="https://www.youtube.com/embed/BI_bY-7ZICs"
-          title="Emblem Editor Tutorial"
-          frameborder="0"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-          allowfullscreen
-        ></iframe>
-      </div>
+      <div class="flex flex-col lg:flex-row gap-8 items-center">
+        <ol class="w-full lg:w-1/2 space-y-2.5 text-zinc-300 text-[13px] leading-snug">
+          <li class="flex gap-3">
+            <span class="text-gold font-mono text-xs font-bold shrink-0 mt-0.5">1.</span>
+            <span>Navigate to the <a href="https://socialclub.rockstargames.com" target="_blank" rel="noopener" class="text-gold hover:underline">Rockstar Social Club</a>, log in, and go to your Crew Emblems page. Click <strong class="text-white">Create a New Emblem</strong>.</span>
+          </li>
+          <li class="flex gap-3">
+            <span class="text-gold font-mono text-xs font-bold shrink-0 mt-0.5">2.</span>
+            <span>Open Developer Tools. Windows: <kbd class="px-1.5 py-0.5 bg-zinc-800 border border-zinc-700 rounded text-[10px] font-mono">F12</kbd> or <kbd class="px-1.5 py-0.5 bg-zinc-800 border border-zinc-700 rounded text-[10px] font-mono">Ctrl+Shift+J</kbd>. Mac: <kbd class="px-1.5 py-0.5 bg-zinc-800 border border-zinc-700 rounded text-[10px] font-mono">⌘+⌥+J</kbd>.</span>
+          </li>
+          <li class="flex gap-3">
+            <span class="text-gold font-mono text-xs font-bold shrink-0 mt-0.5">3.</span>
+            <span>Click the <strong class="text-white">Console</strong> tab. Look for the blinking cursor at the bottom.</span>
+          </li>
+          <li class="flex gap-3">
+            <span class="text-gold font-mono text-xs font-bold shrink-0 mt-0.5">4.</span>
+            <span>If you see a paste warning, type <code class="px-1.5 py-0.5 bg-zinc-800 border border-zinc-700 rounded text-[10px] font-mono">allow pasting</code> and press Enter.</span>
+          </li>
+          <li class="flex gap-3">
+            <span class="text-gold font-mono text-xs font-bold shrink-0 mt-0.5">5.</span>
+            <span>Right-click at the cursor and choose <strong class="text-white">Paste</strong>, or press <kbd class="px-1.5 py-0.5 bg-zinc-800 border border-zinc-700 rounded text-[10px] font-mono">Ctrl+V</kbd> on Windows / <kbd class="px-1.5 py-0.5 bg-zinc-800 border border-zinc-700 rounded text-[10px] font-mono">⌘+V</kbd> on Mac, then press <kbd class="px-1.5 py-0.5 bg-zinc-800 border border-zinc-700 rounded text-[10px] font-mono">Enter</kbd>.</span>
+          </li>
+          <li class="flex gap-3">
+            <span class="text-gold font-mono text-xs font-bold shrink-0 mt-0.5">6.</span>
+            <span>Close Developer Tools with the same shortcut, click <strong class="text-white">Save</strong>, then <strong class="text-white">Publish</strong>.</span>
+          </li>
+        </ol>
 
-      <ol class="space-y-2.5 text-zinc-300 text-[13px] leading-snug">
-        <li class="flex gap-3">
-          <span class="text-gold font-mono text-xs font-bold shrink-0 mt-0.5">1.</span>
-          <span>Navigate to the <a href="https://socialclub.rockstargames.com" target="_blank" rel="noopener" class="text-gold hover:underline">Rockstar Social Club</a>, log in, and go to your Crew Emblems page. Click <strong class="text-white">Create a New Emblem</strong>.</span>
-        </li>
-        <li class="flex gap-3">
-          <span class="text-gold font-mono text-xs font-bold shrink-0 mt-0.5">2.</span>
-          <span>Open Developer Tools: press <kbd class="px-1.5 py-0.5 bg-zinc-800 border border-zinc-700 rounded text-[10px] font-mono">F12</kbd> (or <kbd class="px-1.5 py-0.5 bg-zinc-800 border border-zinc-700 rounded text-[10px] font-mono">Ctrl+Shift+J</kbd>).</span>
-        </li>
-        <li class="flex gap-3">
-          <span class="text-gold font-mono text-xs font-bold shrink-0 mt-0.5">3.</span>
-          <span>Click the <strong class="text-white">Console</strong> tab. Look for the blinking cursor at the bottom.</span>
-        </li>
-        <li class="flex gap-3">
-          <span class="text-gold font-mono text-xs font-bold shrink-0 mt-0.5">4.</span>
-          <span>If you see a paste warning, type <code class="px-1.5 py-0.5 bg-zinc-800 border border-zinc-700 rounded text-[10px] font-mono">allow pasting</code> and press Enter.</span>
-        </li>
-        <li class="flex gap-3">
-          <span class="text-gold font-mono text-xs font-bold shrink-0 mt-0.5">5.</span>
-          <span>Right-click at the cursor → <strong class="text-white">Paste</strong> (or <kbd class="px-1.5 py-0.5 bg-zinc-800 border border-zinc-700 rounded text-[10px] font-mono">Ctrl+V</kbd>), then press <kbd class="px-1.5 py-0.5 bg-zinc-800 border border-zinc-700 rounded text-[10px] font-mono">Enter</kbd>.</span>
-        </li>
-        <li class="flex gap-3">
-          <span class="text-gold font-mono text-xs font-bold shrink-0 mt-0.5">6.</span>
-          <span>Close Developer Tools (<kbd class="px-1.5 py-0.5 bg-zinc-800 border border-zinc-700 rounded text-[10px] font-mono">F12</kbd>), click <strong class="text-white">Save</strong>, then <strong class="text-white">Publish</strong>.</span>
-        </li>
-      </ol>
+        <div class="w-full lg:w-1/2 aspect-video rounded-xl overflow-hidden border border-zinc-800 bg-black">
+          <iframe
+            class="w-full h-full"
+            src="https://www.youtube.com/embed/BI_bY-7ZICs"
+            title="Emblem Editor Tutorial"
+            frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen
+          ></iframe>
+        </div>
+      </div>
     </div>
   </div>
 
